@@ -78,8 +78,8 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
                     }
                 }
-                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp,
-                    fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp
+
                 ) )
             }
             WidthSpacer(width = 26.dp)
@@ -93,8 +93,8 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_100))
                     }
                 }
-                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp,
-                    fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp
+
                 ) )
 
             }
@@ -110,7 +110,7 @@ fun IconsOverview() {
                     }
                 }
                 Text("Chat", style= TextStyle(color=Color.White,
-                    fontSize= 16.sp,fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                    fontSize= 16.sp
                 ) )
 
             }

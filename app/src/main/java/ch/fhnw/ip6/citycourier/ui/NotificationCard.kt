@@ -38,8 +38,8 @@ fun NotificationCard(notification: Notification){
             ) {
                 Text(notification.title, style = TextStyle(color=Color.Black, fontSize= 20.sp, fontWeight = FontWeight.Bold)
                 )
-                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp,
-                    fontFamily = FontFamily(Font(name="Roboto-Regular.ttf"))
+                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp
+
                 ).withOpacity(0.90f)
 
                 )
