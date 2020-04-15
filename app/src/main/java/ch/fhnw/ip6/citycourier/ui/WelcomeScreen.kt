@@ -34,7 +34,10 @@ private fun CityCourierLogo() {
 @Composable
  fun WelcomeScreen() {
     val context = +ambient(ContextAmbient)
+    val notification1 = Notification("Order 12345"," You have received a new order")
+    val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
 
+    val notifyList: List<Notification> = listOf( notification1, notification2)
     MaterialTheme (colors = LightThemeColors) {
         Column( modifier = Spacing(10.dp)) {
             CityCourierLogo()
@@ -46,17 +49,14 @@ private fun CityCourierLogo() {
                 Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
                     elevation = 8.dp,  modifier = Spacing(10.dp)) {
                     Text("Notifications",
-                        style =TextStyle(color = Color.Black, fontSize= 24.sp) )
+                        style =TextStyle(color = Color.Black, fontSize= 24.sp),
+                        modifier = Spacing(left = Dp(10f), right = Dp(60f)))
                 }
 
             }
-            val notification1 = Notification("Order 12345"," You have received a new order")
-            val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
 
-            val notifyList: List<Notification> = listOf( notification1, notification2)
             //notification list
             NotificationList(notifications = notifyList)
-
         }
 
     }
@@ -65,7 +65,7 @@ private fun CityCourierLogo() {
 
 
 @Composable
-private fun IconsOverview() {
+fun IconsOverview() {
     MaterialTheme (colors = LightThemeColors) {
         Row(modifier = Spacing(30.dp), arrangement = Arrangement.SpaceBetween ) {
             Column (){
@@ -119,6 +119,7 @@ private fun IconsOverview() {
     }
 
 }
+
 @Composable
 private fun NotificationList(notifications: List<Notification>) {
     VerticalScroller(isScrollable = true) {
