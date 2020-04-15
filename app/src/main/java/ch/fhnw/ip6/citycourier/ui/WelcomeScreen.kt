@@ -15,8 +15,6 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
-import androidx.ui.text.font.Font
-import androidx.ui.text.font.FontFamily
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -82,7 +80,7 @@ fun IconsOverview() {
 
                 ) )
             }
-            WidthSpacer(width = 26.dp)
+            WidthSpacer(width = 20.dp)
 
             Column() {
                 Container(
@@ -90,7 +88,7 @@ fun IconsOverview() {
                     alignment = Alignment.TopCenter
                 ) {
                     Clip(shape = RoundedCornerShape(8.dp)) {
-                        DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_100))
+                        DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_80))
                     }
                 }
                 Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp
@@ -98,7 +96,7 @@ fun IconsOverview() {
                 ) )
 
             }
-            WidthSpacer(width = 26.dp)
+            WidthSpacer(width = 20.dp)
             Column() {
                 Container(
                     width = Dp(100f),

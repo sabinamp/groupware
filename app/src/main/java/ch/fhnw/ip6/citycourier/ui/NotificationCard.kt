@@ -23,7 +23,7 @@ import ch.fhnw.ip6.citycourier.model.Notification
 
 @Composable
 fun NotificationCard(notification: Notification){
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,modifier = Height(130.dp) wraps Expanded) {
+    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,modifier = Height(110.dp) wraps Expanded) {
         Row(modifier = Modifier.None,
             arrangement = Arrangement.Begin
         ){
