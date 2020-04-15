@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp(children: @Composable() () -> Unit) {
     MaterialTheme {
-        Surface(color = Color.DarkGray) {
+        Surface(color = Color(30,26,27)) {
             children()
         }
     }
