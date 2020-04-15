@@ -15,6 +15,8 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
+import androidx.ui.text.font.Font
+import androidx.ui.text.font.FontFamily
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -33,10 +35,6 @@ private fun CityCourierLogo() {
  fun WelcomeScreen() {
     val context = +ambient(ContextAmbient)
 
-    val notification1 = Notification("Order 12345"," You have received a new order")
-    val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
-
-    val notifyList: List<Notification> = listOf( notification1, notification2)
     MaterialTheme (colors = LightThemeColors) {
         Column( modifier = Spacing(10.dp)) {
             CityCourierLogo()
@@ -52,7 +50,10 @@ private fun CityCourierLogo() {
                 }
 
             }
+            val notification1 = Notification("Order 12345"," You have received a new order")
+            val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
 
+            val notifyList: List<Notification> = listOf( notification1, notification2)
             //notification list
             NotificationList(notifications = notifyList)
 
@@ -77,7 +78,9 @@ private fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
                     }
                 }
-                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp) )
+                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp,
+                    fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                ) )
             }
             WidthSpacer(width = 26.dp)
 
@@ -90,7 +93,9 @@ private fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_100))
                     }
                 }
-                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp) )
+                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp,
+                    fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                ) )
 
             }
             WidthSpacer(width = 26.dp)
@@ -104,7 +109,9 @@ private fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_100))
                     }
                 }
-                Text("Chat", style= TextStyle(color=Color.White, fontSize= 16.sp) )
+                Text("Chat", style= TextStyle(color=Color.White,
+                    fontSize= 16.sp,fontFamily = FontFamily(Font(name="Roboto-Bold.ttf"))
+                ) )
 
             }
 

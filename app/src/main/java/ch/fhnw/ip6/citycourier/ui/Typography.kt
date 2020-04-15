@@ -12,7 +12,7 @@ import androidx.ui.text.font.FontFamily
 
 val regular = Font(name="Roboto-Regular.ttf",weight = FontWeight.W400)
 val medium = Font(name="Roboto-Medium.ttf", weight = FontWeight.W500)
-val semibold = Font(name="Roboto-Bold.ttf", weight=FontWeight.W600)
+val semibold = Font(name="Roboto-Bold.ttf", weight = FontWeight.W600)
 
 val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
 

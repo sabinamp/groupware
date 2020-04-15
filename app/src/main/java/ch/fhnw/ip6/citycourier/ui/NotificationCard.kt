@@ -15,6 +15,8 @@ import androidx.ui.material.surface.Card
 import androidx.ui.material.withOpacity
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
+import androidx.ui.text.font.Font
+import androidx.ui.text.font.FontFamily
 import androidx.ui.text.font.FontWeight
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -36,8 +38,9 @@ fun NotificationCard(notification: Notification){
             ) {
                 Text(notification.title, style = TextStyle(color=Color.Black, fontSize= 20.sp, fontWeight = FontWeight.Bold)
                 )
-                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp)
-                    .withOpacity(0.90f)
+                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp,
+                    fontFamily = FontFamily(Font(name="Roboto-Regular.ttf"))
+                ).withOpacity(0.90f)
 
                 )
             }
