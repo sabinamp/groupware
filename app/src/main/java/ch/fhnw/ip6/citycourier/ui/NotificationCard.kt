@@ -5,6 +5,7 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Modifier
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.core.sp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
@@ -13,12 +14,13 @@ import androidx.ui.material.Divider
 import androidx.ui.material.surface.Card
 import androidx.ui.material.withOpacity
 import androidx.ui.res.vectorResource
+import androidx.ui.text.TextStyle
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
 
 @Composable
 fun NotificationCard(notification: Notification){
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp) {
+    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,modifier = Height(150.dp) wraps Expanded) {
         Row(modifier = Modifier.None,
             arrangement = Arrangement.Begin
         ){
@@ -29,9 +31,9 @@ fun NotificationCard(notification: Notification){
             WidthSpacer(10.dp)
             Column(modifier = Spacing(6.dp)
             ) {
-                Text(notification.title, style = themeTypography.h6
+                Text(notification.title, style = TextStyle(color=Color.White, fontSize= 20.sp)
                 )
-                Text(notification.message, style = themeTypography.body2
+                Text(notification.message, style= TextStyle(color=Color.White, fontSize= 16.sp)
                     .withOpacity(0.87f)
 
                 )

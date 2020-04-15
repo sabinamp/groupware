@@ -44,16 +44,16 @@ private fun CityCourierLogo() {
             HeightSpacer(10.dp)
 
             Container(modifier = Height(120.dp) wraps Expanded) {
-                Surface(color = Color.White, shape = RoundedCornerShape(8.dp), elevation = 8.dp) {
+                Surface(color = Color.White, shape = RoundedCornerShape(8.dp),
+                    elevation = 8.dp,  modifier = Spacing(30.dp)) {
                     Text("Notifications",
-                        style =TextStyle(color=Color.Black),
-                        modifier = Spacing(left=10.dp,right = 50.dp)
-                    )
+                        style =TextStyle(color = Color.Black,
+                        fontSize= 24.sp) )
                 }
             }
             Divider(color = Color(0x14333333))
             //notification list
-            //NotificationList(notifications = notList)
+            NotificationList(notifications = notList)
         }
 
 
@@ -68,42 +68,42 @@ private fun IconsOverview() {
         Row(modifier = Spacing(20.dp), arrangement = Arrangement.SpaceBetween ) {
             Column (){
                 Container(
-                    width = Dp(60f),
-                    height = Dp(60f),
+                    width = Dp(80f),
+                    height = Dp(80f),
                     alignment = Alignment.TopCenter
                 ) {
                     Clip(shape = RoundedCornerShape(8.dp)) {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell40))
                     }
                 }
-                Text("Orders",  style = TextStyle(color=Color.White))
+                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp) )
             }
-            WidthSpacer(width = 20.dp)
+            WidthSpacer(width = 26.dp)
 
             Column() {
                 Container(
-                    modifier = Width(Dp(60f)), height = Dp(60f),
+                    modifier = Width(Dp(80f)), height = Dp(80f),
                     alignment = Alignment.TopCenter
                 ) {
                     Clip(shape = RoundedCornerShape(8.dp)) {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile40))
                     }
                 }
-                Text("Profile" , style=TextStyle(color=Color.White))
+                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp) )
 
             }
-            WidthSpacer(width = 20.dp)
+            WidthSpacer(width = 26.dp)
             Column() {
                 Container(
-                    width = Dp(60f),
-                    height = Dp(60f),
+                    width = Dp(80f),
+                    height = Dp(80f),
                     alignment = Alignment.TopCenter
                 ) {
                     Clip(shape = RoundedCornerShape(8.dp)) {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_40))
                     }
                 }
-                Text("Chat", style= TextStyle(color=Color.White))
+                Text("Chat", style= TextStyle(color=Color.White, fontSize= 16.sp) )
 
             }
 
