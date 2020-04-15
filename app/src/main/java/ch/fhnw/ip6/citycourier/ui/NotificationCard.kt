@@ -29,7 +29,7 @@ fun NotificationCard(notification: Notification){
         ){
             Column( modifier = Spacing(4.dp)
             ){
-                Container(height=44.dp, width=44.dp) {
+                Container(height=40.dp, width=40.dp) {
                 DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell40))
              }
             }

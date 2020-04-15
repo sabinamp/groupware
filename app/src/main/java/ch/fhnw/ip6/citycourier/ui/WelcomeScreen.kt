@@ -24,7 +24,7 @@ import ch.fhnw.ip6.citycourier.model.Notification
 
 @Composable
 private fun CityCourierLogo() {
-    Container(modifier = Height(120.dp) wraps Expanded) {
+    Container(modifier = Height(130.dp) wraps Expanded) {
         Clip(shape = RoundedCornerShape(8.dp)) {
             DrawImage(image = +imageResource(R.drawable.deliveryservice_logo))
         }
