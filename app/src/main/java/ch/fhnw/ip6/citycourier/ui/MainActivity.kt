@@ -1,33 +1,31 @@
-package ch.fhnw.ip6.citycourier
+package ch.fhnw.ip6.citycourier.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
-import androidx.ui.core.Text
 import androidx.ui.core.setContent
+import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
-import androidx.ui.tooling.preview.Preview
+import androidx.ui.material.surface.Surface
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                Greeting("Android")
+            MyApp {
+                WelcomeScreen()
             }
         }
     }
 }
-
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
+fun MyApp(children: @Composable() () -> Unit) {
     MaterialTheme {
-        Greeting("Android")
+        Surface(color = Color.DarkGray) {
+            children()
+        }
     }
 }
+
+
