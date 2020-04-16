@@ -15,6 +15,8 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
+import androidx.ui.text.font.Font
+import androidx.ui.text.font.FontFamily
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -36,7 +38,7 @@ private fun CityCourierLogo() {
     val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
 
     val notifyList: List<Notification> = listOf( notification1, notification2)
-    MaterialTheme (colors = LightThemeColors) {
+    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         Column( modifier = Spacing(10.dp)) {
             CityCourierLogo()
             HeightSpacer(10.dp)
@@ -47,7 +49,9 @@ private fun CityCourierLogo() {
                 Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
                     elevation = 8.dp,  modifier = Spacing(10.dp)) {
                     Text("Notifications",
-                        style =TextStyle(color = Color.Black, fontSize= 24.sp),
+                        /*style =TextStyle(color = Color.Black, fontSize= 24.sp, fontFamily = FontFamily(
+                            Font(name="montserrat_semibold.otf"))
+                        ))*/ style= themeTypography.subtitle1,
                         modifier = Spacing(left = Dp(10f), right = Dp(60f)))
                 }
 
@@ -64,7 +68,7 @@ private fun CityCourierLogo() {
 
 @Composable
 fun IconsOverview() {
-    MaterialTheme (colors = LightThemeColors) {
+    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         Row(modifier = Spacing(30.dp), arrangement = Arrangement.SpaceBetween ) {
             Column (){
                 Container(
@@ -76,9 +80,11 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
                     }
                 }
-                Text("Orders",  style = TextStyle(color=Color.White, fontSize= 16.sp
-
-                ) )
+                Text("Orders",  style = themeTypography.h6
+                    /*TextStyle(color=Color.White, fontSize= 20.sp,
+                        fontFamily = FontFamily(
+                        Font(name="montserrat_semibold.otf")) )*/
+                )
             }
             WidthSpacer(width = 20.dp)
 
@@ -91,9 +97,7 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_80))
                     }
                 }
-                Text("Profile" , style=TextStyle(color=Color.White, fontSize= 16.sp
-
-                ) )
+                Text("Profile" , style= themeTypography.h6 )
 
             }
             WidthSpacer(width = 20.dp)
@@ -107,9 +111,7 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_100))
                     }
                 }
-                Text("Chat", style= TextStyle(color=Color.White,
-                    fontSize= 16.sp
-                ) )
+                Text("Chat", style= themeTypography.h6 )
 
             }
 
