@@ -7,7 +7,7 @@ import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.FontFamily
-
+import androidx.ui.text.font.FontStyle
 
 
 val regular = Font(name="montserrat_regular.otf")
@@ -27,13 +27,14 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
         fontSize = 24.sp,
-        color = Color(27,97,160)
+        color = Color.White
+
     ),
     h6 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
         fontSize = 20.sp,
-        color = Color.White
+        color = Color(27,97,160)
     ),
 
     subtitle1 = TextStyle(
@@ -45,13 +46,20 @@ val themeTypography = Typography(
     subtitle2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+        fontSize = 16.sp,
+        color=Color.Black
     ),
 
     body1 = TextStyle(
         fontFamily = appFontFamily,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         color = Color.Black
+    ),
+    body2 = TextStyle(
+        fontFamily = appFontFamily,
+        fontSize = 14.sp,
+        color = Color.DarkGray,
+        fontStyle = FontStyle.Normal
     ),
     button = TextStyle(
         fontFamily = appFontFamily,
@@ -66,6 +74,7 @@ val themeTypography = Typography(
     overline = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 12.sp
+        fontSize = 12.sp,
+        fontStyle = FontStyle.Italic
     )
 )

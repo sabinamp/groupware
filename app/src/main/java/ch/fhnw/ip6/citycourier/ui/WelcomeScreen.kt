@@ -51,7 +51,7 @@ private fun CityCourierLogo() {
                     Text("Notifications",
                         /*style =TextStyle(color = Color.Black, fontSize= 24.sp, fontFamily = FontFamily(
                             Font(name="montserrat_semibold.otf"))
-                        ))*/ style= themeTypography.subtitle1,
+                        ))*/ style= themeTypography.h6,
                         modifier = Spacing(left = Dp(10f), right = Dp(60f)))
                 }
 
@@ -80,7 +80,7 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
                     }
                 }
-                Text("Orders",  style = themeTypography.h6
+                Text("Orders",  style = themeTypography.h5
                     /*TextStyle(color=Color.White, fontSize= 20.sp,
                         fontFamily = FontFamily(
                         Font(name="montserrat_semibold.otf")) )*/
@@ -97,7 +97,7 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_80))
                     }
                 }
-                Text("Profile" , style= themeTypography.h6 )
+                Text("Profile" , style= themeTypography.h5 )
 
             }
             WidthSpacer(width = 20.dp)
@@ -111,7 +111,7 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_100))
                     }
                 }
-                Text("Chat", style= themeTypography.h6 )
+                Text("Chat", style= themeTypography.h5 )
 
             }
 

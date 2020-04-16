@@ -36,11 +36,10 @@ fun NotificationCard(notification: Notification){
             WidthSpacer(10.dp)
             Column(modifier = Spacing(8.dp)
             ) {
-                Text(notification.title, style = TextStyle(color=Color.Black, fontSize= 20.sp, fontWeight = FontWeight.Bold)
+                Text(notification.title, style = themeTypography.subtitle1
+                    /*TextStyle(color=Color.Black, fontSize= 20.sp, fontWeight = FontWeight.Bold)*/
                 )
-                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp
-
-                ).withOpacity(0.90f)
+                Text(notification.message, style= themeTypography.body2.withOpacity(0.90f)
 
                 )
             }
