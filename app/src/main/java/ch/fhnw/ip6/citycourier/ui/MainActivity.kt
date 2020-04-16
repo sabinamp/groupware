@@ -7,6 +7,7 @@ import androidx.ui.core.setContent
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
+import ch.fhnw.ip6.citycourier.ui.welcome.WelcomeScreen
 
 
 class MainActivity : AppCompatActivity() {

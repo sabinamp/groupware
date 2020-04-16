@@ -1,4 +1,4 @@
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier.ui.welcome
 
 import androidx.compose.Composable
 import androidx.compose.ambient
@@ -17,6 +17,8 @@ import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
+import ch.fhnw.ip6.citycourier.ui.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themeTypography
 
 
 @Composable
@@ -116,6 +118,6 @@ fun IconsOverview() {
 @Preview
 @Composable
 fun DefaultPreview() {
-        WelcomeScreen()
+    WelcomeScreen()
 
 }
