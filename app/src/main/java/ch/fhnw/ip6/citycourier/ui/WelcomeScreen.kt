@@ -14,9 +14,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.Font
-import androidx.ui.text.font.FontFamily
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -123,16 +121,19 @@ fun IconsOverview() {
 @Composable
 private fun NotificationList(notifications: List<Notification>) {
     VerticalScroller(isScrollable = true) {
-        // each notification in the list
-        for (each in notifications) {
-            Padding(10.dp) {
-                NotificationCard(each)
+        Column(
+        ){
+            // each notification in the list
+            for (each in notifications) {
+                Padding(10.dp) {
+                    NotificationCard(each)
+                }
             }
         }
+
     }
-
-
 }
+
 @Preview
 @Composable
 fun DefaultPreview() {
