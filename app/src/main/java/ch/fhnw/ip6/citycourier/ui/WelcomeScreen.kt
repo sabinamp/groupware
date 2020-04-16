@@ -5,7 +5,6 @@ import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
 import androidx.ui.foundation.DrawImage
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
@@ -14,7 +13,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
-import androidx.ui.foundation.VerticalScroller
+
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
@@ -34,8 +33,8 @@ private fun CityCourierLogo() {
     val context = +ambient(ContextAmbient)
     val notification1 = Notification("Order 12345"," You have received a new order")
     val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
-
-    val notifyList: List<Notification> = listOf( notification1, notification2)
+    val notification3 = Notification("Order 56789.","The delivery has been rescheduled.")
+    val notifyList: List<Notification> = listOf( notification1, notification2, notification3)
     MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         Column( modifier = Spacing(10.dp)) {
             CityCourierLogo()
@@ -47,9 +46,7 @@ private fun CityCourierLogo() {
                 Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
                     elevation = 8.dp,  modifier = Spacing(10.dp)) {
                     Text("Notifications",
-                        /*style =TextStyle(color = Color.Black, fontSize= 24.sp, fontFamily = FontFamily(
-                            Font(name="montserrat_semibold.otf"))
-                        ))*/ style= themeTypography.h6,
+                        style= themeTypography.h6,
                         modifier = Spacing(left = Dp(10f), right = Dp(60f)))
                 }
 
@@ -118,21 +115,7 @@ fun IconsOverview() {
 
 }
 
-@Composable
-private fun NotificationList(notifications: List<Notification>) {
-    VerticalScroller(isScrollable = true) {
-        Column(
-        ){
-            // each notification in the list
-            for (each in notifications) {
-                Padding(10.dp) {
-                    NotificationCard(each)
-                }
-            }
-        }
 
-    }
-}
 
 @Preview
 @Composable
