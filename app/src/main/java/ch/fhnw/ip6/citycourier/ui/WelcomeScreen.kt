@@ -44,10 +44,10 @@ private fun CityCourierLogo() {
 
             Container(modifier = Height(100.dp) wraps Expanded) {
                 Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
-                    elevation = 8.dp,  modifier = Spacing(10.dp)) {
+                    elevation = 10.dp,  modifier = Spacing(30.dp)) {
                     Text("Notifications",
                         style= themeTypography.h6,
-                        modifier = Spacing(left = Dp(10f), right = Dp(60f)))
+                        modifier = Spacing(left = Dp(10f), right = Dp(10f)))
                 }
 
             }
@@ -75,13 +75,9 @@ fun IconsOverview() {
                         DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
                     }
                 }
-                Text("Orders",  style = themeTypography.h5
-                    /*TextStyle(color=Color.White, fontSize= 20.sp,
-                        fontFamily = FontFamily(
-                        Font(name="montserrat_semibold.otf")) )*/
-                )
+                Text("Orders",  style = themeTypography.h5)
             }
-            WidthSpacer(width = 20.dp)
+            WidthSpacer(width = 22.dp)
 
             Column() {
                 Container(
@@ -95,7 +91,7 @@ fun IconsOverview() {
                 Text("Profile" , style= themeTypography.h5 )
 
             }
-            WidthSpacer(width = 20.dp)
+            WidthSpacer(width = 22.dp)
             Column() {
                 Container(
                     width = Dp(100f),

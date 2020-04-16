@@ -11,11 +11,10 @@ import androidx.ui.foundation.VerticalScroller
 @Composable
 fun NotificationList(notifications: List<Notification>) {
     VerticalScroller(isScrollable = true) {
-        Column(
-        ){
+        Column(){
             // each notification in the list
             for (each in notifications) {
-                Padding(10.dp) {
+                Padding(6.dp) {
                     NotificationCard(each)
                 }
             }
