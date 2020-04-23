@@ -14,7 +14,7 @@ fun NotificationList(notifications: List<Notification>) {
         Column(){
             // each notification in the list
             for (each in notifications) {
-                Padding(6.dp) {
+                Padding(5.dp) {
                     NotificationCard(each)
                 }
             }

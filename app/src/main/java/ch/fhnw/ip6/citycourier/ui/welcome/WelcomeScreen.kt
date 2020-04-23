@@ -44,12 +44,12 @@ private fun CityCourierLogo() {
         VerticalScroller(isScrollable = true) {
             Column( modifier = Spacing(10.dp)) {
                 CityCourierLogo()
-                HeightSpacer(10.dp)
+                HeightSpacer(8.dp)
 
                 Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
                     IconsOverview()
                 }
-                HeightSpacer(10.dp)
+                HeightSpacer(8.dp)
 
                 Container(modifier = Height(100.dp) wraps Expanded) {
                         Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
