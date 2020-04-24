@@ -35,14 +35,14 @@ private fun CityCourierLogo() {
 @Composable
  fun WelcomeScreen() {
     val context = +ambient(ContextAmbient)
-    val notification1 = Notification("Order 12345"," You have received a new order")
-    val notification2 = Notification("Order 34567.","The delivery has been rescheduled.")
+    val notification1 = Notification("Order 12345"," You have received a new order. Standard Delivery.")
+    val notification2 = Notification("Order 34567.","The delivery has been rescheduled.Standard Delivery")
     val notification3 = Notification("Order 56789.","The delivery has been rescheduled.")
     val notifyList: List<Notification> = listOf( notification1, notification2, notification3)
 
     MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         VerticalScroller(isScrollable = true) {
-            Column( modifier = Spacing(10.dp)) {
+            Column( modifier = Spacing(6.dp)) {
                 CityCourierLogo()
                 HeightSpacer(8.dp)
 
