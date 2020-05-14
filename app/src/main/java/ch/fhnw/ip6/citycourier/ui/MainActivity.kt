@@ -7,6 +7,7 @@ import androidx.ui.core.setContent
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
+import ch.fhnw.ip6.citycourier.ui.welcome.WelcomeScreen
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp(children: @Composable() () -> Unit) {
     MaterialTheme {
-        Surface(color = Color(19,23,40)) {
+        Surface(color = Color(19,124,113)) {
             children()
         }
     }

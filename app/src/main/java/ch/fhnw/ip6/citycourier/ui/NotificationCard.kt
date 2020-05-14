@@ -23,25 +23,21 @@ import ch.fhnw.ip6.citycourier.model.Notification
 
 @Composable
 fun NotificationCard(notification: Notification){
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,modifier = Height(110.dp) wraps Expanded) {
+    Card(shape = RoundedCornerShape(8.dp), elevation = 10.dp, modifier = Height(100.dp) wraps Expanded) {
         Row(modifier = Modifier.None,
             arrangement = Arrangement.Begin
         ){
-            Column( modifier = Spacing(4.dp)
+            Column( modifier = Spacing(8.dp)
             ){
-                Container(height=40.dp, width=40.dp) {
-                DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell40))
+                Container(height=50.dp, width=50.dp) {
+                DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell80))
              }
             }
             WidthSpacer(10.dp)
             Column(modifier = Spacing(8.dp)
             ) {
-                Text(notification.title, style = TextStyle(color=Color.Black, fontSize= 20.sp, fontWeight = FontWeight.Bold)
-                )
-                Text(notification.message, style= TextStyle(color=Color.Black, fontSize= 16.sp
-
-                ).withOpacity(0.90f)
-
+                Text(notification.title, style = themeTypography.subtitle1)
+                Text(notification.message, style= themeTypography.body2.withOpacity(0.90f)
                 )
             }
 

@@ -7,12 +7,12 @@ import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
 import androidx.ui.text.font.Font
 import androidx.ui.text.font.FontFamily
+import androidx.ui.text.font.FontStyle
 
 
-
-val regular = Font(name="Roboto-Regular.ttf",weight = FontWeight.W400)
-val medium = Font(name="Roboto-Medium.ttf", weight = FontWeight.W500)
-val semibold = Font(name="Roboto-Bold.ttf", weight = FontWeight.W600)
+val regular = Font(name="montserrat_regular.otf")
+val medium = Font(name="montserrat_black.otf", weight = FontWeight.W500)
+val semibold = Font(name="montserrat_semibold.otf", weight = FontWeight.W600)
 
 val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
 
@@ -27,30 +27,39 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
         fontSize = 24.sp,
-        color = Color(27,97,160)
+        color = Color.White
+
     ),
     h6 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W600,
         fontSize = 20.sp,
-        color = Color.White
+        color = Color(27,97,160)
     ),
 
     subtitle1 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
-        fontSize = 16.sp
+        fontSize = 18.sp,
+        color = Color.DarkGray
     ),
     subtitle2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+        fontSize = 16.sp,
+        color=Color.Black
     ),
 
     body1 = TextStyle(
         fontFamily = appFontFamily,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         color = Color.Black
+    ),
+    body2 = TextStyle(
+        fontFamily = appFontFamily,
+        fontSize = 14.sp,
+        color = Color.DarkGray,
+        fontStyle = FontStyle.Normal
     ),
     button = TextStyle(
         fontFamily = appFontFamily,
@@ -65,6 +74,7 @@ val themeTypography = Typography(
     overline = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 12.sp
+        fontSize = 12.sp,
+        fontStyle = FontStyle.Italic
     )
 )
