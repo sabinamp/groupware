@@ -13,10 +13,10 @@ public class CourierInfo {
     private String deviceName = null;
 
     @JsonProperty("conn")
-    private String conn = null;
+    private Conn conn = null;
 
     @JsonProperty("status")
-    private String status = null;
+    private CourierStatus status = null;
 
     @JsonProperty("location")
     private Location location = null;
@@ -46,12 +46,12 @@ public class CourierInfo {
         return this;
     }
 
-    public CourierInfo status(String status) {
+    public CourierInfo status(CourierStatus status) {
         this.status= status;
         return this;
     }
 
-    public CourierInfo conn(String conn) {
+    public CourierInfo conn(Conn conn) {
         this.conn= conn;
         return this;
     }
@@ -89,19 +89,19 @@ public class CourierInfo {
         this.deviceName = deviceName;
     }
 
-    public String getConn() {
+    public Conn getConn() {
         return conn;
     }
 
-    public void setConn(String conn) {
+    public void setConn(Conn conn) {
         this.conn = conn;
     }
 
-    public String getStatus() {
+    public CourierStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CourierStatus status) {
         this.status = status;
     }
 
