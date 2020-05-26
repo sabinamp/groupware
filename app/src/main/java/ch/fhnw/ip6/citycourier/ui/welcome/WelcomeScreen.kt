@@ -1,5 +1,8 @@
 package ch.fhnw.ip6.citycourier.ui.welcome
 
+import android.graphics.drawable.VectorDrawable
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Colors
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
@@ -8,8 +11,12 @@ import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.Image
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
+import androidx.ui.material.Button
+import androidx.ui.material.Divider
+import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
@@ -20,12 +27,13 @@ import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Notification
 import ch.fhnw.ip6.citycourier.ui.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themeTypography
-import java.math.BigInteger
+import ch.fhnw.ip6.citycourier.data.dataService
+import java.util.*
 
 
 @Composable
 private fun CityCourierLogo() {
-    Container(modifier = Height(130.dp) wraps Expanded) {
+    Container(modifier = Height(110.dp) wraps Expanded) {
         Clip(shape = RoundedCornerShape(8.dp)) {
             DrawImage(image = +imageResource(R.drawable.deliveryservice_logo))
         }
@@ -35,41 +43,44 @@ private fun CityCourierLogo() {
 @Composable
  fun WelcomeScreen() {
     val context = +ambient(ContextAmbient)
-    val notification1 = Notification("Order 12345"," You have received a new order. Standard Delivery.")
-    val notification2 = Notification("Order 34567.","The delivery has been rescheduled.Standard Delivery")
-    val notification3 = Notification("Order 56789.","The delivery has been rescheduled.")
-    val notifyList: List<Notification> = listOf( notification1, notification2, notification3)
+
 
     MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         VerticalScroller(isScrollable = true) {
-            Column( modifier = Spacing(6.dp)) {
+            Column( modifier = Spacing(5.dp)) {
                 CityCourierLogo()
-                HeightSpacer(8.dp)
+                HeightSpacer(5.dp)
 
                 Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
                     IconsOverview()
                 }
-                HeightSpacer(8.dp)
-
-                Container(modifier = Height(100.dp) wraps Expanded) {
-                        Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
-                            elevation = 10.dp,  modifier = Spacing(30.dp)) {
-                            Text("Notifications",
-                                style= themeTypography.h6,
-                                modifier = Spacing(left = Dp(10f), right = Dp(10f)))
-                        }
-
-                }
-
-                //notification list
-                  NotificationList(notifications = notifyList)
+                HeightSpacer(5.dp)
+                NotifyListBody()
                 }
             }
-
 
     }
 }
 
+@Composable
+fun NotifyListBody(){
+    Padding(padding = 10.dp){
+        Column{
+            Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
+                Text("Notifications",
+                    style= themeTypography.h3,
+                    modifier = Spacing(left = Dp(10f), right = Dp(10f)))
+            }
+            Padding(padding = EdgeInsets(0.dp, 12.dp, 0.dp, 12.dp)) {
+                val colors = LightThemeColors
+                Divider(color = colors.secondary, height = 2.dp)
+            }
+            //notification list
+            NotificationList(notifications = dataService())
+        }
+    }
+
+}
 
 @Composable
 fun IconsOverview() {
@@ -83,14 +94,15 @@ fun IconsOverview() {
                         alignment = Alignment.TopCenter
                     ) {
                         Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60))
                         }
+
                     }
-                    Text("Orders", style = themeTypography.h5)
+                    Text("Orders", style = themeTypography.subtitle1)
                 }
             }
 
-            WidthSpacer(width = 14.dp)
+            WidthSpacer(width = 18.dp)
 
             expanded(flex=1.0f){
                 Column(){
@@ -100,10 +112,11 @@ fun IconsOverview() {
                         alignment = Alignment.TopCenter
                     ) {
                         Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_80))
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_user_60))
                         }
+
                     }
-                    Text("Profile" , style= themeTypography.h5 )
+                    Text("Profile" , style= themeTypography.subtitle1 )
 
                 }
             }
@@ -118,10 +131,10 @@ fun IconsOverview() {
                        alignment = Alignment.TopCenter
                    ) {
                        Clip(shape = RoundedCornerShape(8.dp)) {
-                           DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_100))
+                           DrawVector(vectorImage = +vectorResource(R.drawable.ic_team_60))
                        }
-                   }
-                   Text("Chat", style= themeTypography.h5 )
+                    }
+                   Text("Team", style= themeTypography.subtitle1)
                }
            }
         }

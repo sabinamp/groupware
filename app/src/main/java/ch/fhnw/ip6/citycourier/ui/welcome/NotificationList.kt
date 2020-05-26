@@ -1,6 +1,7 @@
 package ch.fhnw.ip6.citycourier.ui.welcome
 
 import androidx.compose.Composable
+import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
@@ -15,7 +16,7 @@ fun NotificationList(notifications: List<Notification>) {
         Column(modifier = Spacing(4.dp)){
             // each notification in the list
             for (each in notifications) {
-                Padding(5.dp) {
+                Padding(4.dp) {
                     NotificationCard(each)
                 }
             }
