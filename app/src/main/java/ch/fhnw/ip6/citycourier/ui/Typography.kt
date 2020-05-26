@@ -18,34 +18,48 @@ val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
 
 
 val themeTypography = Typography(
-    h4 = TextStyle(
+    h2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
-        fontSize = 30.sp
+        fontSize = 26.sp
+    ),
+    h3 = TextStyle(
+        fontFamily = appFontFamily,
+        fontWeight = FontWeight.W500,
+        fontSize = 22.sp,
+        color = LightThemeColors.secondary
+    ),
+    h4 = TextStyle(
+        fontFamily = appFontFamily,
+        fontWeight = FontWeight.W400,
+        fontSize = 22.sp,
+        color = LightThemeColors.onSurface
     ),
     h5 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W600,
-        fontSize = 24.sp,
+        fontWeight = FontWeight.W400,
+        fontSize = 20.sp,
         color = Color.White
 
     ),
     h6 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W600,
-        fontSize = 20.sp,
-        color = Color(27,97,160)
+        fontWeight = FontWeight.W400,
+        fontSize = 18.sp,
+        color = Color(255, 234, 227)
     ),
 
     subtitle1 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W600,
+        fontWeight = FontWeight.W500,
         fontSize = 18.sp,
-        color = Color.DarkGray
+        color = LightThemeColors.onSurface
+       // color = Color(229,177,151)
+        //color = Color(0xffb197)
     ),
     subtitle2 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W400,
         fontSize = 16.sp,
         color=Color.Black
     ),
