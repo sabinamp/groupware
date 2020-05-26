@@ -1,6 +1,8 @@
 package ch.fhnw.ip6.citycourier.ui.welcome
 
 import android.graphics.drawable.VectorDrawable
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Colors
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
@@ -12,6 +14,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
+import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
@@ -50,29 +53,32 @@ private fun CityCourierLogo() {
                     IconsOverview()
                 }
                 HeightSpacer(5.dp)
-
-                /*  Container(modifier = Height(60.dp) wraps Expanded) {
-                      Surface(color = Color.White, shape = RoundedCornerShape(4.dp),
-                            elevation = 10.dp,  modifier = Spacing(10.dp)) {
-                            Text("Notifications",
-                                style= themeTypography.h6,
-                                modifier = Spacing(left = Dp(10f), right = Dp(10f)))
-                        }
-
-                }*/
-                Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
-                    Text("Notifications",
-                        style= themeTypography.h3,
-                        modifier = Spacing(left = Dp(10f), right = Dp(10f)))
-                }
-                //notification list
-                  NotificationList(notifications = dataService())
+                NotifyListBody()
                 }
             }
 
     }
 }
 
+@Composable
+fun NotifyListBody(){
+    Padding(padding = 10.dp){
+        Column{
+            Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
+                Text("Notifications",
+                    style= themeTypography.h3,
+                    modifier = Spacing(left = Dp(10f), right = Dp(10f)))
+            }
+            Padding(padding = EdgeInsets(0.dp, 12.dp, 0.dp, 12.dp)) {
+                val colors = LightThemeColors
+                Divider(color = colors.secondary, height = 2.dp)
+            }
+            //notification list
+            NotificationList(notifications = dataService())
+        }
+    }
+
+}
 
 @Composable
 fun IconsOverview() {
@@ -86,10 +92,10 @@ fun IconsOverview() {
                         alignment = Alignment.TopCenter
                     ) {
                         Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell100))
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60))
                         }
                     }
-                    Text("Orders", style = themeTypography.h3)
+                    Text("Orders", style = themeTypography.subtitle1)
                 }
             }
 
@@ -103,10 +109,10 @@ fun IconsOverview() {
                         alignment = Alignment.TopCenter
                     ) {
                         Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_80))
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_user_60))
                         }
                     }
-                    Text("Profile" , style= themeTypography.h3 )
+                    Text("Profile" , style= themeTypography.subtitle1 )
 
                 }
             }
@@ -121,12 +127,12 @@ fun IconsOverview() {
                        alignment = Alignment.TopCenter
                    ) {
                        Clip(shape = RoundedCornerShape(8.dp)) {
-                           DrawVector(vectorImage = +vectorResource(R.drawable.ic_message_100))
+                           DrawVector(vectorImage = +vectorResource(R.drawable.ic_team_60))
                        }
-                       //val vectorImage = +vectorResource(R.drawable.ic_message_100)
+
 
                    }
-                   Text("Chat", style= themeTypography.h3 )
+                   Text("Team", style= themeTypography.subtitle1)
                }
            }
         }
