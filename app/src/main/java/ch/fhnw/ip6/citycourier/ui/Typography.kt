@@ -18,23 +18,35 @@ val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
 
 
 val themeTypography = Typography(
-    h4 = TextStyle(
+    h2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
         fontSize = 30.sp
     ),
-    h5 = TextStyle(
+    h3 = TextStyle(
+        fontFamily = appFontFamily,
+        fontWeight = FontWeight.W600,
+        fontSize = 28.sp,
+        color = Color.White
+    ),
+    h4 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
         fontSize = 24.sp,
+        color = Color(	227, 248, 255)
+    ),
+    h5 = TextStyle(
+        fontFamily = appFontFamily,
+        fontWeight = FontWeight.W600,
+        fontSize = 20.sp,
         color = Color.White
 
     ),
     h6 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
-        fontSize = 20.sp,
-        color = Color(27,97,160)
+        fontSize = 18.sp,
+        color = Color(255, 234, 227)
     ),
 
     subtitle1 = TextStyle(
