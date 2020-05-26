@@ -4,24 +4,24 @@ import android.graphics.drawable.shapes.RectShape
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
+import androidx.ui.engine.geometry.Outline
 import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
+import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
-import androidx.ui.material.Button
-import androidx.ui.material.ButtonStyle
-import androidx.ui.material.Divider
+import androidx.ui.material.*
 import androidx.ui.material.surface.Card
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.withOpacity
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.model.DeliveryType
 import ch.fhnw.ip6.citycourier.model.Notification
 import ch.fhnw.ip6.citycourier.ui.welcome.WelcomeScreen
 
@@ -32,8 +32,14 @@ fun NotificationCard(notification: Notification){
             expanded(flex=1.0f){
                 Column( modifier = Spacing(5.dp)
                 ){
-                    Container(height=50.dp, width=50.dp) {
-                        DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell80))
+                    Container(height=60.dp, width=60.dp) {
+                        if(notification.type == DeliveryType.STANDARD){
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60)  )
+                        }else{
+                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_urgent_60))
+                        }
+
+
                     }
                 }
             }
@@ -41,24 +47,35 @@ fun NotificationCard(notification: Notification){
            expanded(flex=5.0f){
                Column(modifier = Spacing(5.dp)
                ) {
-                   Text(notification.title, style = themeTypography.subtitle1)
+                   Text(notification.title, style = themeTypography.body1)
                    Text(notification.message, style= themeTypography.body2.withOpacity(0.90f)
                    )
                }
            }
             expanded(flex=2.0f) {
-                Column(modifier = Spacing(5.dp)
-                ) {
-                    Button(text = "OK",
-                        style = ButtonStyle(Color(151,255,177), shape = RectangleShape),
-                        onClick = {})
-                    HeightSpacer(5.dp)
-                    Button(text = "NO",
-                        style = ButtonStyle(Color(255,151,171), shape = RectangleShape),
-                        onClick = {})
-                }
-            }
 
+                    Column(modifier = Spacing(5.dp)
+                    ) {
+                      /*  FloatingActionButton(
+                            color =Color(151, 255, 177),
+                            text = "OK",
+                            onClick = { *//* do something here *//* })*/
+                        Button(text = "OK",
+                            style = ButtonStyle(Color(151, 255, 177),
+                                shape = RectangleShape),
+                            modifier = MaxHeight(45.dp),
+                            onClick = {})
+                        HeightSpacer(3.dp)
+                       /* FloatingActionButton(
+                            color = LightThemeColors.onError,
+                            text = "NO",
+                            onClick = { *//* do something here *//* })*/
+                        Button(text = "NO",
+                            style = ButtonStyle(LightThemeColors.onError, shape = RectangleShape),
+                            modifier = MaxHeight(45.dp),
+                            onClick = {})
+                    }
+            }
         }
     }
     Divider(color = Color.Gray)
@@ -68,7 +85,7 @@ fun NotificationCard(notification: Notification){
 @Preview
 @Composable
 fun CardPreview() {
-    NotificationCard(Notification("title", "message"))
+    NotificationCard(Notification("title", "message", DeliveryType.STANDARD))
 
 }
 

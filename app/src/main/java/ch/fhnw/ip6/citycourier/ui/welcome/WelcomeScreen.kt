@@ -14,7 +14,9 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
+import androidx.ui.material.Button
 import androidx.ui.material.Divider
+import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.imageResource
@@ -94,6 +96,7 @@ fun IconsOverview() {
                         Clip(shape = RoundedCornerShape(8.dp)) {
                             DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60))
                         }
+
                     }
                     Text("Orders", style = themeTypography.subtitle1)
                 }
@@ -111,6 +114,7 @@ fun IconsOverview() {
                         Clip(shape = RoundedCornerShape(8.dp)) {
                             DrawVector(vectorImage = +vectorResource(R.drawable.ic_user_60))
                         }
+
                     }
                     Text("Profile" , style= themeTypography.subtitle1 )
 
@@ -129,9 +133,7 @@ fun IconsOverview() {
                        Clip(shape = RoundedCornerShape(8.dp)) {
                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_team_60))
                        }
-
-
-                   }
+                    }
                    Text("Team", style= themeTypography.subtitle1)
                }
            }

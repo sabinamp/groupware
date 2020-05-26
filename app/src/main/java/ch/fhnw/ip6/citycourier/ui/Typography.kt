@@ -26,12 +26,12 @@ val themeTypography = Typography(
     h3 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 24.sp,
+        fontSize = 22.sp,
         color = LightThemeColors.secondary
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W400,
         fontSize = 22.sp,
         color = LightThemeColors.onSurface
     ),
@@ -51,9 +51,11 @@ val themeTypography = Typography(
 
     subtitle1 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.W500,
         fontSize = 18.sp,
-        color = Color(229,177,151)
+        color = LightThemeColors.onSurface
+       // color = Color(229,177,151)
+        //color = Color(0xffb197)
     ),
     subtitle2 = TextStyle(
         fontFamily = appFontFamily,
