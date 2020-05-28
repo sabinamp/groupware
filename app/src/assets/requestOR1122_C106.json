@@ -1,0 +1,11 @@
+{
+  "orderId": "OR1122",
+  "assigneeId": "C106",
+  "addressLine": "Rosenstrasse 14",
+  "deliveryType": "Urgent",
+  "taskType": "Parcel collection",
+  "dueOn": "29.05.2020 17:00",
+  "shift": "AM",
+  "confirmed": "false",
+  "sentWhen": "27.05.2020 14:00"
+}

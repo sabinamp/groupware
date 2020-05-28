@@ -11,7 +11,7 @@ fun ProfileScreen(){
 
 @Preview
 @Composable
-fun DefaultPreview() {
+fun ProfilePreview() {
     ProfileScreen()
 
 }

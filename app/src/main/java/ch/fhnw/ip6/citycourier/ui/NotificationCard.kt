@@ -1,14 +1,10 @@
 package ch.fhnw.ip6.citycourier.ui
 
-import android.graphics.drawable.shapes.RectShape
+
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
-import androidx.ui.engine.geometry.Outline
-import androidx.ui.engine.geometry.Shape
-import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -16,24 +12,25 @@ import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.material.surface.Card
-import androidx.ui.material.surface.Surface
+
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 
+
 import ch.fhnw.ip6.citycourier.R
-import ch.fhnw.ip6.citycourier.model.DeliveryType
-import ch.fhnw.ip6.citycourier.model.Notification
-import ch.fhnw.ip6.citycourier.ui.welcome.WelcomeScreen
+import ch.fhnw.ip6.citycourier.model.*
+import java.time.LocalDateTime
+
 
 @Composable
-fun NotificationCard(notification: Notification){
+fun NotificationCard(notification: TaskRequest){
     Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp, modifier = Height(90.dp) wraps Expanded) {
         FlexRow{
             expanded(flex=1.0f){
                 Column( modifier = Spacing(5.dp)
                 ){
                     Container(height=60.dp, width=60.dp) {
-                        if(notification.type == DeliveryType.STANDARD){
+                        if(DeliveryType.STANDARD == notification.deliveryType ){
                             DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60)  )
                         }else{
                             DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_urgent_60))
@@ -47,8 +44,10 @@ fun NotificationCard(notification: Notification){
            expanded(flex=5.0f){
                Column(modifier = Spacing(5.dp)
                ) {
-                   Text(notification.title, style = themeTypography.body1)
-                   Text(notification.message, style= themeTypography.body2.withOpacity(0.90f)
+                   Text("Delivery Request for "+notification.orderId, style = themeTypography.body1)
+                   Text("Task: "+notification.taskType, style= themeTypography.body2.withOpacity(0.90f))
+
+                   Text("Address: "+notification.addressLine, style= themeTypography.body2.withOpacity(0.90f)
                    )
                }
            }
@@ -62,7 +61,7 @@ fun NotificationCard(notification: Notification){
                             onClick = { *//* do something here *//* })*/
                         Button(text = "OK",
                             style = ButtonStyle(Color(151, 255, 177),
-                                shape = RectangleShape),
+                                shape = CircleShape),
                             modifier = MaxHeight(45.dp),
                             onClick = {})
                         HeightSpacer(3.dp)
@@ -71,7 +70,7 @@ fun NotificationCard(notification: Notification){
                             text = "NO",
                             onClick = { *//* do something here *//* })*/
                         Button(text = "NO",
-                            style = ButtonStyle(LightThemeColors.onError, shape = RectangleShape),
+                            style = ButtonStyle(LightThemeColors.onError, shape = CircleShape),
                             modifier = MaxHeight(45.dp),
                             onClick = {})
                     }
@@ -82,13 +81,26 @@ fun NotificationCard(notification: Notification){
 
 }
 
+
 @Preview
 @Composable
-fun CardPreview() {
-    NotificationCard(Notification("title", "message", DeliveryType.STANDARD))
+fun NotificationPreview() {
+    val notification1 = TaskRequest()
+    notification1.orderId("OR1123")
+    notification1.assigneeId( "C102")
+    notification1.addressLine("Rosenstrasse 14")
+    notification1.deliveryType(DeliveryType.STANDARD)
+    notification1.taskType(TaskType.PARCEL_COLLECTION)
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        notification1.dueOn(LocalDateTime.now().plusHours(7))
+        notification1.sentWhen(LocalDateTime.now())
+    }
+    notification1.shift(ShiftType.AM)
+
+    NotificationCard(notification1)
 
 }
-
 
 
 
