@@ -72,7 +72,10 @@ class DataServiceTest {
         }
 */
         Assert.assertEquals(dataService().size, 4)
-        Assert.assertEquals(  "Tulpenstr 18" ,dataService().get(0).addressLine  )
+        Assert.assertEquals(  "Rosenstrasse 12" ,dataService().get(0).addressLine  )
         Assert.assertEquals(  "OR1123" ,dataService().get(0).orderId  )
+
+        Assert.assertEquals(  "Tulpenstr 18" ,dataService().get(3).addressLine  )
+        Assert.assertEquals(  "OR1125" ,dataService().get(3).orderId  )
     }
 }
