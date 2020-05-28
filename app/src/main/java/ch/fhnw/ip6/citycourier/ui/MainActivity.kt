@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MyApp {
                 WelcomeScreen()
+
             }
         }
     }
