@@ -44,9 +44,9 @@ fun Picture(){
             style = themeTypography.subtitle1
         )
     }
-    HeightSpacer(height = 25.dp)
+    HeightSpacer(height = 5.dp)
 
-    Container(modifier = Size(130.dp, 130.dp)) {
+    Container(modifier = Size(100.dp, 100.dp)) {
         Clip(shape= CircleShape){
             DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_60))
         }
@@ -55,12 +55,35 @@ fun Picture(){
 
 @Composable
 fun ProfileInfo(){
-    HeightSpacer(height=10.dp)
-    Row(modifier = Width(130.dp)) {
-        Column(modifier = Width(65.dp)) {
-            Text(text="Name",modifier=Width(50.dp))
-            Text(text="Martin",modifier=Width(50.dp))
+    HeightSpacer(height=2.dp)
+    Column(modifier = Spacing(5.dp)) {
+        Row(modifier = Spacing(5.dp)) {
+            Text(text="First name", modifier = Width(150.dp))
+
+            Text(text="Martin", modifier = Width(150.dp))
         }
+        Row(modifier = Spacing(5.dp)) {
+            Text(text="Last name", modifier = Width(150.dp))
+
+            Text(text="Keller", modifier = Width(150.dp))
+        }
+        Row(modifier = Spacing(5.dp)) {
+            Text(text="CourierID", modifier = Width(150.dp))
+
+            Text(text="CourierIC001", modifier = Width(150.dp))
+        }
+        Row(modifier = Spacing(5.dp)) {
+            Text(text="Region", modifier = Width(150.dp))
+
+            Text(text="City Zürich West", modifier = Width(150.dp))
+        }
+        Row(modifier = Spacing(5.dp)) {
+            Text(text="Contact", modifier = Width(150.dp))
+
+            Text(text="martin.keller@courier.ch", modifier = Width(150.dp))
+        }
+
+
     }
 }
 
@@ -81,35 +104,40 @@ fun StatusBar() {
             expanded(flex=1.0f) {
                 Column(){
                     Container(
-                        width = Dp(60f),
-                        height = Dp(60f),
+                        width = Dp(30f),
+                        height = Dp(30f),
                         alignment = Alignment.TopCenter
                     ) {
                         Clip(shape = RoundedCornerShape(8.dp)) {
                             DrawImage(image = +imageResource(R.drawable.arrow))
                         }
-
                     }
-
                 }
             }
 
             WidthSpacer(width = 10.dp)
 
             expanded(flex=1.0f){
-                Column(){
-                    Container(
-                        width = Dp(60f),
-                        height = Dp(60f),
-                        alignment = Alignment.TopCenter
-                    ) {
-                        Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawImage(image = +imageResource(R.drawable.online_connection))
+                Column() {
+                    Row() {
+
+                        Container(
+                            width = Dp(30f),
+                            height = Dp(30f),
+                            alignment = Alignment.TopRight
+                        ) {
+                            Clip(shape = RoundedCornerShape(8.dp)) {
+                                DrawImage(image = +imageResource(R.drawable.online_connection))
+                            }
+
                         }
+                        WidthSpacer(width = 15.dp)
+                        Text("Online")
 
                     }
-                    Text("Connection" , style= themeTypography.subtitle1 )
 
+
+                }
                 }
             }
 
@@ -117,7 +145,7 @@ fun StatusBar() {
         }
     }
 
-}
+
 
 
 
