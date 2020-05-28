@@ -11,6 +11,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
 import androidx.ui.layout.Size
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
@@ -57,31 +58,38 @@ fun Picture(){
 fun ProfileInfo(){
     HeightSpacer(height=2.dp)
     Column(modifier = Spacing(5.dp)) {
-        Row(modifier = Spacing(5.dp)) {
-            Text(text="First name", modifier = Width(150.dp))
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="CourierID", modifier = Width(150.dp))
+                Text(text="courier00C1", modifier = Width(150.dp))
+            }
 
-            Text(text="Martin", modifier = Width(150.dp))
-        }
-        Row(modifier = Spacing(5.dp)) {
-            Text(text="Last name", modifier = Width(150.dp))
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="Device name", modifier = Width(150.dp))
+                Text(text="RedmiHauser", modifier = Width(150.dp))
+            }
 
-            Text(text="Keller", modifier = Width(150.dp))
-        }
-        Row(modifier = Spacing(5.dp)) {
-            Text(text="CourierID", modifier = Width(150.dp))
+            Row(modifier = Spacing(5.dp)){
+                Text(text="First name", modifier = Width(150.dp))
+                Text(text="Martin", modifier = Width(150.dp))
+            }
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="Last name", modifier = Width(150.dp))
+                Text(text="Hauser", modifier = Width(150.dp))
+            }
 
-            Text(text="CourierIC001", modifier = Width(150.dp))
-        }
-        Row(modifier = Spacing(5.dp)) {
-            Text(text="Region", modifier = Width(150.dp))
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="Region", modifier = Width(150.dp))
+                Text(text="City Zürich West", modifier = Width(150.dp))
+            }
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="Mail", modifier = Width(150.dp))
+                Text(text="info@citycourier.ch", modifier = Width(150.dp))
+            }
 
-            Text(text="City Zürich West", modifier = Width(150.dp))
-        }
-        Row(modifier = Spacing(5.dp)) {
-            Text(text="Contact", modifier = Width(150.dp))
-
-            Text(text="martin.keller@courier.ch", modifier = Width(150.dp))
-        }
+            Row(modifier = Spacing(5.dp)) {
+                Text(text="Telephone number", modifier = Width(150.dp))
+                Text(text="+41442205020", modifier = Width(150.dp))
+            }
 
 
     }
@@ -90,7 +98,7 @@ fun ProfileInfo(){
 
 @Composable
 fun CourierLogo() {
-    Container(modifier = Height(110.dp) wraps Expanded) {
+    Container(modifier = Height(90.dp) wraps Expanded) {
         Clip(shape = RoundedCornerShape(8.dp)) {
             DrawImage(image = +imageResource(R.drawable.deliveryservice_logo))
         }
@@ -124,15 +132,21 @@ fun StatusBar() {
                         Container(
                             width = Dp(30f),
                             height = Dp(30f),
-                            alignment = Alignment.TopRight
+                            alignment = Alignment.CenterRight
                         ) {
                             Clip(shape = RoundedCornerShape(8.dp)) {
                                 DrawImage(image = +imageResource(R.drawable.online_connection))
                             }
 
                         }
-                        WidthSpacer(width = 15.dp)
-                        Text("Online")
+                            WidthSpacer(width = 15.dp)
+                            Button() {
+                                Text("Online")
+
+                                }
+
+                            }
+
 
                     }
 
@@ -143,7 +157,7 @@ fun StatusBar() {
 
 
         }
-    }
+
 
 
 
