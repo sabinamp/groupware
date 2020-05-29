@@ -2,7 +2,6 @@ package ch.fhnw.ip6.citycourier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 import java.util.Objects;
 
 

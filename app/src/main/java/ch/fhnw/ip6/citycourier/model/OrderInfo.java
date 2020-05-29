@@ -2,6 +2,7 @@ package ch.fhnw.ip6.citycourier.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ import java.util.Objects;
 public class OrderInfo {
     @JsonProperty("placedWhen")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
-    private LocalDateTime  placedWhen = null;
+    private LocalDateTime placedWhen = null;
 
     @JsonProperty("deliveryType")
     private DeliveryType deliveryType = null;

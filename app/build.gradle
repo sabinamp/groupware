@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "ch.fhnw.ip6.citycourier"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -55,4 +55,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3'
     implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.10.3'
+
+
 }

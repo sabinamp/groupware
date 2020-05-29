@@ -1,8 +1,6 @@
 package ch.fhnw.ip6.citycourier.ui.welcome
 
-import android.graphics.drawable.VectorDrawable
-import android.provider.CalendarContract
-import android.provider.CalendarContract.Colors
+
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
@@ -10,11 +8,10 @@ import androidx.ui.core.*
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.Image
+
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
-import androidx.ui.material.Button
+
 import androidx.ui.material.Divider
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
@@ -24,11 +21,10 @@ import androidx.ui.res.vectorResource
 
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
-import ch.fhnw.ip6.citycourier.model.Notification
 import ch.fhnw.ip6.citycourier.ui.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themeTypography
 import ch.fhnw.ip6.citycourier.data.dataService
-import java.util.*
+
 
 
 @Composable
@@ -39,6 +35,7 @@ private fun CityCourierLogo() {
         }
     }
 }
+
 
 @Composable
  fun WelcomeScreen() {
@@ -61,6 +58,7 @@ private fun CityCourierLogo() {
 
     }
 }
+
 
 @Composable
 fun NotifyListBody(){

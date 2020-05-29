@@ -2,7 +2,7 @@ package ch.fhnw.ip6.citycourier.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class Profile   {
     @JsonProperty("email")
     private String email = null;
