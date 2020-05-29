@@ -1,7 +1,9 @@
 package ch.fhnw.ip6.citycourier.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+import java.util.Objects;
 
 
 public class Address   {
