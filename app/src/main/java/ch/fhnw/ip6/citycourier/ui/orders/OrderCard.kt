@@ -4,8 +4,6 @@ package ch.fhnw.ip6.citycourier.ui.orders
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
-import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
@@ -19,8 +17,8 @@ import androidx.ui.tooling.preview.Preview
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.*
-import ch.fhnw.ip6.citycourier.ui.LightThemeColors
-import ch.fhnw.ip6.citycourier.ui.themeTypography
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 import java.time.LocalDateTime
 
 

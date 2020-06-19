@@ -1,5 +1,5 @@
 
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier.ui.themes
 
 import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette

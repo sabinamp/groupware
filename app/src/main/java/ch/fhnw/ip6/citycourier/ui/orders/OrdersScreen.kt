@@ -9,10 +9,9 @@ import androidx.ui.layout.*
 import androidx.ui.material.Divider
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.data.dataService
-import ch.fhnw.ip6.citycourier.model.OrderDescriptiveInfo
 import ch.fhnw.ip6.citycourier.model.TaskRequest
-import ch.fhnw.ip6.citycourier.ui.LightThemeColors
-import ch.fhnw.ip6.citycourier.ui.themeTypography
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable

@@ -8,6 +8,7 @@ import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import ch.fhnw.ip6.citycourier.ui.orders.OrdersScreen
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 
 class OrdersActivity : AppCompatActivity() {

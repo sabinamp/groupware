@@ -18,8 +18,8 @@ import androidx.ui.tooling.preview.Preview
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.*
-import ch.fhnw.ip6.citycourier.ui.LightThemeColors
-import ch.fhnw.ip6.citycourier.ui.themeTypography
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 import java.time.LocalDateTime
 
 

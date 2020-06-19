@@ -7,9 +7,9 @@ import androidx.ui.layout.*
 import androidx.ui.material.Divider
 import androidx.ui.material.surface.Card
 import androidx.ui.tooling.preview.Preview
-import ch.fhnw.ip6.citycourier.ui.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.btn.TransparentButton
-import ch.fhnw.ip6.citycourier.ui.themeTypography
+import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 @Composable
 fun OrdersAlertCard() {
@@ -24,7 +24,8 @@ fun OrdersAlertCard() {
 
                 }
                 Padding(padding = EdgeInsets(0.dp, 12.dp, 0.dp, 12.dp)) {
-                    val colors = LightThemeColors
+                    val colors =
+                        LightThemeColors
                     Divider(color = colors.secondary, height = 2.dp)
                 }
                 FlexRow {

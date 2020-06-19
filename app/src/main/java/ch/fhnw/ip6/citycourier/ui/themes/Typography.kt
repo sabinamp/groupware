@@ -1,4 +1,4 @@
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier.ui.themes
 
 import androidx.ui.core.sp
 import androidx.ui.graphics.Color
@@ -14,7 +14,11 @@ val regular = Font(name="montserrat_regular.otf")
 val medium = Font(name="montserrat_black.otf", weight = FontWeight.W500)
 val semibold = Font(name="montserrat_semibold.otf", weight = FontWeight.W600)
 
-val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
+val appFontFamily = FontFamily(fonts = listOf(
+    regular,
+    medium,
+    semibold
+))
 
 
 val themeTypography = Typography(
