@@ -1,10 +1,9 @@
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier.ui.welcome
 
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
-import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
@@ -19,6 +18,8 @@ import androidx.ui.tooling.preview.Preview
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.*
+import ch.fhnw.ip6.citycourier.ui.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themeTypography
 import java.time.LocalDateTime
 
 
@@ -27,7 +28,7 @@ fun NotificationCard(notification: TaskRequest){
     Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp, modifier = Height(90.dp) wraps Expanded) {
         FlexRow{
             expanded(flex=1.0f){
-                Column( modifier = Spacing(5.dp)
+                Column( modifier = Spacing(2.dp)
                 ){
                     Container(height=60.dp, width=60.dp) {
                         if(DeliveryType.STANDARD == notification.deliveryType ){
@@ -42,7 +43,7 @@ fun NotificationCard(notification: TaskRequest){
             }
             //WidthSpacer(5.dp)
            expanded(flex=5.0f){
-               Column(modifier = Spacing(5.dp)
+               Column(modifier = Spacing(4.dp)
                ) {
                    Text("Delivery Request for "+notification.orderId, style = themeTypography.body1)
                    Text("Task: "+notification.taskType, style= themeTypography.body2.withOpacity(0.90f))
@@ -52,8 +53,7 @@ fun NotificationCard(notification: TaskRequest){
                }
            }
             expanded(flex=2.0f) {
-
-                    Column(modifier = Spacing(5.dp)
+                    Column(modifier = Spacing(4.dp)
                     ) {
                       /*  FloatingActionButton(
                             color =Color(151, 255, 177),
@@ -62,7 +62,7 @@ fun NotificationCard(notification: TaskRequest){
                         Button(text = "OK",
                             style = ButtonStyle(Color(151, 255, 177),
                                 shape = CircleShape),
-                            modifier = MaxHeight(45.dp),
+                            modifier = MaxHeight(40.dp),
                             onClick = {})
                         HeightSpacer(3.dp)
                        /* FloatingActionButton(
@@ -71,7 +71,7 @@ fun NotificationCard(notification: TaskRequest){
                             onClick = { *//* do something here *//* })*/
                         Button(text = "NO",
                             style = ButtonStyle(LightThemeColors.onError, shape = CircleShape),
-                            modifier = MaxHeight(45.dp),
+                            modifier = MaxHeight(40.dp),
                             onClick = {})
                     }
             }

@@ -24,7 +24,7 @@ import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.ui.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themeTypography
 import ch.fhnw.ip6.citycourier.data.dataService
-
+import ch.fhnw.ip6.citycourier.ui.orders.OrdersAlertCard
 
 
 @Composable
@@ -62,9 +62,9 @@ private fun CityCourierLogo() {
 
 @Composable
 fun NotifyListBody(){
-    Padding(padding = 10.dp){
+    Padding(padding = 8.dp){
         Column{
-            Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
+/*            Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
                 Text("Notifications",
                     style= themeTypography.h3,
                     modifier = Spacing(left = Dp(10f), right = Dp(10f)))
@@ -72,9 +72,10 @@ fun NotifyListBody(){
             Padding(padding = EdgeInsets(0.dp, 12.dp, 0.dp, 12.dp)) {
                 val colors = LightThemeColors
                 Divider(color = colors.secondary, height = 2.dp)
-            }
-            //notification list
-            NotificationList(notifications = dataService())
+            }*/
+            AlertCard()
+
+
         }
     }
 

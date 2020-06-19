@@ -21,19 +21,20 @@ val themeTypography = Typography(
     h2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W600,
-        fontSize = 26.sp
+        fontSize = 24.sp,
+        color = LightThemeColors.secondary
     ),
     h3 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
-        fontSize = 22.sp,
-        color = LightThemeColors.secondary
+        fontSize = 20.sp,
+        color = LightThemeColors.onBackground
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
-        fontSize = 22.sp,
-        color = LightThemeColors.onSurface
+        fontSize = 19.sp,
+        color = LightThemeColors.secondary
     ),
     h5 = TextStyle(
         fontFamily = appFontFamily,
@@ -53,7 +54,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
         fontSize = 18.sp,
-        color = LightThemeColors.onSurface
+        color = LightThemeColors.secondary
        // color = Color(229,177,151)
         //color = Color(0xffb197)
     ),
