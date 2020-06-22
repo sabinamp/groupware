@@ -1,15 +1,20 @@
 package ch.fhnw.ip6.citycourier.ui.orders
 
 
+import android.graphics.drawable.Icon
+import android.widget.ImageButton
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
+import androidx.ui.foundation.shape.corner.CutCornerShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.Image
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.material.surface.Card
+import androidx.ui.res.imageResource
 
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
@@ -24,51 +29,86 @@ import java.time.LocalDateTime
 
 @Composable
 fun OrderCard(notification: TaskRequest){
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp, modifier = Height(90.dp) wraps Expanded) {
-        FlexRow{
-            expanded(flex=1.0f){
-                Column( modifier = Spacing(2.dp)
-                ){
-                    Container(height=60.dp, width=60.dp) {
-                        if(DeliveryType.STANDARD == notification.deliveryType ){
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60)  )
-                        }else{
-                            DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_urgent_60))
+    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp, modifier = Height(120.dp) wraps Expanded) {
+        Column (modifier = Spacing(5.dp)) {
+
+            FlexRow (crossAxisAlignment = CrossAxisAlignment.Start){
+                expanded(flex = 2.0f) {
+                    Column(modifier = Spacing(8.dp), arrangement = Arrangement.Center
+                    ) {
+                        Container(height = 50.dp, width = 50.dp) {
+                            if (DeliveryType.STANDARD == notification.deliveryType) {
+                                DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_60))
+                            } else {
+                                DrawVector(vectorImage = +vectorResource(R.drawable.ic_bell_urgent_60))
+                            }
+                        }
+                    }
+                }
+                expanded(flex = 7.0f) {
+                    Column(
+                        modifier = Spacing(4.dp)
+                    ) {
+                        Text("Order " + notification.orderId, style = themeTypography.body1)
+                        Text(
+                            "Task: " + notification.taskType,
+                            style = themeTypography.body2.withOpacity(0.90f)
+                        )
+
+                        Text(
+                            "Address: " + notification.addressLine,
+                            style = themeTypography.body2.withOpacity(0.90f)
+                        )
+                        FlexRow(modifier = Spacing(4.dp)) {
+                            expanded(flex = 2.0f) {
+                                Padding(left = 2.dp, right=8.dp) {
+                                    Button(text = "Pending",
+                                        style = ButtonStyle(
+                                            LightThemeColors.primaryVariant,
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                        onClick = {})
+
+                                }
+
+                            }
+
+                           inflexible  {
+                                Padding(left = 2.dp, right=5.dp) {
+                                /*  Container(width = 24.dp, height = 24.dp) {
+                                      Clip(shape = RoundedCornerShape(24.dp)) {
+                                        DrawVector(vectorImage = +vectorResource(R.drawable.ic_phone_24))
+                                        }
+                                    }*/
+
+                                    FloatingActionButton(
+                                        color = LightThemeColors.onError,
+                                        text = "Call",
+                                        onClick = {})
+                                    }
+
+
+                            }
+
+                            inflexible  {
+                                Padding(left = 2.dp, right=5.dp) {
+                                    FloatingActionButton(
+                                        color = Color(151, 255, 177),
+                                        text = "Info",
+                                        onClick = {})
+                                }
+                            }
                         }
 
 
-                    }
+                        }
                 }
-            }
-         expanded(flex=5.0f){
-               Column(modifier = Spacing(4.dp)
-               ) {
-                   Text("Order "+notification.orderId, style = themeTypography.body1)
-                   Text("Task: "+notification.taskType, style= themeTypography.body2.withOpacity(0.90f))
 
-                   Text("Address: "+notification.addressLine, style= themeTypography.body2.withOpacity(0.90f)
-                   )
-               }
-           }
-            expanded(flex=3.5f) {
-                    Row(modifier = Spacing(8.dp)
-                    ) {
-                        /*Button(text = "Info",
-                            style = ButtonStyle(Color(151, 255, 177),
-                                shape = RoundedCornerShape(12.dp)),
-                            onClick = {})*/
-                        FloatingActionButton(
-                            color = Color(151, 255, 177),
-                            text = "Info",
-                            onClick = {})
-                         FloatingActionButton(
-                           color = LightThemeColors.onError,
-                           text = "Call",
-                           onClick = {})
-
-                    }
             }
-        }
+
+            }
+
+
     }
     Divider(color = Color.DarkGray)
 

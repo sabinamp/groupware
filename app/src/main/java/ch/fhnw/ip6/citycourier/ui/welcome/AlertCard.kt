@@ -6,13 +6,14 @@ import androidx.ui.core.dp
 import androidx.ui.layout.*
 import androidx.ui.material.Divider
 import androidx.ui.material.surface.Card
+import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.data.dataService
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 @Composable
 fun AlertCard() {
-    Card(color = LightThemeColors.onSurface) {
+    Card(color = LightThemeColors.onBackground) {
         Padding(padding = 12.dp) {
             Column {
                 FlexRow(mainAxisAlignment = MainAxisAlignment.SpaceBetween) {
@@ -22,9 +23,7 @@ fun AlertCard() {
 
                 }
                 Padding(padding = EdgeInsets(0.dp, 12.dp, 4.dp, 12.dp)) {
-                    val colors =
-                        LightThemeColors
-                    Divider(color = colors.onBackground, height = 2.dp)
+                    Divider(color = LightThemeColors.onSurface, height = 2.dp)
                 }
                 FlexRow (mainAxisAlignment = MainAxisAlignment.Center){
                    expanded(flex = 1.0f) {
@@ -43,4 +42,10 @@ fun AlertCard() {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun AlertCardPreview() {
+    AlertCard()
 }

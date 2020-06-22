@@ -24,7 +24,7 @@ fun OrdersScreen(){
 fun OrdersAppBar() {
     // TODO: Transform to tabs
     Row(modifier = Spacing(3.dp), arrangement = Arrangement.Center ) {
-        Text("Your Current Orders" , style= themeTypography.h2 )
+        Text("Your Current Orders" , style= themeTypography.h3 )
         // TODO: Other items
     }
 }
@@ -41,6 +41,17 @@ fun OrdersBody(){
     }
 }
 
+
+@Composable
+fun CurrentOrdersCard() {
+    Text(text = "Current Orders", style = themeTypography.h3)
+    Padding(padding = EdgeInsets(0.dp, 12.dp, 4.dp, 12.dp)) {
+        val colors = LightThemeColors
+        Divider(color = colors.onBackground, height = 2.dp)
+    }
+    OrderList(orders = dataService() )
+}
+
 @Composable
 fun OrderList(orders: List<TaskRequest>) {
     VerticalScroller(isScrollable = true) {
@@ -55,19 +66,6 @@ fun OrderList(orders: List<TaskRequest>) {
 
     }
 }
-
-
-
-@Composable
-fun CurrentOrdersCard() {
-    Text(text = "Current Orders", style = themeTypography.h3)
-    Padding(padding = EdgeInsets(0.dp, 12.dp, 4.dp, 12.dp)) {
-        val colors = LightThemeColors
-        Divider(color = colors.onBackground, height = 2.dp)
-    }
-    OrderList(orders = dataService() )
-}
-
 
 @Preview
 @Composable
