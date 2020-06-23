@@ -1,4 +1,4 @@
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier.ui.themes
 
 import androidx.ui.core.sp
 import androidx.ui.graphics.Color
@@ -14,32 +14,37 @@ val regular = Font(name="montserrat_regular.otf")
 val medium = Font(name="montserrat_black.otf", weight = FontWeight.W500)
 val semibold = Font(name="montserrat_semibold.otf", weight = FontWeight.W600)
 
-val appFontFamily = FontFamily(fonts = listOf(regular, medium, semibold))
+val appFontFamily = FontFamily(fonts = listOf(
+    regular,
+    medium,
+    semibold
+))
 
 
 val themeTypography = Typography(
     h2 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W600,
-        fontSize = 26.sp
+        fontWeight = FontWeight.W500,
+        fontSize = 24.sp,
+        color = LightThemeColors.secondary
     ),
     h3 = TextStyle(
         fontFamily = appFontFamily,
-        fontWeight = FontWeight.W500,
-        fontSize = 22.sp,
+        fontWeight = FontWeight.W400,
+        fontSize = 20.sp,
         color = LightThemeColors.secondary
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
-        fontSize = 22.sp,
-        color = LightThemeColors.onSurface
+        fontSize = 19.sp,
+        color = LightThemeColors.secondary
     ),
     h5 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp,
-        color = Color.White
+        color = Color.Black
 
     ),
     h6 = TextStyle(
@@ -53,21 +58,21 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
         fontSize = 18.sp,
-        color = LightThemeColors.onSurface
+        color = LightThemeColors.onBackground
        // color = Color(229,177,151)
-        //color = Color(0xffb197)
     ),
     subtitle2 = TextStyle(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 16.sp,
-        color=Color.Black
+        color = Color(29,167,155)
+
     ),
 
     body1 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 16.sp,
-        color = Color.Black
+        color = Color.DarkGray
     ),
     body2 = TextStyle(
         fontFamily = appFontFamily,
