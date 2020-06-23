@@ -32,7 +32,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp,
-        color = LightThemeColors.onSurface
+        color = LightThemeColors.secondary
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
@@ -44,7 +44,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp,
-        color = Color.White
+        color = Color.Black
 
     ),
     h6 = TextStyle(
@@ -58,7 +58,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W500,
         fontSize = 18.sp,
-        color = LightThemeColors.onPrimary
+        color = LightThemeColors.onBackground
        // color = Color(229,177,151)
     ),
     subtitle2 = TextStyle(
@@ -66,12 +66,13 @@ val themeTypography = Typography(
         fontWeight = FontWeight.W400,
         fontSize = 16.sp,
         color = Color(29,167,155)
+
     ),
 
     body1 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 16.sp,
-        color = Color.White
+        color = Color.DarkGray
     ),
     body2 = TextStyle(
         fontFamily = appFontFamily,

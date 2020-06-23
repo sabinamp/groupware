@@ -23,7 +23,7 @@ fun AlertCard() {
 
                 }
                 Padding(padding = EdgeInsets(0.dp, 12.dp, 4.dp, 12.dp)) {
-                    Divider(color = LightThemeColors.onSurface, height = 2.dp)
+                    Divider(color = LightThemeColors.background, height = 2.dp)
                 }
                 FlexRow (mainAxisAlignment = MainAxisAlignment.Center){
                    expanded(flex = 1.0f) {

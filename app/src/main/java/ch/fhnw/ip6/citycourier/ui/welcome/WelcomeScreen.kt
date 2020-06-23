@@ -12,26 +12,21 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
-import androidx.ui.material.AlertDialog
-import androidx.ui.material.Button
-import androidx.ui.material.ButtonStyle
 
 import androidx.ui.material.MaterialTheme
-import androidx.ui.res.colorResource
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.data.AppContainer
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
-import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable
-private fun CityCourierLogo() {
-    Container(modifier = Height(110.dp) wraps Expanded) {
+fun CityCourierLogo() {
+    Container(modifier = Height(100.dp) wraps Expanded) {
         Clip(shape = RoundedCornerShape(8.dp)) {
             DrawImage(image = +imageResource(R.drawable.deliveryservice_logo))
         }
@@ -40,7 +35,7 @@ private fun CityCourierLogo() {
 
 @Composable
 fun CityCourierApp(appContainer: AppContainer) {
-    CityCourierTheme {
+    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
         AppContent(taskRequestsRepository = appContainer.taskRequestRepository )
     }
 }
