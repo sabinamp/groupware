@@ -2,20 +2,24 @@ package ch.fhnw.ip6.citycourier.ui.orders
 
 
 import androidx.compose.Composable
-import androidx.ui.core.Text
-import androidx.ui.core.dp
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Text
+
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.graphics.Color
 import androidx.ui.layout.*
 import androidx.ui.material.Divider
-import androidx.ui.tooling.preview.Preview
+
+import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.data.dataService
 import ch.fhnw.ip6.citycourier.model.TaskRequest
-import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable
-fun OrdersScreen(){
+fun OrdersScreen(ordersRepository: Any?) {
     OrdersAppBar()
     OrdersBody()
 }
@@ -23,7 +27,7 @@ fun OrdersScreen(){
 @Composable
 fun OrdersAppBar() {
     // TODO: Transform to tabs
-    Row(modifier = Spacing(3.dp), arrangement = Arrangement.Center ) {
+    Row(modifier = Modifier.padding(5.dp) ) {
         Text("Your Current Orders" , style= themeTypography.h3 )
         // TODO: Other items
     }
@@ -31,23 +35,22 @@ fun OrdersAppBar() {
 
 @Composable
 fun OrdersBody(){
-    Padding(padding = 26.dp) {
-        Column {
+        Column(modifier = Modifier.padding(25.dp)) {
             // TODO: scrolling container
-            OrdersAlertCard()
-            HeightSpacer(height = 10.dp)
+            //OrderCardTop()
+            Spacer(modifier = Modifier.padding(5.dp))
             CurrentOrdersCard()
         }
-    }
+
 }
 
 
 @Composable
 fun CurrentOrdersCard() {
     Text(text = "Current Orders", style = themeTypography.h3)
-    Padding(padding = EdgeInsets(0.dp, 12.dp, 4.dp, 12.dp)) {
-        val colors = LightThemeColors
-        Divider(color = colors.onBackground, height = 2.dp)
+    Column(modifier = Modifier.padding(start=12.dp, top=0.dp, bottom=4.dp, end=12.dp)) {
+
+        Divider(color = Color.DarkGray)
     }
     OrderList(orders = dataService() )
 }
@@ -55,10 +58,10 @@ fun CurrentOrdersCard() {
 @Composable
 fun OrderList(orders: List<TaskRequest>) {
     VerticalScroller(isScrollable = true) {
-        Column(modifier = Spacing(2.dp)){
+        Column(modifier = Modifier.padding(2.dp)){
             // each notification in the list
             for (each in orders) {
-                Padding(4.dp) {
+                Box(padding=4.dp) {
                     OrderCard(each)
                 }
             }
@@ -67,8 +70,3 @@ fun OrderList(orders: List<TaskRequest>) {
     }
 }
 
-@Preview
-@Composable
-fun OrdersPreview() {
-    OrdersScreen()
-}

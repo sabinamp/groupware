@@ -1,67 +1,45 @@
 package ch.fhnw.ip6.citycourier.ui.profile
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
+
 import androidx.ui.core.*
-import androidx.ui.foundation.DrawImage
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.*
-
-import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.Card
-import androidx.ui.material.surface.Surface
-import androidx.ui.res.imageResource
-
+import androidx.ui.foundation.Box
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.layout.*
+import androidx.ui.material.Card
+
+import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
-import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.data.CourierRepository
+
+import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.btn.EditButton
+import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 
 @Composable
-fun ProfileScreen(courierId: String){
+fun ProfileScreen(courierId: String, courierRepository: CourierRepository) {
 
-    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
+    CityCourierTheme {
         Column(
-            modifier = Spacing(5.dp)
+            modifier = Modifier.padding(5.dp)
         ) {
-            NavBack()
-            HeightSpacer(5.dp)
+            //NavIcon
+            Spacer(modifier = Modifier.height(5.dp))
             ProfilePicture("John Smith")
-            HeightSpacer(height = 5.dp)
-           ProfileInfo(courierId = courierId)
+            Spacer(modifier = Modifier.height(5.dp))
+            ProfileInfo(courierId = courierId)
         }
     }
 }
-
-
-
-
-@Composable
-fun NavBack() {
-      Padding(padding = 10.dp) {
-                   Container(
-                        width = Dp(60f),
-                        height = Dp(60f),
-                        alignment = Alignment.Center
-                    ) {
-                        Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawImage(image = +imageResource(R.drawable.arrow))
-                        }
-                    }
-
-            }
-
-}
-
-
+   
 
 
 @Composable
 fun ProfileInfo(courierId: String) {
     Card(
-        modifier = MinHeight(300.dp) wraps Expanded,
+        modifier = Modifier.height(300.dp).plus(Modifier.fillMaxWidth()),
         color = LightThemeColors.onBackground, elevation = 7.dp
     ) {
         Column {
@@ -91,13 +69,13 @@ fun ProfileInfo(courierId: String) {
                  value = "41442205020",
                  imageUrl = R.drawable.ic_phone_24
              )
-            FlexRow(){
-                expanded(flex=1.0f){
-                    Padding(padding = 30.dp) {
+            Row(){
+
+                    Box(padding = 30.dp) {
                         EditButton(text = "Edit", onClick = {})
 
                     }
-                }
+
 
             }
 
@@ -106,11 +84,11 @@ fun ProfileInfo(courierId: String) {
 
     }
 }
-    
 
-@Preview
+@Preview("Profile Info Preview")
 @Composable
-fun ProfileScreenPreview() {
-    ProfileScreen("C100")
-
+fun ProfileInfoPreview(){
+    ThemedPreview(darkTheme = false) {
+        ProfileInfo(courierId = "C100")
+    }
 }

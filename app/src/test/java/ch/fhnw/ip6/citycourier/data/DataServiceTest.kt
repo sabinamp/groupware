@@ -1,12 +1,12 @@
 package ch.fhnw.ip6.citycourier.data
 
 import ch.fhnw.ip6.citycourier.model.DeliveryType
-import ch.fhnw.ip6.citycourier.model.ShiftType
+
 import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.model.TaskType
 import org.junit.Assert
 import org.junit.Test
-import java.time.LocalDateTime
+
 
 class DataServiceTest {
     @Test
@@ -14,12 +14,12 @@ class DataServiceTest {
         val notification1 = TaskRequest()
         notification1.orderId("OR1123")
         notification1.assigneeId( "C102")
-        notification1.addressLine("Rosenstrasse 14")
+
         notification1.deliveryType(DeliveryType.STANDARD)
         notification1.taskType(TaskType.PARCEL_COLLECTION)
-        notification1.shift(ShiftType.AM)
+
         Assert.assertEquals(DeliveryType.STANDARD, notification1.deliveryType)
-        Assert.assertEquals("Rosenstrasse 14", notification1.addressLine)
+
         Assert.assertEquals("OR1123", notification1.orderId)
     }
 
@@ -72,7 +72,7 @@ class DataServiceTest {
         }
 */
         Assert.assertEquals(dataService().size, 4)
-        Assert.assertEquals(  "Tulpenstr 18" ,dataService().get(0).addressLine  )
+
         Assert.assertEquals(  "OR1123" ,dataService().get(0).orderId  )
     }
 }

@@ -1,8 +1,7 @@
 package ch.fhnw.ip6.citycourier.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 public class AvatarImage {
     @JsonProperty("imageId")
     private String imageId = null;
@@ -15,44 +14,6 @@ public class AvatarImage {
 
     @JsonProperty("imageHeight")
     private Integer imageHeight = null;
-
-    /**
-     * Used to define the category of the image
-     */
-    public enum DimensionCategoryEnum {
-        THUMBNAIL("Thumbnail"),
-
-        MOBILE("Mobile"),
-
-        DESKTOP("Desktop");
-
-
-        private String value;
-
-        DimensionCategoryEnum(String value) {
-            this.value = value;
-        }
-
-        @Override
-        @JsonValue
-        public String toString() {
-            return String.valueOf(value);
-        }
-
-        @JsonCreator
-        public static DimensionCategoryEnum fromValue(String text) {
-            for (DimensionCategoryEnum b : DimensionCategoryEnum.values()) {
-                if (String.valueOf(b.value).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
-        }
-    }
-
-    @JsonProperty("dimensionCategory")
-    private DimensionCategoryEnum dimensionCategory = null;
-
 
     public AvatarImage imageId(String imageId) {
         this.imageId = imageId;
@@ -122,22 +83,6 @@ public class AvatarImage {
         this.imageHeight = imageHeight;
     }
 
-    public AvatarImage dimensionCategory(DimensionCategoryEnum dimensionCategory) {
-        this.dimensionCategory = dimensionCategory;
-        return this;
-    }
-
-    /**
-     * Used to define the category of the image
-     * @return dimensionCategory
-     **/
-   public DimensionCategoryEnum getDimensionCategory() {
-        return dimensionCategory;
-    }
-
-    public void setDimensionCategory(DimensionCategoryEnum dimensionCategory) {
-        this.dimensionCategory = dimensionCategory;
-    }
 
 
     @Override
@@ -152,13 +97,12 @@ public class AvatarImage {
         return  Objects.equals(this.imageId, multimediaDescriptionImage.imageId) &&
                 Objects.equals(this.imageUrl, multimediaDescriptionImage.imageUrl) &&
                 Objects.equals(this.imageWidth, multimediaDescriptionImage.imageWidth) &&
-                Objects.equals(this.imageHeight, multimediaDescriptionImage.imageHeight) &&
-                Objects.equals(this.dimensionCategory, multimediaDescriptionImage.dimensionCategory);
+                Objects.equals(this.imageHeight, multimediaDescriptionImage.imageHeight);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageId, imageUrl, imageWidth, imageHeight, dimensionCategory);
+        return Objects.hash(imageId, imageUrl, imageWidth, imageHeight);
     }
 
     @Override
@@ -170,7 +114,6 @@ public class AvatarImage {
         sb.append("    imageUrl: ").append(toIndentedString(imageUrl)).append("\n");
         sb.append("    imageWidth: ").append(toIndentedString(imageWidth)).append("\n");
         sb.append("    imageHeight: ").append(toIndentedString(imageHeight)).append("\n");
-        sb.append("    dimensionCategory: ").append(toIndentedString(dimensionCategory)).append("\n");
         sb.append("}");
         return sb.toString();
     }

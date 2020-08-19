@@ -2,6 +2,7 @@ package ch.fhnw.ip6.citycourier.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Gets or Sets OrderStatus
  */
@@ -9,11 +10,13 @@ public enum OrderStatus {
 
     PENDING("New Order"),
 
+    STARTED("Order Processed"),
+
     PARCEL_COLLECTED("Parcel Collected"),
 
     IN_PROGRESS("In Progress"),
 
-    CANCELED("Canceled"),
+    CANCELED("Cancelled"),
 
     COMPLETED("Successful Delivery"),
 

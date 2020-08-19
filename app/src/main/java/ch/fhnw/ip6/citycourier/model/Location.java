@@ -5,38 +5,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Location {
     @JsonProperty("latitude")
-    private BigDecimal latitude = null;
+    private Double latitude = null;
 
     @JsonProperty("longitude")
-    private BigDecimal longitude = null;
+    private Double longitude = null;
+
 
     // create and initialize a point with given
     // latitude, longitude specified in degrees
-    public Location( BigDecimal latitude, BigDecimal longitude) {
+    public Location( Double latitude, Double longitude) {
         this.latitude  = latitude;
         this.longitude = longitude;
     }
-    public Location latitude(BigDecimal latitude) {
+    public Location latitude(Double latitude) {
         this.latitude = latitude;
         return this;
     }
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
-
-    public Location longitude(BigDecimal longitude) {
+    public Location longitude(Double longitude) {
         this.longitude = longitude;
         return this;
     }
-    public BigDecimal getLongitude() {
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -81,24 +84,6 @@ public class Location {
     }
 
 
-    // return distance between this location and that location
-    // measured in statute miles
-    public double distanceTo(Location that) {
-        double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
-        double lat1 = Math.toRadians(this.latitude.doubleValue());
-        double lon1 = Math.toRadians(this.longitude.doubleValue());
-        double lat2 = Math.toRadians(that.latitude.doubleValue());
-        double lon2 = Math.toRadians(that.longitude.doubleValue());
-
-        // great circle distance in radians, using law of cosines formula
-        double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-                + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
-
-        // each degree on a great circle of Earth is 60 nautical miles
-        double nauticalMiles = 60 * Math.toDegrees(angle);
-        double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
-        return statuteMiles;
-    }
 
 
 }

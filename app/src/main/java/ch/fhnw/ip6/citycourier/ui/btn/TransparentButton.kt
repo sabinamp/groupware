@@ -1,21 +1,19 @@
 package ch.fhnw.ip6.citycourier.ui.btn
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
+
 import androidx.ui.graphics.Color
 import androidx.ui.material.Button
-import androidx.ui.material.ContainedButtonStyle
-import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+import androidx.ui.unit.Dp
+
 
 @Composable
 fun TransparentButton(text: String, onClick: (() -> Unit)? = null) {
-    Button(
-        text = text, onClick = {
+    Button( onClick = {
             // handle button click
-        }, style = ContainedButtonStyle(
-            color = Color.Transparent,
-            rippleColor = LightThemeColors.secondary,
+            },
+            backgroundColor = Color.Transparent,
+            contentColor = Color.DarkGray,
             elevation = Dp(7f)
-        )
-    )
+    ){text}
 }
