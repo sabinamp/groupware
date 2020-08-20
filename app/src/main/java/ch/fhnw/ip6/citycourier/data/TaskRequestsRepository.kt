@@ -16,6 +16,6 @@ interface TaskRequestsRepository{
     /**
      * Get list of accepted task requests.
      */
-//    fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit)
+   fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit)
 
 }

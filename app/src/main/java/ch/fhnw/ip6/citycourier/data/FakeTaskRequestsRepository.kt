@@ -16,7 +16,7 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
 ): TaskRequestsRepository {
 
     private val taskRequests: List<TaskRequest> by lazy{
-    taskRequestList
+        taskRequestData()
     }
 
     override fun getTaskRequest(id: String, callback: (Result<TaskRequest?>) -> Unit) {
@@ -41,6 +41,11 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
             resultThreadHandler.post { callback(Result.Success(taskRequests)) }
         }
     }
+
+    override fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
+        callback( Result.Success(taskRequests.filter { t->t.confirmed.equals(RequestReply.ACCEPTED)}))
+    }
+
     /**
      * Executes a block of code in the past and returns an error in the [callback]
      * if [block] throws an exception.

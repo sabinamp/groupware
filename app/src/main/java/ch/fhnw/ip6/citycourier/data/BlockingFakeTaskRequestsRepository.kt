@@ -15,7 +15,7 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
 ): TaskRequestsRepository {
 
     private val taskRequests: List<TaskRequest> by lazy{
-       taskRequestList
+        taskRequestData()
     }
     override fun getTaskRequest(id: String, callback: (Result<TaskRequest?>) -> Unit) {
         callback(Result.Success(taskRequests.find { it.taskId == id }))
@@ -23,6 +23,10 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
     override fun getTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
         callback( Result.Success(taskRequests))
 
+    }
+
+    override fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
+        callback( Result.Success(taskRequests.filter { t->t.confirmed.equals(RequestReply.ACCEPTED)}))
     }
 
 }

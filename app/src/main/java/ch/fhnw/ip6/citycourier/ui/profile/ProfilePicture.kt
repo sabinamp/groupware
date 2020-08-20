@@ -20,6 +20,7 @@ import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
@@ -27,19 +28,20 @@ import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 @Composable
 fun ProfilePicture(name:String){
 
-    Box(modifier= Modifier.height(250.dp),
+    Box(modifier= Modifier.height(260.dp).plus(Modifier.fillMaxWidth()),
+        backgroundColor = LightThemeColors.onBackground,
             shape = RoundedCornerShape(topLeft = 90.dp, topRight = 90.dp,
             bottomLeft = 0.dp, bottomRight = 0.dp)
     ){
 
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column(modifier = Modifier.padding(55.dp)) {
             Box(modifier = Modifier.padding(5.dp).plus(Modifier.width(80.dp))) {
                 Image(vectorResource(R.drawable.ic_profile_80))
             }
-            Box(padding = 5.dp) {
+            Box(padding = 10.dp) {
                 Text(name, style = themeTypography.h2, maxLines = 1)
             }
-            Box(padding = 5.dp) {
+            Box(padding = 10.dp) {
                 Row(modifier = Modifier.height(50.dp)){
                     Text("Available", style = themeTypography.h6, maxLines = 1)
                     Spacer(modifier = Modifier.width(5.dp))
@@ -48,11 +50,10 @@ fun ProfilePicture(name:String){
 
             }
 
-                }
-
-
-
         }
+
+
+    }
 
     }
 

@@ -71,8 +71,8 @@ class DataServiceTest {
             notification1.sentWhen(LocalDateTime.now())
         }
 */
-        Assert.assertEquals(dataService().size, 4)
+        Assert.assertEquals(taskRequestData().size, 5)
 
-        Assert.assertEquals(  "OR1123" ,dataService().get(0).orderId  )
+        Assert.assertEquals(  "OR1123" ,taskRequestData().get(0).orderId  )
     }
 }

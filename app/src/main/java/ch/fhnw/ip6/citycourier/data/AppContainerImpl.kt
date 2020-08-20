@@ -13,8 +13,8 @@ import android.os.Looper
  */
 interface AppContainer {
     val taskRequestRepository: TaskRequestsRepository
-    val ordersRepository: OrdersRepository
-    val courierRepository: CourierRepository
+   /* val ordersRepository: OrdersRepository
+    val courierRepository: CourierRepository*/
 }
 
 /**
@@ -38,8 +38,8 @@ class AppContainerImpl(private val applicationContext: Context) : AppContainer {
             resources = applicationContext.resources)
     }
 
-   override val ordersRepository: OrdersRepository = FakeOrdersRepository(applicationContext)
-    override val courierRepository: CourierRepository = CourierRepositoryImpl(applicationContext)
+  // override val ordersRepository: OrdersRepository = BlockingFakeOrdersRepository(applicationContext)
+    //override val courierRepository: CourierRepository = CourierRepositoryImpl(applicationContext)
 
 
 }

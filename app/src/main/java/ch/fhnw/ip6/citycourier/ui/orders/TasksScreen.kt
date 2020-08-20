@@ -2,59 +2,79 @@ package ch.fhnw.ip6.citycourier.ui.orders
 
 
 import androidx.compose.Composable
+import androidx.compose.remember
+import androidx.compose.state
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.*
 
 import androidx.ui.layout.*
-import androidx.ui.material.Divider
+import androidx.ui.material.*
 
-import androidx.ui.material.IconButton
-import androidx.ui.material.TopAppBar
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
+import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 
 import androidx.ui.unit.dp
+import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.data.*
 
-import ch.fhnw.ip6.citycourier.data.OrdersRepository
-import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
-import ch.fhnw.ip6.citycourier.data.dataService
+import ch.fhnw.ip6.citycourier.model.RequestReply
+
 import ch.fhnw.ip6.citycourier.model.TaskRequest
+import ch.fhnw.ip6.citycourier.state.previewDataFrom
+import ch.fhnw.ip6.citycourier.ui.AppDrawer
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.navigateTo
-import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
-
-import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
+import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 
 
 @Composable
-fun TasksScreen(ordersRepository: OrdersRepository, taskRequestsRepository: TaskRequestsRepository) {
-    OrdersAppBar()
-    OrderList(dataService())
-
-}
-
-
-
-@Composable
-fun OrdersAppBar(){
-        TopAppBar(
-            title = {
-                Text(
-                    text = "City Courier. Your Current Orders",
-                    style = themeTypography.h3,
-                    color = contentColor()
+fun TasksScreen(/*ordersRepository: OrdersRepository,*/
+    scaffoldState: ScaffoldState = remember { ScaffoldState() },
+                                                        taskRequestsRepository: TaskRequestsRepository){
+        Scaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                AppDrawer(
+                    currentScreen = Screen.TasksScreen,
+                    closeDrawer = { scaffoldState.drawerState = DrawerState.Closed }
                 )
             },
-            navigationIcon = {
-                IconButton(onClick = { navigateTo(Screen.WelcomeScreen) }) {
-                    Icon(Icons.Filled.ArrowBack)
-                }
+            topAppBar = {
+                TopAppBar(
+                    title = { Text("City Courier. Your Current Tasks") },
+                    navigationIcon = {
+                        IconButton(onClick = { scaffoldState.drawerState = DrawerState.Opened }) {
+                            Icon(vectorResource(R.drawable.ic_menu_icon_24))
+                        }
+                    }
+                )
+            },
+            bodyContent = {
+
+                TasksScreenBody(taskRequestsRepository)
             }
         )
-    
 }
+
+@Composable
+fun TasksScreenBody(taskRequestsRepository: TaskRequestsRepository) {
+    CityCourierTheme {
+        val tasks = loadFakeTasks()
+        OrderList(tasks)
+    }
+}
+
+@Composable
+private fun loadFakeTasks(): List<TaskRequest> {
+    return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getAcceptedTaskRequests)
+    //return assignedTaskRequestData()
+    }
+
+
 
 
 
@@ -77,19 +97,12 @@ fun OrderList(orders: List<TaskRequest>) {
     }
 }
 
-@Preview("Orders ApBar")
-@Composable
-fun OrdersAppBarPreview(){
-    ThemedPreview {
-        OrdersAppBar()
-    }
-}
 
-@Preview("Order List")
+
+@Preview("OrderList")
 @Composable
-fun OrderListPreview(){
-    ThemedPreview() {
-        val tasks = dataService()
-        OrderList(orders =tasks)
+fun TasksScreenBodyPreview(){
+    ThemedPreview {
+        OrderList(orders = loadFakeTasks())
     }
 }

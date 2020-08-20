@@ -1,10 +1,10 @@
-package ch.fhnw.ip6.citycourier.ui
+package ch.fhnw.ip6.citycourier
 
 import android.app.Application
 import ch.fhnw.ip6.citycourier.data.AppContainer
 import ch.fhnw.ip6.citycourier.data.AppContainerImpl
 
-class CityCourierApplication : Application() {
+class CityCourierApplication: Application() {
     // AppContainer instance used by the rest of classes to obtain dependencies
     lateinit var container: AppContainer
 

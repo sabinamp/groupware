@@ -25,10 +25,12 @@ import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.data.BlockingFakeTaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.FakeTaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
+import ch.fhnw.ip6.citycourier.data.taskRequestData
 import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.state.*
 import ch.fhnw.ip6.citycourier.ui.AppDrawer
 import ch.fhnw.ip6.citycourier.ui.Screen
+import ch.fhnw.ip6.citycourier.ui.SwipeToRefreshLayout
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.orders.OrderList
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
@@ -83,7 +85,15 @@ fun WelcomeScreenContent(taskRequestRepository: TaskRequestsRepository, modifier
         if (postsState.loading && !postsState.refreshing) {
             LoadingHomeScreen()
         } else {
-
+            SwipeToRefreshLayout(
+                refreshingState = postsState.refreshing,
+                onRefresh = { refreshTasks() },
+                refreshIndicator = {
+                    Surface(elevation = 10.dp, shape = CircleShape) {
+                        CircularProgressIndicator(Modifier.preferredSize(50.dp).padding(4.dp))
+                    }
+                }
+            ) {
                 WelcomeScreenBodyWrapper(
                     modifier = modifier,
                     state = postsState,
@@ -91,6 +101,7 @@ fun WelcomeScreenContent(taskRequestRepository: TaskRequestsRepository, modifier
                         refreshTasks()
                     }
                 )
+            }
 
         }
 }
@@ -219,6 +230,8 @@ private fun PreviewDrawerOpenDark() {
 @Composable
 private fun loadFakeTasks(): List<TaskRequest> {
     return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getTaskRequests)
+    //loading data from the repository fails -todo
+
 }
 
 @Preview("Home screen,  closed drawer")

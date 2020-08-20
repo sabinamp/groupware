@@ -1,25 +1,32 @@
 package ch.fhnw.ip6.citycourier.ui.profile
 
 import androidx.compose.Composable
+import androidx.compose.remember
 
 import androidx.ui.core.*
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Icon
+import androidx.ui.foundation.Text
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.layout.*
-import androidx.ui.material.Card
+import androidx.ui.material.*
+import androidx.ui.res.vectorResource
 
 import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.data.CourierRepository
+import ch.fhnw.ip6.citycourier.ui.AppDrawer
+import ch.fhnw.ip6.citycourier.ui.Screen
 
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.btn.EditButton
+import ch.fhnw.ip6.citycourier.ui.orders.TasksScreenBody
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 
 @Composable
-fun ProfileScreen(courierId: String, courierRepository: CourierRepository) {
+fun ProfileScreenBody(courierId: String) {
 
     CityCourierTheme {
         Column(
@@ -34,7 +41,33 @@ fun ProfileScreen(courierId: String, courierRepository: CourierRepository) {
     }
 }
    
+@Composable
+fun ProfileScreen(courierId: String, scaffoldState: ScaffoldState = remember { ScaffoldState() },
+/*courierRepository: CourierRepository*/){
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            AppDrawer(
+                currentScreen = Screen.TasksScreen,
+                closeDrawer = { scaffoldState.drawerState = DrawerState.Closed }
+            )
+        },
+        topAppBar = {
+            TopAppBar(
+                title = { Text("Your Profile") },
+                navigationIcon = {
+                    IconButton(onClick = { scaffoldState.drawerState = DrawerState.Opened }) {
+                        Icon(vectorResource(R.drawable.ic_menu_icon_24))
+                    }
+                }
+            )
+        },
+        bodyContent = {
 
+            ProfileScreenBody(courierId = courierId)
+        }
+    )
+}
 
 @Composable
 fun ProfileInfo(courierId: String) {
@@ -89,6 +122,14 @@ fun ProfileInfo(courierId: String) {
 @Composable
 fun ProfileInfoPreview(){
     ThemedPreview(darkTheme = false) {
-        ProfileInfo(courierId = "C100")
+        ProfileInfo(courierId = "C000")
+    }
+}
+
+@Preview("Profile Screen Body Preview")
+@Composable
+fun ProfileScreenBodyPreview(){
+    ThemedPreview(darkTheme = false) {
+        ProfileScreenBody(courierId = "C000")
     }
 }

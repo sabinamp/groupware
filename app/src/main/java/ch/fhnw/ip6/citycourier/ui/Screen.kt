@@ -10,9 +10,9 @@ import androidx.compose.setValue
  */
 sealed class Screen {
     object WelcomeScreen : Screen()
-    data class ProfileScreen(val courierId: String) : Screen()
+    object ProfileScreen : Screen()
     object TasksScreen : Screen()
-    object TeamScreen : Screen()
+
     data class TaskDetails(val taskId: String): Screen()
 }
 

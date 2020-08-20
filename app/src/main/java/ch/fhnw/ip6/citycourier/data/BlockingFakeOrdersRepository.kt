@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService
 /*
 * Implementation that returns a hardcoded list of Task Requests
  */
-class FakeOrdersRepository(private val context: Context) : OrdersRepository {
+class BlockingFakeOrdersRepository(private val context: Context) : OrdersRepository {
     companion object Factory {
         val orderMap = mutableMapOf<String, OrderDescriptiveInfo>()
         fun createOrder(orderId: String): OrderDescriptiveInfo{

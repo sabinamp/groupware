@@ -11,6 +11,7 @@ import androidx.ui.foundation.Image
 
 import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Color
 
 import androidx.ui.layout.*
 import androidx.ui.layout.ColumnScope.weight
@@ -78,10 +79,10 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 }
 @Composable
 fun OrderCard(taskRequest: TaskRequest) {
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,
+    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,color = Color.White,
         modifier = Modifier
             .fillMaxWidth()
-        .clickable(onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
+        .clickable( onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
         .padding(10.dp)
     ) {
         NotificationImage(taskRequest = taskRequest, modifier = Modifier.padding(end = 16.dp))
