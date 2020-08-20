@@ -39,7 +39,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp,
-        color = LightThemeColors.secondary
+        color = Color.White
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
@@ -84,7 +84,7 @@ val themeTypography = Typography(
     body2 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 14.sp,
-        color = Color.DarkGray,
+        color = Color.White,
         fontStyle = FontStyle.Normal
     ),
     button = TextStyle(

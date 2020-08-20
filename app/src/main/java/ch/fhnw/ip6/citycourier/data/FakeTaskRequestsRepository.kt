@@ -1,68 +1,73 @@
 package ch.fhnw.ip6.citycourier.data
 
-import android.content.Context
+import android.content.res.Resources
+import android.os.Handler
 import ch.fhnw.ip6.citycourier.model.*
 import java.time.LocalDateTime
-import kotlin.Result.Companion.success
-
+import java.util.concurrent.ExecutorService
+import kotlin.random.Random
 
 /*
 * Implementation that returns a hardcoded list of Task Requests
  */
-class FakeTaskRequestsRepository( private val context: Context): TaskRequestsRepository {
+class FakeTaskRequestsRepository(private val executorService: ExecutorService,
+                                 private val resultThreadHandler: Handler,
+                                 private val resources: Resources
+): TaskRequestsRepository {
 
-    private val taskRequests by lazy{
-        val notification1 = TaskRequest()
-        notification1.orderId ="OR1123"
-        notification1.assigneeId = "C102"
+    private val taskRequests: List<TaskRequest> by lazy{
+    taskRequestList
+    }
 
-        notification1.deliveryType = DeliveryType.STANDARD
-        notification1.taskType = TaskType.PARCEL_COLLECTION
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notification1.dueOn = LocalDateTime.now().plusDays(1)
-            notification1.sentWhen = LocalDateTime.now()
+    override fun getTaskRequest(id: String, callback: (Result<TaskRequest?>) -> Unit) {
+        executeInBackground(callback) {
+            resultThreadHandler.post {
+                callback(
+                    Result.Success(
+                        taskRequests.find { it.taskId == id }
+                ))
+            }
         }
-
-
-        val notification2 = TaskRequest()
-        notification2.orderId="OR1122"
-        notification2.assigneeId="C102"
-
-        notification2.deliveryType= DeliveryType.STANDARD
-        notification2.taskType =  TaskType.PARCEL_COLLECTION
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notification1.dueOn = LocalDateTime.now().plusDays(1)
-            notification1.sentWhen = LocalDateTime.now()
-        }
-        val notification3 = TaskRequest()
-        notification2.orderId="OR1124"
-        notification2.assigneeId="C102"
-
-        notification2.deliveryType= DeliveryType.URGENT
-        notification2.taskType=  TaskType.DELIVERY_FIRST
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notification1.dueOn = LocalDateTime.now().plusDays(2)
-            notification1.sentWhen = LocalDateTime.now()
-        }
-        val notification4 = TaskRequest()
-        notification2.orderId = "OR1125"
-        notification2.assigneeId="C102"
-
-        notification2.deliveryType= DeliveryType.URGENT
-        notification2.taskType=  TaskType.PARCEL_COLLECTION
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notification1.dueOn= LocalDateTime.now().plusHours(1)
-            notification1.sentWhen= LocalDateTime.now()
-        }
-        val notification5 = Notification("Delivery Request for Order OR1127.", "new order", DeliveryType.URGENT)
-        listOf( notification1, notification2,notification3, notification4)
     }
 
     override fun getTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
-        callback( Result.Success(taskRequests))
+        //callback( Result.Success(taskRequests))
+        executeInBackground(callback) {
+            simulateNetworkRequest()
+            Thread.sleep(1500L)
+            if (shouldRandomlyFail()) {
+                throw IllegalStateException()
+            }
+            resultThreadHandler.post { callback(Result.Success(taskRequests)) }
+        }
     }
+    /**
+     * Executes a block of code in the past and returns an error in the [callback]
+     * if [block] throws an exception.
+     */
+    private fun executeInBackground(callback: (Result<Nothing>) -> Unit, block: () -> Unit) {
+        executorService.execute {
+            try {
+                block()
+            } catch (e: Exception) {
+                resultThreadHandler.post { callback(Result.Error(e)) }
+            }
+        }
+    }
+
+    /**
+     * Simulates network request
+     */
+    private var networkRequestDone = false
+    private fun simulateNetworkRequest() {
+        if (!networkRequestDone) {
+            Thread.sleep(2000L)
+            networkRequestDone = true
+        }
+    }
+
+    /**
+     * 1/3 requests should fail loading
+     */
+    private fun shouldRandomlyFail(): Boolean = Random.nextFloat() < 0.33f
 }

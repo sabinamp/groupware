@@ -3,9 +3,9 @@ package ch.fhnw.ip6.citycourier.mqttservice
 import android.app.Activity
 import android.util.Log
 
-
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.io.IOException
 
 class MqttClientHelper(activity:Activity) {
 
@@ -30,7 +30,8 @@ class MqttClientHelper(activity:Activity) {
             }
 
             override fun connectionLost(throwable: Throwable) {}
-            @Throws(Exception::class)
+
+            //@Throws(IOException::class)
             override fun messageArrived(
                 topic: String,
                 mqttMessage: MqttMessage

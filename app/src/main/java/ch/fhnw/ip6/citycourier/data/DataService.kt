@@ -1,7 +1,6 @@
 package ch.fhnw.ip6.citycourier.data
 
 
-import android.app.Activity
 import ch.fhnw.ip6.citycourier.model.*
 
 import java.time.LocalDateTime
@@ -9,6 +8,7 @@ import java.time.LocalDateTime
 
 fun dataService(): List<TaskRequest>{
     val notification1 = TaskRequest()
+    notification1.taskId="T1"
     notification1.orderId ="OR1123"
     notification1.assigneeId = "C102"
 
@@ -22,6 +22,7 @@ fun dataService(): List<TaskRequest>{
 
 
     val notification2 = TaskRequest()
+    notification2.taskId="T2"
     notification2.orderId="OR1122"
     notification2.assigneeId="C102"
 
@@ -29,10 +30,11 @@ fun dataService(): List<TaskRequest>{
     notification2.taskType =  TaskType.PARCEL_COLLECTION
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        notification1.dueOn = LocalDateTime.now().plusDays(1)
-        notification1.sentWhen = LocalDateTime.now()
+        notification2.dueOn = LocalDateTime.now().plusDays(1)
+        notification2.sentWhen = LocalDateTime.now()
     }
     val notification3 = TaskRequest()
+    notification3.taskId="T3"
     notification3.orderId="OR1124"
     notification3.assigneeId="C102"
 
@@ -45,6 +47,7 @@ fun dataService(): List<TaskRequest>{
     }
 
     val notification4 = TaskRequest()
+    notification4.taskId="T4"
     notification4.orderId = "OR1125"
     notification4.assigneeId="C102"
 
@@ -52,16 +55,12 @@ fun dataService(): List<TaskRequest>{
     notification4.taskType=  TaskType.PARCEL_COLLECTION
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        notification1.dueOn= LocalDateTime.now().plusHours(1)
-        notification1.sentWhen= LocalDateTime.now()
+        notification4.dueOn= LocalDateTime.now().plusHours(1)
+        notification4.sentWhen= LocalDateTime.now()
     }
     //val notification3 = Notification("Delivery Request for Order OR1125.", "second delivery attempt",DeliveryType.STANDARD)
     //val notification4 = Notification("Delivery Request for Order OR1126.","first delivery attempt to final destination",        DeliveryType.STANDARD)
 
-    val notifyList: List<TaskRequest> = listOf( notification1, notification2,notification3, notification4  )
-    return  notifyList
+    return listOf( notification1, notification2,notification3, notification4  )
 }
 
-fun connectToHiveMQBroker( activity: Activity){
-   //todo
-}

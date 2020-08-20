@@ -6,6 +6,7 @@ import androidx.ui.core.Modifier
 import androidx.ui.foundation.*
 
 import androidx.ui.layout.*
+import androidx.ui.material.Divider
 
 import androidx.ui.material.IconButton
 import androidx.ui.material.TopAppBar
@@ -22,6 +23,7 @@ import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.navigateTo
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
@@ -29,9 +31,8 @@ import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 @Composable
 fun TasksScreen(ordersRepository: OrdersRepository, taskRequestsRepository: TaskRequestsRepository) {
     OrdersAppBar()
-    Column(modifier = Modifier.padding(15.dp)) {
-        OrderList(dataService())
-    }
+    OrderList(dataService())
+
 }
 
 
@@ -60,14 +61,15 @@ fun OrdersAppBar(){
 @Composable
 fun OrderList(orders: List<TaskRequest>) {
     VerticalScroller(isScrollable = true) {
-        Column(modifier = Modifier.padding(2.dp)){
+        Column(modifier = Modifier.padding(15.dp)){
             // each notification in the list
             for (each in orders) {
-                Box(padding=4.dp) {
-                    OrderCard(each)
-                }
+                OrderCard(each)
                 Spacer(modifier = Modifier.padding(5.dp))
-
+              /*  Divider(
+                    modifier = Modifier.padding(vertical = 5.dp),
+                    color = LightThemeColors.onSurface.copy(alpha = 0.08f)
+                )*/
             }
         }
 
@@ -87,6 +89,7 @@ fun OrdersAppBarPreview(){
 @Composable
 fun OrderListPreview(){
     ThemedPreview() {
-        OrderList(orders = dataService())
+        val tasks = dataService()
+        OrderList(orders =tasks)
     }
 }

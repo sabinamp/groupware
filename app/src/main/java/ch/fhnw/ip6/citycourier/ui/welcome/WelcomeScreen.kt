@@ -1,28 +1,40 @@
 package ch.fhnw.ip6.citycourier.ui.welcome
 
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.*
+import androidx.core.os.postDelayed
 import androidx.ui.core.*
 import androidx.ui.foundation.Box
 
 import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
+import androidx.ui.foundation.contentColor
+import androidx.ui.foundation.shape.corner.CircleShape
+import androidx.ui.graphics.Color
 
 import androidx.ui.layout.*
+import androidx.ui.layout.RowScope.weight
 import androidx.ui.material.*
 
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.data.BlockingFakeTaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.FakeTaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
 import ch.fhnw.ip6.citycourier.model.TaskRequest
-import ch.fhnw.ip6.citycourier.state.previewDataFrom
+import ch.fhnw.ip6.citycourier.state.*
 import ch.fhnw.ip6.citycourier.ui.AppDrawer
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
+import ch.fhnw.ip6.citycourier.ui.orders.OrderList
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+import ch.fhnw.ip6.citycourier.ui.themes.snackbarAction
+import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable
@@ -56,47 +68,166 @@ fun WelcomeScreen(
 
 
 @Composable
- fun WelcomeScreenContent(taskRequestRepository: Any?, modifier: Modifier) {
-
-
+ fun WelcomeScreenBody(tasks: List<TaskRequest>) {
    CityCourierTheme{
-
-       Box(padding = 5.dp ) {
-
-                NotifyListBody()
-       }
+       HomeScreenIntro()
+       OrderList(orders = tasks)
     }
 }
 
+@Composable
+fun WelcomeScreenContent(taskRequestRepository: TaskRequestsRepository, modifier: Modifier) {
 
+        val (postsState, refreshTasks) = refreshableUiStateFrom(taskRequestRepository::getTaskRequests)
+
+        if (postsState.loading && !postsState.refreshing) {
+            LoadingHomeScreen()
+        } else {
+
+                WelcomeScreenBodyWrapper(
+                    modifier = modifier,
+                    state = postsState,
+                    onErrorAction = {
+                        refreshTasks()
+                    }
+                )
+
+        }
+}
 
 @Composable
-fun NotifyListBody(){
-    Box(padding = 8.dp){
-        Column{
-            AlertCard()
+private fun LoadingHomeScreen() {
+    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center)) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun HomeScreenIntro() {
+    Card(color = LightThemeColors.background) {
+        Column(Modifier.weight(1f)){
+            Row(horizontalArrangement = Arrangement.Center) {
+                Text(text = "New notifications.", style = themeTypography.h3, modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp))
+            }
+
+            Divider(color = Color.LightGray, modifier = Modifier.height(2.dp))
+
+            Row (horizontalArrangement = Arrangement.Center){
+                val text = "Please accept or deny each task request within 10 minutes."
+                Text(modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp),
+                    style = themeTypography.body2,
+                    text = text
+                )
+            }
+
         }
     }
 
 }
 
+@Composable
+fun ErrorSnackbar(
+    showError: Boolean,
+    modifier: Modifier = Modifier,
+    onErrorAction: () -> Unit = { },
+    onDismiss: () -> Unit = { }
+) {
+    if (showError) {
+        // Make Snackbar disappear after 5 seconds if the user hasn't interacted with it
+        onActive {
+            // With coroutines, this will be cancellable
+            Handler(Looper.getMainLooper()).postDelayed(5000L) {
+                onDismiss()
+            }
+        }
 
+        Snackbar(
+            modifier = modifier.padding(16.dp),
+            text = { Text("Can't update latest notifications") },
+            action = {
+                TextButton(
+                    onClick = {
+                        onErrorAction()
+                        onDismiss()
+                    },
+                    contentColor = contentColor()
+                ) {
+                    Text(
+                        text = "RETRY",
+                        color = MaterialTheme.colors.snackbarAction
+                    )
+                }
+            }
+        )
+    }
+}
+@Composable
+private fun WelcomeScreenBodyWrapper(
+    modifier: Modifier = Modifier,
+    state: RefreshableUiState<List<TaskRequest>>,
+    onErrorAction: () -> Unit
+) {
+    // State for showing the Snackbar error. This state will reset with the content of the lambda
+    // inside stateFor each time the RefreshableUiState input parameter changes.
+    // showSnackbarError is the value of the error state, use updateShowSnackbarError to update it.
+    val (showSnackbarError, updateShowSnackbarError) = stateFor(state) {
+        state is RefreshableUiState.Error
+    }
 
+    Stack(modifier = modifier.fillMaxSize()) {
+        state.currentData?.let { posts ->
+            WelcomeScreenBody(tasks = posts)
+        }
+        ErrorSnackbar(
+            showError = showSnackbarError,
+            onErrorAction = onErrorAction,
+            onDismiss = { updateShowSnackbarError(false) },
+            modifier = Modifier.gravity(Alignment.BottomCenter)
+        )
+    }
+}
 
+@Preview("HomeScreenIntro Preview")
+@Composable
+fun HomeScreenIntroPreview() {
+    ThemedPreview {
+        HomeScreenIntro()
+    }
+}
 
+@Preview("Home screen body")
+@Composable
+fun WelcomeScreenBodyPreview(){
+
+    ThemedPreview() {
+        val taskRequests = loadFakeTasks()
+        WelcomeScreenBody(tasks = taskRequests)
+    }
+}
 
 @Preview("Home screen, open drawer dark theme")
 @Composable
 private fun PreviewDrawerOpenDark() {
     ThemedPreview(darkTheme = true) {
         WelcomeScreen(
-            taskRequestRepository = FakeTaskRequestsRepository(ContextAmbient.current),
+            taskRequestRepository = BlockingFakeTaskRequestsRepository(ContextAmbient.current),
             scaffoldState = ScaffoldState(drawerState = DrawerState.Opened)
         )
     }
 }
 
 @Composable
-private fun loadFakePosts(): List<TaskRequest> {
-    return previewDataFrom(FakeTaskRequestsRepository(ContextAmbient.current)::getTaskRequests)
+private fun loadFakeTasks(): List<TaskRequest> {
+    return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getTaskRequests)
+}
+
+@Preview("Home screen,  closed drawer")
+@Composable
+private fun PreviewWelcomeScreenClosed() {
+    ThemedPreview(darkTheme = false) {
+        WelcomeScreen(
+            taskRequestRepository = BlockingFakeTaskRequestsRepository(ContextAmbient.current),
+            scaffoldState = ScaffoldState(drawerState = DrawerState.Closed)
+        )
+    }
 }

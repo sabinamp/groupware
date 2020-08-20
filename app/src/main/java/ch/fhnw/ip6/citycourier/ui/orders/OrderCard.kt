@@ -10,8 +10,10 @@ import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Image
 
 import androidx.ui.foundation.clickable
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
 
 import androidx.ui.layout.*
+import androidx.ui.layout.ColumnScope.weight
 import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
@@ -52,13 +54,8 @@ fun NotificationDetails(
 fun NotificationTitle(taskRequest: TaskRequest) {
     ProvideEmphasis(EmphasisAmbient.current.high) {
 
-        val taskStatus=  ""+ if (taskRequest.completedWhen!= null &&taskRequest.completedWhen.isBefore(LocalDateTime.now())) {
-            Text("Completed")
-        } else {
-            Text("Pending")
-        }
-        val content=   "Task "+ taskRequest.taskId+ " OrderID: "+taskRequest.orderId +taskStatus
-        Text(content, style = themeTypography.subtitle1)
+        val title=   "Task "+ taskRequest.taskId+ " OrderID: "+taskRequest.orderId
+        Text(title, style = themeTypography.subtitle1)
     }
 }
 
@@ -81,7 +78,9 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 }
 @Composable
 fun OrderCard(taskRequest: TaskRequest) {
-    Row(modifier = Modifier
+    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,
+        modifier = Modifier
+            .fillMaxWidth()
         .clickable(onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
         .padding(10.dp)
     ) {
@@ -89,6 +88,11 @@ fun OrderCard(taskRequest: TaskRequest) {
         Column(modifier = Modifier.weight(1f)) {
             NotificationTitle(taskRequest)
             NotificationDetails(taskRequest)
+            if (taskRequest.completedWhen!= null &&taskRequest.completedWhen.isBefore(LocalDateTime.now())) {
+                Text("Completed", style = themeTypography.body2)
+            } else {
+                Text("Pending",  style = themeTypography.body2)
+            }
 
         }
         ProvideEmphasis(EmphasisAmbient.current.medium) {
@@ -145,8 +149,9 @@ fun NotificationDetailsPreview() {
 @Preview("Order Card")
 @Composable
 fun OrderCardPreview() {
-    val notification = createTaskRequestForPreview()
+
     ThemedPreview() {
+        val notification = createTaskRequestForPreview()
         OrderCard(notification)
     }
 }

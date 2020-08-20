@@ -14,8 +14,10 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.material.TextButton
 import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Alarm
 import androidx.ui.material.icons.filled.Home
 import androidx.ui.material.icons.filled.ListAlt
+import androidx.ui.material.icons.filled.PersonOutline
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -29,18 +31,18 @@ import ch.fhnw.ip6.citycourier.ui.orders.TaskDetailsScreen
 import ch.fhnw.ip6.citycourier.ui.orders.TasksScreen
 import ch.fhnw.ip6.citycourier.ui.profile.ProfileScreen
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.ui.welcome.WelcomeScreen
 
 
 @Composable
-fun CityCourierLogo(modifier: Modifier = Modifier) {
+fun DrawerNavIcon(modifier: Modifier = Modifier) {
      Row(modifier = modifier) {
          Image(
              asset = vectorResource(R.drawable.ic_menu_icon_24),
              colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
          )
-         Spacer(Modifier.preferredWidth(8.dp))
      }
 }
 
@@ -61,9 +63,10 @@ private fun AppContent(
     taskRequestRepository: TaskRequestsRepository,
     orderRepository: OrdersRepository,
     courierRepository: CourierRepository
-    ) {  Crossfade(current = CityCourierStatus.currentScreen) { screen ->
+    ) {
+    Crossfade(current = CityCourierStatus.currentScreen) { screen ->
          Surface(color = MaterialTheme.colors.background) {
-            when (screen) {
+             when (screen) {
                 is Screen.WelcomeScreen -> WelcomeScreen(taskRequestRepository)
                 is Screen.TasksScreen -> TasksScreen(orderRepository, taskRequestsRepository = taskRequestRepository)
                 is Screen.ProfileScreen -> ProfileScreen(
@@ -76,6 +79,7 @@ private fun AppContent(
             }
         }
      }
+
 }
 
 
@@ -87,21 +91,21 @@ private fun DrawerButton(
     action: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val colors = MaterialTheme.colors
+
     val imageAlpha = if (isSelected) {
         1f
     } else {
         0.6f
     }
     val textIconColor = if (isSelected) {
-        colors.primary
+        LightThemeColors.primary
     } else {
-        colors.onSurface.copy(alpha = 0.6f)
+        LightThemeColors.onSurface.copy(alpha = 0.6f)
     }
     val backgroundColor = if (isSelected) {
-        colors.primary.copy(alpha = 0.12f)
+        LightThemeColors.primary.copy(alpha = 0.12f)
     } else {
-        colors.surface
+        LightThemeColors.surface
     }
 
     val surfaceModifier = modifier
@@ -144,7 +148,7 @@ fun AppDrawer(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(Modifier.preferredHeight(24.dp))
-        CityCourierLogo(Modifier.padding(2.dp).plus(Modifier.height(30.dp).plus(Modifier.width(40.dp))))
+        DrawerNavIcon(Modifier.padding(16.dp))
         Divider(color = MaterialTheme.colors.onSurface.copy(alpha = .2f))
         DrawerButton(
             icon = Icons.Filled.Home,
@@ -157,7 +161,7 @@ fun AppDrawer(
         )
 
         DrawerButton(
-            icon = Icons.Filled.ListAlt,
+            icon = Icons.Filled.Alarm,
             label = "My Tasks",
             isSelected = currentScreen == Screen.TasksScreen,
             action = {
@@ -167,7 +171,7 @@ fun AppDrawer(
         )
 
         DrawerButton(
-            icon = Icons.Filled.ListAlt,
+            icon = Icons.Filled.PersonOutline,
             label = "Profile",
             isSelected = currentScreen == Screen.TeamScreen,
             action = {

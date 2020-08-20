@@ -33,7 +33,9 @@ class AppContainerImpl(private val applicationContext: Context) : AppContainer {
     }
 
     override val taskRequestRepository: TaskRequestsRepository by lazy {
-        FakeTaskRequestsRepository(applicationContext)
+        FakeTaskRequestsRepository(executorService = executorService,
+            resultThreadHandler = mainThreadHandler,
+            resources = applicationContext.resources)
     }
 
    override val ordersRepository: OrdersRepository = FakeOrdersRepository(applicationContext)
