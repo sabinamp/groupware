@@ -72,7 +72,7 @@ fun ProfileInfo(courierId: String) {
             Row(){
 
                     Box(padding = 30.dp) {
-                        EditButton(text = "Edit", onClick = {})
+                        EditButton(onClick = {})
 
                     }
 

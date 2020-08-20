@@ -11,7 +11,7 @@ import androidx.compose.setValue
 sealed class Screen {
     object WelcomeScreen : Screen()
     data class ProfileScreen(val courierId: String) : Screen()
-    object OrdersScreen : Screen()
+    object TasksScreen : Screen()
     object TeamScreen : Screen()
     data class TaskDetails(val taskId: String): Screen()
 }
@@ -19,7 +19,7 @@ sealed class Screen {
 object CityCourierStatus {
     var currentScreen by mutableStateOf<Screen>(Screen.WelcomeScreen)
     val favorites = ModelList<String>()
-    val selectedTopics = ModelList<String>()
+
 }
 
 /**

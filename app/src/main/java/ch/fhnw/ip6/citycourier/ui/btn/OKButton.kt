@@ -31,20 +31,10 @@ import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 
 @Composable
-fun EditButton(onClick: (() -> Unit)? = null) {
-   /* Button(
-        onClick = {
-            // handle button click
-        },
-        modifier = Modifier.width(100.dp).plus(Modifier.height(50.dp)),
-        backgroundColor = Color.Transparent,
-        contentColor = Color.DarkGray,
-        elevation = Dp(7f),
-        shape = RoundedCornerShape(8.dp)
-    ){text}
-*/ val editIcon=
-    Button(onClick = {}, shape = CircleShape, backgroundColor = LightThemeColors.primaryVariant) {
-        Icon(asset = imageResource(R.drawable.edit),modifier = Modifier.drawBackground(
+fun OKButton(onClick: (() -> Unit)? = null) {
+    val editIcon=
+    Button(onClick = {}, shape = CircleShape, backgroundColor = LightThemeColors.secondaryVariant) {
+        Icon(asset = imageResource(R.drawable.ok),modifier = Modifier.drawBackground(
             color = Color.White,
             style = Stroke(4f),
             shape = CircleShape
@@ -55,9 +45,9 @@ fun EditButton(onClick: (() -> Unit)? = null) {
 
 @Preview
 @Composable
-fun EditButtonPreview(){
+fun OKButtonPreview(){
     ThemedPreview{
-        EditButton()
+        OKButton()
     }
 
 }

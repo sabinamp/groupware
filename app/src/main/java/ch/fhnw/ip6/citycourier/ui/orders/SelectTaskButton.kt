@@ -33,6 +33,7 @@ import androidx.ui.material.icons.filled.Done
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 
 @Composable
@@ -43,9 +44,9 @@ fun SelectTopicButton(
     key(selected) {
         val icon = if (selected) Icons.Filled.Done else Icons.Filled.Add
         val backgroundColor = if (selected) {
-            MaterialTheme.colors.primary
+            LightThemeColors.primary
         } else {
-            MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+            LightThemeColors.secondaryVariant.copy(alpha = 0.12f)
         }
         Surface(
             color = backgroundColor,

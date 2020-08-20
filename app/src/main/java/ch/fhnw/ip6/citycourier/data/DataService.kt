@@ -33,22 +33,23 @@ fun dataService(): List<TaskRequest>{
         notification1.sentWhen = LocalDateTime.now()
     }
     val notification3 = TaskRequest()
-    notification2.orderId="OR1124"
-    notification2.assigneeId="C102"
+    notification3.orderId="OR1124"
+    notification3.assigneeId="C102"
 
-    notification2.deliveryType=DeliveryType.URGENT
-    notification2.taskType=  TaskType.DELIVERY_FIRST
+    notification3.deliveryType=DeliveryType.URGENT
+    notification3.taskType=  TaskType.DELIVERY_FIRST
 
    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        notification1.dueOn = LocalDateTime.now().plusDays(2)
-        notification1.sentWhen = LocalDateTime.now()
+        notification3.dueOn = LocalDateTime.now().plusDays(2)
+        notification3.sentWhen = LocalDateTime.now()
     }
-    val notification4 = TaskRequest()
-    notification2.orderId = "OR1125"
-    notification2.assigneeId="C102"
 
-    notification2.deliveryType=DeliveryType.URGENT
-    notification2.taskType=  TaskType.PARCEL_COLLECTION
+    val notification4 = TaskRequest()
+    notification4.orderId = "OR1125"
+    notification4.assigneeId="C102"
+
+    notification4.deliveryType=DeliveryType.URGENT
+    notification4.taskType=  TaskType.PARCEL_COLLECTION
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         notification1.dueOn= LocalDateTime.now().plusHours(1)

@@ -25,8 +25,8 @@ import ch.fhnw.ip6.citycourier.data.AppContainer
 import ch.fhnw.ip6.citycourier.data.CourierRepository
 import ch.fhnw.ip6.citycourier.data.OrdersRepository
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
-import ch.fhnw.ip6.citycourier.ui.orders.OrdersScreen
 import ch.fhnw.ip6.citycourier.ui.orders.TaskDetailsScreen
+import ch.fhnw.ip6.citycourier.ui.orders.TasksScreen
 import ch.fhnw.ip6.citycourier.ui.profile.ProfileScreen
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 
@@ -65,7 +65,7 @@ private fun AppContent(
          Surface(color = MaterialTheme.colors.background) {
             when (screen) {
                 is Screen.WelcomeScreen -> WelcomeScreen(taskRequestRepository)
-                is Screen.OrdersScreen -> OrdersScreen(orderRepository)
+                is Screen.TasksScreen -> TasksScreen(orderRepository, taskRequestsRepository = taskRequestRepository)
                 is Screen.ProfileScreen -> ProfileScreen(
                     screen.courierId,
                     courierRepository
@@ -159,9 +159,9 @@ fun AppDrawer(
         DrawerButton(
             icon = Icons.Filled.ListAlt,
             label = "My Tasks",
-            isSelected = currentScreen == Screen.OrdersScreen,
+            isSelected = currentScreen == Screen.TasksScreen,
             action = {
-                navigateTo(Screen.OrdersScreen)
+                navigateTo(Screen.TasksScreen)
                 closeDrawer()
             }
         )
