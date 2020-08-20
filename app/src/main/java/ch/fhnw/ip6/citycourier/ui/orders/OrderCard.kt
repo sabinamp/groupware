@@ -4,12 +4,9 @@ package ch.fhnw.ip6.citycourier.ui.orders
 
 import androidx.compose.Composable
 
-import androidx.ui.foundation.Text
 import androidx.ui.core.*
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Image
+import androidx.ui.foundation.*
 
-import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 
@@ -25,11 +22,13 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.data.taskRequestData
 import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.btn.TransparentButton
 import ch.fhnw.ip6.citycourier.ui.navigateTo
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 import java.time.LocalDateTime
@@ -80,10 +79,10 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 @Composable
 fun OrderCard(taskRequest: TaskRequest) {
     Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,color = Color.White,
-        modifier = Modifier
+      modifier = Modifier
             .fillMaxWidth()
-        .clickable( onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
-        .padding(10.dp)
+         .clickable( onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
+       .padding(10.dp)
     ) {
         NotificationImage(taskRequest = taskRequest, modifier = Modifier.padding(end = 16.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -111,16 +110,31 @@ fun NotificationImagePreview(){
         NotificationImage(taskRequest = notification)
     }
 }
+@Composable
+fun OrderList(orders: List<TaskRequest>) {
 
-fun createTaskRequestForPreview(): TaskRequest{
+        Column(modifier = Modifier.padding(10.dp)){
+            // each notification in the list
+            orders.forEach { each->
+                OrderCard(each)
+
+                 Divider(
+                      modifier = Modifier.padding(vertical = 5.dp),
+                      color = LightThemeColors.onSurface.copy(alpha = 0.08f)
+                  )
+            }
+
+    }
+}
+private fun createTaskRequestForPreview(): TaskRequest{
     val notification1 = TaskRequest()
-    notification1.taskId = "T10"
+    notification1.taskId = "T1"
     notification1.orderId("OR1123")
     notification1.assigneeId( "C102")
 
     notification1.deliveryType(DeliveryType.STANDARD)
     notification1.taskType(TaskType.PARCEL_COLLECTION)
-
+    notification1.confirmed(RequestReply.PENDING)
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         notification1.dueOn(LocalDateTime.now().plusHours(7))
         notification1.sentWhen(LocalDateTime.now())
@@ -141,8 +155,8 @@ fun NotificationTitlePreview() {
 @Composable
 fun NotificationDetailsPreview() {
     ThemedPreview() {
-        val notification = createTaskRequestForPreview()
-        NotificationDetails(post = notification)
+
+        NotificationDetails(post = createTaskRequestForPreview())
     }
 }
 
@@ -150,7 +164,6 @@ fun NotificationDetailsPreview() {
 @Preview("Order Card")
 @Composable
 fun OrderCardPreview() {
-
     ThemedPreview() {
         val notification = createTaskRequestForPreview()
         OrderCard(notification)
@@ -160,3 +173,13 @@ fun OrderCardPreview() {
 
 
 
+@Preview("Delivery Task List")
+@Composable
+fun OrderListPreview() {
+    ThemedPreview() {
+        val notifications: List<TaskRequest> = taskRequestData()
+
+        OrderList(notifications)
+
+    }
+}

@@ -34,10 +34,22 @@ val notification3 = createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,T
 val notification4 = createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING)
 val notification5 = createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
 
-val taskRequestList =listOf( notification1, notification2,notification3, notification4, notification5)
+val taskRequestList =listOf( // notification1, notification2,notification3, notification4, notification5)
+    createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
+    createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
+    createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
+    createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING),
+    createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+)
 
 fun taskRequestData(): List<TaskRequest>{
-    return taskRequestList
+    return listOf(
+        createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
+        createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
+        createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
+        createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING),
+        createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+    )
 }
 
 fun assignedTaskRequestData(): List<TaskRequest> {

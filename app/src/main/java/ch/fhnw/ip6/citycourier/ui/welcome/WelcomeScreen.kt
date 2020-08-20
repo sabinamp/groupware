@@ -6,11 +6,8 @@ import android.os.Looper
 import androidx.compose.*
 import androidx.core.os.postDelayed
 import androidx.ui.core.*
-import androidx.ui.foundation.Box
+import androidx.ui.foundation.*
 
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 
@@ -70,10 +67,16 @@ fun WelcomeScreen(
 
 
 @Composable
- fun WelcomeScreenBody(tasks: List<TaskRequest>) {
+ fun WelcomeScreenBody(tasks: List<TaskRequest>, modifier: Modifier = Modifier) {
    CityCourierTheme{
-       HomeScreenIntro()
-       OrderList(orders = tasks)
+       Column(modifier = modifier) {
+           HomeScreenIntro()
+           VerticalScroller(isScrollable = true) {
+               OrderList(orders = tasks)
+           }
+
+       }
+
     }
 }
 
@@ -125,7 +128,7 @@ fun HomeScreenIntro() {
 
             Row (horizontalArrangement = Arrangement.Center){
                 val text = "Please accept or deny each task request within 10 minutes."
-                Text(modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp),
+                Text(modifier = Modifier.padding(start = 10.dp, top = 10.dp,bottom = 5.dp, end = 10.dp),
                     style = themeTypography.body2,
                     text = text
                 )
@@ -231,7 +234,8 @@ private fun PreviewDrawerOpenDark() {
 private fun loadFakeTasks(): List<TaskRequest> {
     return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getTaskRequests)
     //loading data from the repository fails -todo
-
+   /* val tasks: List<TaskRequest> = taskRequestData()
+    return tasks*/
 }
 
 @Preview("Home screen,  closed drawer")

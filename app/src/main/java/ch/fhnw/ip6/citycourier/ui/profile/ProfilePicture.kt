@@ -34,21 +34,20 @@ fun ProfilePicture(name:String){
             bottomLeft = 0.dp, bottomRight = 0.dp)
     ){
 
-        Column(modifier = Modifier.padding(55.dp)) {
+        Column(modifier = Modifier.padding(25.dp), horizontalGravity = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.padding(5.dp).plus(Modifier.width(80.dp))) {
                 Image(vectorResource(R.drawable.ic_profile_80))
             }
             Box(padding = 10.dp) {
-                Text(name, style = themeTypography.h2, maxLines = 1)
-            }
-            Box(padding = 10.dp) {
-                Row(modifier = Modifier.height(50.dp)){
-                    Text("Available", style = themeTypography.h6, maxLines = 1)
+                Column(modifier = Modifier.height(55.dp)){
+                Text(name, style = themeTypography.h2, maxLines = 1, modifier = Modifier.padding(4.dp))
+
+                Text("Available", style = themeTypography.h6, maxLines = 1,modifier = Modifier.padding(4.dp))
                     Spacer(modifier = Modifier.width(5.dp))
 
                 }
-
             }
+
 
         }
 
