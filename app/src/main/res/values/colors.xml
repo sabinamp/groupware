@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#FF45d5fe</color>
+    <color name="colorPrimaryDark">#FF7bb0ff</color>
+    <color name="colorAccent">#FF34f8ff</color>
+    <color name="primaryVariantBlue">#FF00bfff</color>
+    <color name="errorRed">#FFde5b52</color>
+    <color name="red700">#dd0d3e</color>
+    <color name="red900">#c20029</color>
+    <color name="status_bar">@color/red900</color>
 </resources>

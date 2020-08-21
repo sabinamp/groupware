@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class TaskRequest {
+    @JsonProperty("taskId")
+    private String taskId = null;
+
     @JsonProperty("orderId")
     private String orderId = null;
 
     @JsonProperty("assigneeId")
     private String assigneeId = null;
-
-    @JsonProperty("addressLine")
-    private String addressLine = null;
 
     @JsonProperty("deliveryType")
     private DeliveryType deliveryType = null;
@@ -25,15 +25,30 @@ public class TaskRequest {
 
     @JsonProperty("dueOn")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
-    private LocalDateTime dueOn = null;
-
-    @JsonProperty("shift")
-    private ShiftType shift = null;
+    private LocalDateTime  dueOn = null;
 
     @JsonProperty("sentWhen")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
     private LocalDateTime  sentWhen = null;
 
+    @JsonProperty("confirmed")
+    private RequestReply confirmed = null;
+
+    @JsonProperty("done")
+    private boolean done = false;
+
+    @JsonProperty("completedWhen")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
+    private LocalDateTime completedWhen = null;
+
+
+    @JsonProperty("outcome")
+    private OrderStatus outcome = null;
+
+    public TaskRequest taskId(String taskId) {
+        this.taskId = taskId;
+        return this;
+    }
 
     public TaskRequest dueOn(LocalDateTime dueOn) {
         this.dueOn = dueOn;
@@ -45,10 +60,6 @@ public class TaskRequest {
         return this;
     }
 
-    public TaskRequest shift(ShiftType shift) {
-        this.shift = shift;
-        return this;
-    }
 
     public TaskRequest deliveryType(DeliveryType deliveryType) {
         this.deliveryType = deliveryType;
@@ -70,10 +81,33 @@ public class TaskRequest {
         return this;
     }
 
-    public TaskRequest addressLine(String addressLine) {
-        this.addressLine = addressLine;
+    public TaskRequest confirmed(RequestReply accepted){
+        this.confirmed = accepted;
         return this;
     }
+
+    public TaskRequest done(boolean done){
+        this.done = done;
+        return this;
+    }
+
+    public TaskRequest completedWhen(LocalDateTime completedWhen) {
+        this.completedWhen = completedWhen;
+        return this;
+    }
+    public TaskRequest taskType(OrderStatus outcome) {
+        this.outcome = outcome;
+        return this;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
     public String getOrderId() {
         return orderId;
     }
@@ -115,13 +149,6 @@ public class TaskRequest {
         this.dueOn = dueOn;
     }
 
-    public ShiftType getShift() {
-        return shift;
-    }
-
-    public void setShift(ShiftType shift) {
-        this.shift = shift;
-    }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
     public LocalDateTime getSentWhen() {
@@ -132,25 +159,39 @@ public class TaskRequest {
         this.sentWhen = sentWhen;
     }
 
-    public boolean isConfirmed() {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm", locale = "de")
+    public LocalDateTime getCompletedWhen() {
+        return completedWhen;
+    }
+
+    public void setCompletedWhen(LocalDateTime completedWhen) {
+        this.completedWhen = completedWhen;
+    }
+
+
+    public RequestReply getConfirmed() {
         return confirmed;
     }
 
-    public void setConfirmed(boolean confirmed) {
+    public void setConfirmed(RequestReply confirmed) {
         this.confirmed = confirmed;
     }
 
-    public String getAddressLine() {
-        return addressLine;
+    public boolean isDone() {
+        return done;
     }
 
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
-    @JsonProperty("confirmed")
-    private boolean confirmed = false;
+    public OrderStatus getOutcome() {
+        return outcome;
+    }
 
+    public void setOutcome(OrderStatus outcome) {
+        this.outcome = outcome;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -161,34 +202,40 @@ public class TaskRequest {
             return false;
         }
         TaskRequest task = (TaskRequest) o;
-        return Objects.equals(this.orderId, task.orderId) &&
+        return  Objects.equals(this.taskId, task.taskId) &&
+                Objects.equals(this.orderId, task.orderId) &&
                 Objects.equals(this.assigneeId, task.assigneeId)&&
-                Objects.equals(this.addressLine, task.addressLine)&&
                 Objects.equals(this.deliveryType, task.deliveryType) &&
                 Objects.equals(this.sentWhen, task.sentWhen) &&
                 Objects.equals(this.taskType, task.taskType) &&
                 Objects.equals(this.dueOn, task.dueOn) &&
-                Objects.equals(this.confirmed, task.confirmed);
+                Objects.equals(this.confirmed, task.confirmed)&&
+                Objects.equals(this.done, task.done) &&
+                Objects.equals(this.completedWhen, task.completedWhen) &&
+                Objects.equals(this.outcome, task.outcome);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, assigneeId, addressLine,sentWhen, deliveryType, taskType, dueOn,
-                confirmed);
+        return Objects.hash(taskId, orderId, assigneeId, sentWhen, deliveryType, taskType, dueOn,
+                confirmed, done, completedWhen, outcome);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class TaskRequest {\n");
+        sb.append("    taskId: ").append(toIndentedString(taskId)).append("\n");
         sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
         sb.append("    assigneeId: ").append(toIndentedString(assigneeId)).append("\n");
-        sb.append("    addressLine: ").append(toIndentedString(addressLine)).append("\n");
         sb.append("    sentWhen: ").append(toIndentedString(sentWhen)).append("\n");
         sb.append("    deliveryType: ").append(toIndentedString(deliveryType)).append("\n");
         sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
         sb.append("    dueOn: ").append(toIndentedString(dueOn)).append("\n");
         sb.append("    confirmed: ").append(toIndentedString(confirmed)).append("\n");
+        sb.append("    done: ").append(toIndentedString(done)).append("\n");
+        sb.append("    completedWhen: ").append(toIndentedString(completedWhen)).append("\n");
+        sb.append("    outcome: ").append(toIndentedString(outcome)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -2,7 +2,9 @@ package ch.fhnw.ip6.citycourier.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CourierInfo {
 
@@ -18,14 +20,14 @@ public class CourierInfo {
     @JsonProperty("status")
     private CourierStatus status = null;
 
-    @JsonProperty("location")
-    private Location location = null;
+/*    @JsonProperty("location")
+    private Location location = null;*/
 
     @JsonProperty("avatarImage")
-    private String avatarImage = null;
+    private AvatarImage avatarImage = null;
 
-    @JsonProperty("contactInfos")
-    private List<ContactInfo> contactInfos = null;
+    @JsonProperty("contactInfo")
+    private ContactInfo contactInfo = null;
 
 
     @JsonProperty("assignedOrders")
@@ -36,7 +38,7 @@ public class CourierInfo {
         return this;
     }
 
-    public CourierInfo avatarImage(String avatarImage) {
+    public CourierInfo avatarImage(AvatarImage avatarImage) {
         this.avatarImage= avatarImage;
         return this;
     }
@@ -56,22 +58,16 @@ public class CourierInfo {
         return this;
     }
 
-    public CourierInfo location(Location location) {
+ /*   public CourierInfo location(Location location) {
         this.location= location;
         return this;
-    }
-    public CourierInfo contactInfos(List<ContactInfo> contactInfos) {
-        this.contactInfos = contactInfos;
+    }*/
+    public CourierInfo contactInfos(ContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
         return this;
     }
 
-    public CourierInfo addContactInfosItem(ContactInfo contactInfosItem) {
-        if (this.contactInfos == null) {
-            this.contactInfos = new ArrayList<>();
-        }
-        this.contactInfos.add(contactInfosItem);
-        return this;
-    }
+
 
     public String getCourierName() {
         return courierName;
@@ -105,6 +101,7 @@ public class CourierInfo {
         this.status = status;
     }
 
+/*
     public Location getLocation() {
         return location;
     }
@@ -112,21 +109,22 @@ public class CourierInfo {
     public void setLocation(Location location) {
         this.location = location;
     }
+*/
 
-    public String getAvatarImage() {
+    public AvatarImage getAvatarImage() {
         return avatarImage;
     }
 
-    public void setAvatarImage(String avatarImage) {
+    public void setAvatarImage(AvatarImage avatarImage) {
         this.avatarImage = avatarImage;
     }
 
-    public List<ContactInfo> getContactInfos() {
-        return contactInfos;
+    public ContactInfo getContactInfo() {
+        return contactInfo;
     }
 
-    public void setContactInfos(List<ContactInfo> contactInfos) {
-        this.contactInfos = contactInfos;
+    public void setContactInfo(ContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
     public Set<String> getAssignedOrders() {
@@ -159,13 +157,13 @@ public class CourierInfo {
                 Objects.equals(this.conn, courierInfo.conn) &&
                 Objects.equals(this.status, courierInfo.status) &&
                 Objects.equals(this.avatarImage, courierInfo.avatarImage) &&
-                Objects.equals(this.contactInfos, courierInfo.contactInfos) &&
+                Objects.equals(this.contactInfo, courierInfo.contactInfo) &&
                 Objects.equals(this.assignedOrders, courierInfo.assignedOrders) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courierName, deviceName, conn, status, avatarImage, contactInfos,assignedOrders);
+        return Objects.hash(courierName, deviceName, conn, status, avatarImage, contactInfo,assignedOrders);
     }
 
     @Override
@@ -175,10 +173,9 @@ public class CourierInfo {
                 ", deviceName='" + deviceName + '\'' +
                 ", conn='" + conn + '\'' +
                 ", status='" + status + '\'' +
-                ", location=" + location + '\'' +
                 ", avatarImage='" + avatarImage + '\'' +
                 ", assignedOrders='" + assignedOrders + '\'' +
-                ", contactInfos=" + contactInfos +
+                ", contactInfo=" + contactInfo +
                 '}';
     }
 

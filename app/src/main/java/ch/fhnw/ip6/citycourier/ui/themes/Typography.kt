@@ -1,25 +1,32 @@
 package ch.fhnw.ip6.citycourier.ui.themes
 
-import androidx.ui.core.sp
+
 import androidx.ui.graphics.Color
 import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontWeight
-import androidx.ui.text.font.Font
-import androidx.ui.text.font.FontFamily
-import androidx.ui.text.font.FontStyle
+import androidx.ui.text.font.*
+import androidx.ui.unit.sp
+import ch.fhnw.ip6.citycourier.R
 
 
-val regular = Font(name="montserrat_regular.otf")
-val medium = Font(name="montserrat_black.otf", weight = FontWeight.W500)
-val semibold = Font(name="montserrat_semibold.otf", weight = FontWeight.W600)
+val regular = font(R.font.montserrat_regular)
+val medium = font(R.font.montserrat_medium, FontWeight.W500)
+val semibold = font(R.font.montserrat_semibold, FontWeight.W600)
 
-val appFontFamily = FontFamily(fonts = listOf(
-    regular,
-    medium,
-    semibold
-))
+val appFontFamily = fontFamily(
+    fonts = listOf(
+        regular,
+        medium,
+        semibold
+    )
+)
 
+private val bodyFontFamily = fontFamily(
+    fonts = listOf(
+        font(R.font.domine_regular),
+        font(R.font.domine_bold, FontWeight.Bold)
+    )
+)
 
 val themeTypography = Typography(
     h2 = TextStyle(
@@ -32,7 +39,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 20.sp,
-        color = LightThemeColors.secondary
+        color = Color.White
     ),
     h4 = TextStyle(
         fontFamily = appFontFamily,
@@ -72,12 +79,12 @@ val themeTypography = Typography(
     body1 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 16.sp,
-        color = Color.DarkGray
+        color = Color(229,177,151)
     ),
     body2 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 14.sp,
-        color = Color.DarkGray,
+        color = LightThemeColors.onPrimary,
         fontStyle = FontStyle.Normal
     ),
     button = TextStyle(

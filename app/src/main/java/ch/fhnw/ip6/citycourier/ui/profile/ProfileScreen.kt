@@ -1,177 +1,135 @@
 package ch.fhnw.ip6.citycourier.ui.profile
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
+import androidx.compose.remember
+
 import androidx.ui.core.*
-import androidx.ui.foundation.DrawImage
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.foundation.shape.corner.CircleShape
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.vector.DrawVector
-import androidx.ui.layout.*
-import androidx.ui.layout.Size
-import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
-import androidx.ui.res.imageResource
-import androidx.ui.res.vectorResource
-import androidx.ui.text.TextStyle
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Icon
+import androidx.ui.foundation.Text
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.layout.*
+import androidx.ui.material.*
+import androidx.ui.res.vectorResource
+
+import androidx.ui.unit.dp
+import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
+
 import ch.fhnw.ip6.citycourier.R
-import ch.fhnw.ip6.citycourier.ui.LightThemeColors
-import ch.fhnw.ip6.citycourier.ui.themeTypography
+import ch.fhnw.ip6.citycourier.data.CourierRepository
+import ch.fhnw.ip6.citycourier.ui.AppDrawer
+import ch.fhnw.ip6.citycourier.ui.Screen
 
+import ch.fhnw.ip6.citycourier.ui.ThemedPreview
+import ch.fhnw.ip6.citycourier.ui.btn.EditButton
+import ch.fhnw.ip6.citycourier.ui.orders.TasksScreenBody
+import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme
 
 @Composable
-fun ProfileScreen() {
-    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
-            Column( modifier = Spacing(5.dp)) {
-                CourierLogo()
-                HeightSpacer(5.dp)
-                Row(modifier = Spacing(2.dp), arrangement = Arrangement.Center ) {
-                    StatusBar()
-                }
-                HeightSpacer(5.dp)
-                Picture()
-                ProfileInfo()
-            }
-    }
-}
-@Composable
-fun Picture(){
-    Row(modifier = Width(130.dp)){
-        Text(text = "Profile info",
-            //style = TextStyle(fontSize = TextUnit.Companion.Sp(28))
-            style = themeTypography.subtitle1
-        )
-    }
-    HeightSpacer(height = 5.dp)
+fun ProfileScreenBody(courierId: String) {
 
-    Container(modifier = Size(100.dp, 100.dp)) {
-        Clip(shape= CircleShape){
-            DrawVector(vectorImage = +vectorResource(R.drawable.ic_profile_60))
+    CityCourierTheme {
+        Column(
+            modifier = Modifier.padding(5.dp)
+        ) {
+            //NavIcon
+            Spacer(modifier = Modifier.height(5.dp))
+            ProfilePicture("John Smith")
+            Spacer(modifier = Modifier.height(5.dp))
+            ProfileInfo(courierId = courierId)
         }
     }
 }
-
+   
 @Composable
-fun ProfileInfo(){
-    HeightSpacer(height=2.dp)
-    Column(modifier = Spacing(5.dp)) {
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="CourierID", modifier = Width(150.dp))
-                Text(text="courier00C1", modifier = Width(150.dp))
-            }
-
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="Device name", modifier = Width(150.dp))
-                Text(text="RedmiHauser", modifier = Width(150.dp))
-            }
-
-            Row(modifier = Spacing(5.dp)){
-                Text(text="First name", modifier = Width(150.dp))
-                Text(text="Martin", modifier = Width(150.dp))
-            }
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="Last name", modifier = Width(150.dp))
-                Text(text="Hauser", modifier = Width(150.dp))
-            }
-
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="Region", modifier = Width(150.dp))
-                Text(text="City Zürich West", modifier = Width(150.dp))
-            }
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="Mail", modifier = Width(150.dp))
-                Text(text="info@citycourier.ch", modifier = Width(150.dp))
-            }
-
-            Row(modifier = Spacing(5.dp)) {
-                Text(text="Telephone number", modifier = Width(150.dp))
-                Text(text="+41442205020", modifier = Width(150.dp))
-            }
-
-
-    }
-}
-
-
-@Composable
-fun CourierLogo() {
-    Container(modifier = Height(90.dp) wraps Expanded) {
-        Clip(shape = RoundedCornerShape(8.dp)) {
-            DrawImage(image = +imageResource(R.drawable.deliveryservice_logo))
-        }
-    }
-}
-
-@Composable
-fun StatusBar() {
-    MaterialTheme (colors = LightThemeColors, typography = themeTypography) {
-        FlexRow(modifier = Spacing(14.dp)) {
-            expanded(flex=1.0f) {
-                Column(){
-                    Container(
-                        width = Dp(30f),
-                        height = Dp(30f),
-                        alignment = Alignment.TopCenter
-                    ) {
-                        Clip(shape = RoundedCornerShape(8.dp)) {
-                            DrawImage(image = +imageResource(R.drawable.arrow))
-                        }
+fun ProfileScreen(courierId: String, scaffoldState: ScaffoldState = remember { ScaffoldState() },
+/*courierRepository: CourierRepository*/){
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            AppDrawer(
+                currentScreen = Screen.TasksScreen,
+                closeDrawer = { scaffoldState.drawerState = DrawerState.Closed }
+            )
+        },
+        topAppBar = {
+            TopAppBar(
+                title = { Text("Your Profile") },
+                navigationIcon = {
+                    IconButton(onClick = { scaffoldState.drawerState = DrawerState.Opened }) {
+                        Icon(vectorResource(R.drawable.ic_menu_icon_24))
                     }
                 }
-            }
+            )
+        },
+        bodyContent = {
 
-            WidthSpacer(width = 10.dp)
+            ProfileScreenBody(courierId = courierId)
+        }
+    )
+}
 
-            expanded(flex=1.0f){
-                Column() {
-                    Row() {
+@Composable
+fun ProfileInfo(courierId: String) {
+    Card(
+        modifier = Modifier.height(300.dp).plus(Modifier.fillMaxWidth()),
+        color = LightThemeColors.onBackground, elevation = 7.dp
+    ) {
+        Column {
+           ProfileRow(title = "ID",
+               value = "C100",
+               imageUrl = R.drawable.ic_face_id_24)
 
-                        Container(
-                            width = Dp(30f),
-                            height = Dp(30f),
-                            alignment = Alignment.CenterRight
-                        ) {
-                            Clip(shape = RoundedCornerShape(8.dp)) {
-                                DrawImage(image = +imageResource(R.drawable.online_connection))
-                            }
+             ProfileRow(
+                title = "Name",
+                value = "Martin Hauser",
+                imageUrl = R.drawable.ic_user_24
+            )
 
-                        }
-                            WidthSpacer(width = 15.dp)
-                            Button() {
-                                Text("Online")
+             ProfileRow(
+                 title = "Region",
+                 value = "Zürich West",
+                 imageUrl = R.drawable.ic_tracking_24
+             )
 
-                                }
+             ProfileRow(
+                 title = "Email",
+                 value = "info@citycourier.com",
+                 imageUrl = R.drawable.ic_mail_24
+             )
+             ProfileRow(
+                 title = "Phone",
+                 value = "41442205020",
+                 imageUrl = R.drawable.ic_phone_24
+             )
+            Row(){
 
-                            }
-
+                    Box(padding = 30.dp) {
+                        EditButton(onClick = {})
 
                     }
 
 
-                }
-                }
             }
 
 
         }
 
-
-
-
-
-
-
-
-@Preview
-@Composable
-fun ProfilePreview() {
-    ProfileScreen()
+    }
 }
 
+@Preview("Profile Info Preview")
+@Composable
+fun ProfileInfoPreview(){
+    ThemedPreview(darkTheme = false) {
+        ProfileInfo(courierId = "C000")
+    }
+}
 
-
-
-
+@Preview("Profile Screen Body Preview")
+@Composable
+fun ProfileScreenBodyPreview(){
+    ThemedPreview(darkTheme = false) {
+        ProfileScreenBody(courierId = "C000")
+    }
+}

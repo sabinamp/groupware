@@ -7,7 +7,7 @@ interface OrdersRepository{
     /**
      * Get list of orders.
      */
-    fun getOrders(callback: (Result<Map<String, List<OrderDescriptiveInfo>>>) -> Unit)
+   // fun getOrders(callback: (Result<Map<String, List<OrderDescriptiveInfo>>>) -> Unit)
 
     /**
      * Get order by id.
@@ -15,6 +15,6 @@ interface OrdersRepository{
     fun getOrder(orderId:String, callback: (Result<OrderDescriptiveInfo>) -> Unit)
 
 
-
-
 }
+
+

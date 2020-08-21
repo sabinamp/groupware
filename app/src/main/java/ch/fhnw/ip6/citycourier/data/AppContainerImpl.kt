@@ -7,14 +7,14 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 
-import ch.fhnw.ip6.citycourier.data.AppContainerImpl
-import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
+
 /**
  * Dependency Injection container at the application level.
  */
 interface AppContainer {
     val taskRequestRepository: TaskRequestsRepository
-    //val ordersRepository: OrdersRepository
+   /* val ordersRepository: OrdersRepository
+    val courierRepository: CourierRepository*/
 }
 
 /**
@@ -33,14 +33,17 @@ class AppContainerImpl(private val applicationContext: Context) : AppContainer {
     }
 
     override val taskRequestRepository: TaskRequestsRepository by lazy {
-        FakeTaskRequestsRepository(
-            executorService = executorService,
+        FakeTaskRequestsRepository(executorService = executorService,
             resultThreadHandler = mainThreadHandler,
-            resources = applicationContext.resources
-        )
+            resources = applicationContext.resources)
     }
 
- /*   override val ordersRepository: OrdersRepository by lazy {
-      FakeOrdersRepository()
-    }*/
+  // override val ordersRepository: OrdersRepository = BlockingFakeOrdersRepository(applicationContext)
+    //override val courierRepository: CourierRepository = CourierRepositoryImpl(applicationContext)
+
+
 }
+
+
+
+
