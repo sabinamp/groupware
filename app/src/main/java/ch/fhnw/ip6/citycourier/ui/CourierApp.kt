@@ -24,10 +24,10 @@ import androidx.ui.unit.dp
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.data.AppContainer
-import ch.fhnw.ip6.citycourier.data.CourierRepository
-import ch.fhnw.ip6.citycourier.data.OrdersRepository
+
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
 import ch.fhnw.ip6.citycourier.ui.orders.TaskDetailsScreen
+
 import ch.fhnw.ip6.citycourier.ui.orders.TasksScreen
 import ch.fhnw.ip6.citycourier.ui.profile.ProfileScreen
 import ch.fhnw.ip6.citycourier.ui.themes.CityCourierTheme

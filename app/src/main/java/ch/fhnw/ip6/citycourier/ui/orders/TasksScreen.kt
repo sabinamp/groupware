@@ -67,9 +67,7 @@ fun TasksScreenBody(taskRequestsRepository: TaskRequestsRepository) {
     CityCourierTheme {
         val tasks = loadFakeTasks()
         ScreenIntro()
-        VerticalScroller(isScrollable = true) {
-            // OrderList(tasks)
-        }
+        OrderList(tasks)
 
     }
 }
@@ -77,9 +75,8 @@ fun TasksScreenBody(taskRequestsRepository: TaskRequestsRepository) {
 @Composable
 private fun loadFakeTasks(): List<TaskRequest> {
     return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getAcceptedTaskRequests)
-    //return assignedTaskRequestData()
-    }
 
+}
 
 
 @Composable

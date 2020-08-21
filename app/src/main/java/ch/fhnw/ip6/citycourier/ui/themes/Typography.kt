@@ -79,12 +79,12 @@ val themeTypography = Typography(
     body1 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 16.sp,
-        color = Color.DarkGray
+        color = Color(229,177,151)
     ),
     body2 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 14.sp,
-        color = Color.White,
+        color = LightThemeColors.onPrimary,
         fontStyle = FontStyle.Normal
     ),
     button = TextStyle(

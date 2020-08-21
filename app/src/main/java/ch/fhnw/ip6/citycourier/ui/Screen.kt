@@ -4,6 +4,7 @@ import androidx.compose.frames.ModelList
 import androidx.compose.getValue
 import androidx.compose.mutableStateOf
 import androidx.compose.setValue
+import ch.fhnw.ip6.citycourier.model.TaskRequest
 
 /**
  * Class defining the screens we have in the app: welcome, profile, team details and orders

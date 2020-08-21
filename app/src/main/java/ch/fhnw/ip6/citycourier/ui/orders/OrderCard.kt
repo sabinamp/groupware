@@ -7,26 +7,19 @@ import androidx.compose.Composable
 import androidx.ui.core.*
 import androidx.ui.foundation.*
 
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-
 import androidx.ui.layout.*
-import androidx.ui.layout.ColumnScope.weight
 import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.MoreVert
 
-import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 
 import ch.fhnw.ip6.citycourier.R
-import ch.fhnw.ip6.citycourier.data.taskRequestData
 import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
-import ch.fhnw.ip6.citycourier.ui.btn.TransparentButton
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
@@ -36,38 +29,36 @@ import java.time.LocalDateTime
 
 @Composable
 fun NotificationDetails(
-    post: TaskRequest,
-    modifier: Modifier = Modifier
-) {
+    task: TaskRequest,
+    modifier: Modifier = Modifier) {
     Row(modifier) {
-        ProvideEmphasis(EmphasisAmbient.current.medium) {
-            val textStyle = themeTypography.body2
+        ProvideEmphasis(EmphasisAmbient.current.high) {
+            val textStyle = themeTypography.body1
             Text(
-                text = "${post.taskId} -${post.taskType}. Deliver till - ${post.dueOn} ",
+                text = "${task.taskId} - task ${task.taskType} Please complete till - ${task.dueOn}. ",
                 style = textStyle
             )
-
         }
+
     }
 }
+
 @Composable
 fun NotificationTitle(taskRequest: TaskRequest) {
     ProvideEmphasis(EmphasisAmbient.current.high) {
-
-        val title=   "Task "+ taskRequest.taskId+ " OrderID: "+taskRequest.orderId
-        Text(title, style = themeTypography.subtitle1)
+        val title= "Task "+ taskRequest.taskId + " OrderID: "+taskRequest.orderId
+        Text(title, style = themeTypography.subtitle1, color = LightThemeColors.primaryVariant)
     }
 }
 
 @Composable
 fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
     val urgent= (DeliveryType.STANDARD == taskRequest.deliveryType)
-    var image = if(urgent) {
+    val image = if(urgent) {
         vectorResource(R.drawable.ic_bell_60)
     }else{
         vectorResource(id = R.drawable.ic_bell_urgent_60)
     }
-
     Image(
         asset = image,
         modifier = modifier
@@ -78,21 +69,16 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 }
 @Composable
 fun OrderCard(taskRequest: TaskRequest) {
-    Card(shape = RoundedCornerShape(8.dp), elevation = 8.dp,color = Color.White,
+    Row(
       modifier = Modifier
             .fillMaxWidth()
-         .clickable( onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
-       .padding(10.dp)
+            .clickable( onClick = { navigateTo(Screen.TaskDetails(taskRequest.taskId)) })
+            .padding(20.dp)
     ) {
         NotificationImage(taskRequest = taskRequest, modifier = Modifier.padding(end = 16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            NotificationTitle(taskRequest)
-            NotificationDetails(taskRequest)
-            if (taskRequest.completedWhen!= null &&taskRequest.completedWhen.isBefore(LocalDateTime.now())) {
-                Text("Completed", style = themeTypography.body2)
-            } else {
-                Text("Pending",  style = themeTypography.body2)
-            }
+            NotificationTitle(taskRequest = taskRequest)
+            NotificationDetails(task=taskRequest)
 
         }
         ProvideEmphasis(EmphasisAmbient.current.medium) {
@@ -110,22 +96,7 @@ fun NotificationImagePreview(){
         NotificationImage(taskRequest = notification)
     }
 }
-@Composable
-fun OrderList(orders: List<TaskRequest>) {
 
-        Column(modifier = Modifier.padding(10.dp)){
-            // each notification in the list
-            orders.forEach { each->
-                OrderCard(each)
-
-                 Divider(
-                      modifier = Modifier.padding(vertical = 5.dp),
-                      color = LightThemeColors.onSurface.copy(alpha = 0.08f)
-                  )
-            }
-
-    }
-}
 private fun createTaskRequestForPreview(): TaskRequest{
     val notification1 = TaskRequest()
     notification1.taskId = "T1"
@@ -135,6 +106,7 @@ private fun createTaskRequestForPreview(): TaskRequest{
     notification1.deliveryType(DeliveryType.STANDARD)
     notification1.taskType(TaskType.PARCEL_COLLECTION)
     notification1.confirmed(RequestReply.PENDING)
+
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         notification1.dueOn(LocalDateTime.now().plusHours(7))
         notification1.sentWhen(LocalDateTime.now())
@@ -155,8 +127,7 @@ fun NotificationTitlePreview() {
 @Composable
 fun NotificationDetailsPreview() {
     ThemedPreview() {
-
-        NotificationDetails(post = createTaskRequestForPreview())
+        NotificationDetails(task = createTaskRequestForPreview())
     }
 }
 
@@ -173,13 +144,4 @@ fun OrderCardPreview() {
 
 
 
-@Preview("Delivery Task List")
-@Composable
-fun OrderListPreview() {
-    ThemedPreview() {
-        val notifications: List<TaskRequest> = taskRequestData()
 
-        OrderList(notifications)
-
-    }
-}

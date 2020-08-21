@@ -71,9 +71,7 @@ fun WelcomeScreen(
    CityCourierTheme{
        Column(modifier = modifier) {
            HomeScreenIntro()
-           VerticalScroller(isScrollable = true) {
-               OrderList(orders = tasks)
-           }
+           OrderList(orders = tasks)
 
        }
 
@@ -233,9 +231,7 @@ private fun PreviewDrawerOpenDark() {
 @Composable
 private fun loadFakeTasks(): List<TaskRequest> {
     return previewDataFrom(BlockingFakeTaskRequestsRepository(ContextAmbient.current)::getTaskRequests)
-    //loading data from the repository fails -todo
-   /* val tasks: List<TaskRequest> = taskRequestData()
-    return tasks*/
+
 }
 
 @Preview("Home screen,  closed drawer")

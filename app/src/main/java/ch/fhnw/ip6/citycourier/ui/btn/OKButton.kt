@@ -10,10 +10,7 @@ import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.drawscope.Stroke
-import androidx.ui.layout.fillMaxSize
-import androidx.ui.layout.height
-import androidx.ui.layout.padding
-import androidx.ui.layout.width
+import androidx.ui.layout.*
 
 import androidx.ui.material.Button
 import androidx.ui.material.IconButton
@@ -31,8 +28,8 @@ import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 
 @Composable
-fun OKButton(onClick: (() -> Unit)? = null) {
-    val editIcon=
+fun OKButton(onClick: (() -> Unit)? = null, modifier: Modifier) {
+
     Button(onClick = {}, shape = CircleShape, backgroundColor = LightThemeColors.secondaryVariant) {
         Icon(asset = imageResource(R.drawable.ok),modifier = Modifier.drawBackground(
             color = Color.White,
@@ -47,7 +44,7 @@ fun OKButton(onClick: (() -> Unit)? = null) {
 @Composable
 fun OKButtonPreview(){
     ThemedPreview{
-        OKButton()
+        OKButton(modifier = Modifier.preferredSize(40.dp,40.dp))
     }
 
 }
