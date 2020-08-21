@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 
 
 @Composable
-fun NotificationDetails(
+private fun NotificationDetails(
     task: TaskRequest,
     modifier: Modifier = Modifier) {
     Row(modifier) {
@@ -62,7 +62,7 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
     Image(
         asset = image,
         modifier = modifier
-            .preferredSize(40.dp, 40.dp)
+            .preferredSize(60.dp, 60.dp)
             .padding(4.dp)
 
     )
@@ -97,7 +97,7 @@ fun NotificationImagePreview(){
     }
 }
 
-private fun createTaskRequestForPreview(): TaskRequest{
+fun createTaskRequestForPreview(): TaskRequest{
     val notification1 = TaskRequest()
     notification1.taskId = "T1"
     notification1.orderId("OR1123")

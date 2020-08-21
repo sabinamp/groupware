@@ -66,9 +66,11 @@ fun TasksScreen(/*ordersRepository: OrdersRepository,*/
 fun TasksScreenBody(taskRequestsRepository: TaskRequestsRepository) {
     CityCourierTheme {
         val tasks = loadFakeTasks()
-        ScreenIntro()
-        OrderList(tasks)
-
+        Column() {
+            ScreenIntro()
+            ScreenDivider()
+            AcceptedTaskList(orders = tasks)
+        }
     }
 }
 

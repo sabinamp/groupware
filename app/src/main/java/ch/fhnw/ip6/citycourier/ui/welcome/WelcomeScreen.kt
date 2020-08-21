@@ -72,7 +72,6 @@ fun WelcomeScreen(
        Column(modifier = modifier) {
            HomeScreenIntro()
            OrderList(orders = tasks)
-
        }
 
     }
@@ -125,7 +124,7 @@ fun HomeScreenIntro() {
             Divider(color = Color.LightGray, modifier = Modifier.height(2.dp))
 
             Row (horizontalArrangement = Arrangement.Center){
-                val text = "Please accept or deny each task request within 10 minutes."
+                val text = "Please accept or reject each task request within 10 minutes."
                 Text(modifier = Modifier.padding(start = 10.dp, top = 10.dp,bottom = 5.dp, end = 10.dp),
                     style = themeTypography.body2,
                     text = text

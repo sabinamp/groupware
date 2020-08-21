@@ -44,7 +44,7 @@ fun OKButton(onClick: (() -> Unit)? = null, modifier: Modifier) {
 @Composable
 fun OKButtonPreview(){
     ThemedPreview{
-        OKButton(modifier = Modifier.preferredSize(40.dp,40.dp))
+        OKButton(modifier = Modifier.width(40.dp))
     }
 
 }

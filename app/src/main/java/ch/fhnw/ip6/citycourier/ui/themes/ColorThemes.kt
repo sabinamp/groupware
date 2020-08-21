@@ -11,6 +11,7 @@ val onPrimaryBlue =  Color(0xFF34f8ff)
 val secondaryBlue = Color(72,99,106)
 val onSecondaryWhite = Color(	227, 248, 255)
 val backgroundGray = Color(58,71,80)
+
 val background2 = Color(0xFF3E424B)
 val onBackgroundWhite =Color(0xFFd6f8ff)
 val onSurfaceWhite = Color(0xFFe4f8ff)

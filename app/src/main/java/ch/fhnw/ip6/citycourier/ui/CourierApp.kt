@@ -24,6 +24,7 @@ import androidx.ui.unit.dp
 
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.data.AppContainer
+import ch.fhnw.ip6.citycourier.data.CourierRepository
 
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
 import ch.fhnw.ip6.citycourier.ui.orders.TaskDetailsScreen
@@ -52,27 +53,24 @@ fun CityCourierApp(appContainer: AppContainer) {
     CityCourierTheme {
         AppContent(
             taskRequestRepository = appContainer.taskRequestRepository,
-           /* orderRepository = appContainer.ordersRepository,
-            courierRepository = appContainer.courierRepository*/
+           /* orderRepository = appContainer.ordersRepository,*/
+            courierRepository = appContainer.courierRepository
         )
     }
 }
 
 @Composable
 private fun AppContent(
-    taskRequestRepository: TaskRequestsRepository
-   /* orderRepository: OrdersRepository,
-    courierRepository: CourierRepository*/
+    taskRequestRepository: TaskRequestsRepository,
+   /* orderRepository: OrdersRepository,*/
+    courierRepository: CourierRepository
     ) {
     Crossfade(current = CityCourierStatus.currentScreen) { screen ->
          Surface(color = MaterialTheme.colors.background) {
              when (screen) {
                 is Screen.WelcomeScreen -> WelcomeScreen(taskRequestRepository)
                 is Screen.TasksScreen -> TasksScreen(/*orderRepository,*/ taskRequestsRepository = taskRequestRepository)
-                is Screen.ProfileScreen -> ProfileScreen(
-                    "C102"
-                    /*courierRepository*/
-                )
+                is Screen.ProfileScreen -> ProfileScreen(courierRepository=courierRepository)
                 is Screen.TaskDetails -> TaskDetailsScreen(
                     taskId= screen.taskId, taskRequestsRepository = taskRequestRepository
                 )

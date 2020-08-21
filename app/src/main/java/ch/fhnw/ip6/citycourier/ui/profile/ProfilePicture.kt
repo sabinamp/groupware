@@ -20,13 +20,15 @@ import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.model.Conn
+import ch.fhnw.ip6.citycourier.model.CourierStatus
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable
-fun ProfilePicture(name:String){
+fun ProfilePicture(name:String, available: CourierStatus){
 
     Box(modifier= Modifier.height(260.dp).plus(Modifier.fillMaxWidth()),
         backgroundColor = LightThemeColors.onBackground,
@@ -42,9 +44,8 @@ fun ProfilePicture(name:String){
                 Column(modifier = Modifier.height(55.dp)){
                 Text(name, style = themeTypography.h2, maxLines = 1, modifier = Modifier.padding(4.dp))
 
-                Text("Available", style = themeTypography.h6, maxLines = 1,modifier = Modifier.padding(4.dp))
+                Text(available.toString(), style = themeTypography.h6, maxLines = 1,modifier = Modifier.padding(4.dp))
                     Spacer(modifier = Modifier.width(5.dp))
-
                 }
             }
 
@@ -61,5 +62,5 @@ fun ProfilePicture(name:String){
 @Preview
 @Composable
 fun ProfilePicturePreview(){
-    ProfilePicture("Martin Hauser")
+    ProfilePicture("Martin Hauser", CourierStatus.AVAILABLE)
 }

@@ -58,7 +58,7 @@ val themeTypography = Typography(
         fontFamily = appFontFamily,
         fontWeight = FontWeight.W400,
         fontSize = 18.sp,
-        color = Color(255, 234, 227)
+        color = Color(29,167,155)
     ),
 
     subtitle1 = TextStyle(
@@ -79,7 +79,7 @@ val themeTypography = Typography(
     body1 = TextStyle(
         fontFamily = appFontFamily,
         fontSize = 16.sp,
-        color = Color(229,177,151)
+        color = LightThemeColors.onSecondary,
     ),
     body2 = TextStyle(
         fontFamily = appFontFamily,

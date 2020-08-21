@@ -86,7 +86,7 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
             Row(
                 verticalGravity = Alignment.CenterVertically,
                 modifier = Modifier
-                    .preferredHeight(65.dp)
+                    .preferredHeight(75.dp)
                     .fillMaxWidth()
             ) {
                 IconButton(onClick = onUnimplementedAction,modifier = Modifier.preferredSize(40.dp,40.dp)) {
@@ -97,8 +97,8 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
                 }
                 val context = ContextAmbient.current
 
-                OKButton(onClick = onUnimplementedAction, modifier = Modifier.preferredSize(40.dp,40.dp))
-                Spacer(modifier = Modifier.padding(5.dp))
+                OKButton(onClick = onUnimplementedAction, modifier = Modifier.width(60.dp))
+
                 NoButton(onClick = onUnimplementedAction)
                 Spacer(modifier = Modifier.padding(5.dp))
                 EditButton()
@@ -113,7 +113,7 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
 }
 
 @Composable
-private fun FunctionalityNotAvailablePopup(onDismiss: () -> Unit) {
+fun FunctionalityNotAvailablePopup(onDismiss: () -> Unit) {
         AlertDialog(
             onCloseRequest = onDismiss,
             text = {

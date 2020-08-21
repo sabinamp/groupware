@@ -17,7 +17,8 @@ val LightThemeColors = lightColorPalette(
     onSecondary = onSecondaryWhite,
     error = errorRed,
     onError = onErrorPink,
-    background = backgroundGray
+    background = backgroundGray,
+    onBackground = onBackgroundWhite
 )
 
 private val DarkThemeColors = darkColorPalette(
@@ -28,7 +29,8 @@ private val DarkThemeColors = darkColorPalette(
     onSecondary = Color.White,
     error = Red200,
     onError = Red700,
-    background = background2
+    background = background2,
+    onBackground = onBackgroundWhite
 )
 
 @Composable

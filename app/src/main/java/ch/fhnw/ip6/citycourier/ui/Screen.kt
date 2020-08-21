@@ -11,7 +11,7 @@ import ch.fhnw.ip6.citycourier.model.TaskRequest
  */
 sealed class Screen {
     object WelcomeScreen : Screen()
-    object ProfileScreen : Screen()
+    object ProfileScreen: Screen()
     object TasksScreen : Screen()
 
     data class TaskDetails(val taskId: String): Screen()
