@@ -23,6 +23,7 @@ import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
+import ch.fhnw.ip6.citycourier.ui.util.formatDateAndTime
 
 import java.time.LocalDateTime
 
@@ -35,7 +36,8 @@ private fun NotificationDetails(
         ProvideEmphasis(EmphasisAmbient.current.high) {
             val textStyle = themeTypography.body1
             Text(
-                text = "${task.taskId} - task ${task.taskType} Please complete till - ${task.dueOn}. ",
+                text = "${task.taskId} - task ${task.taskType} Please complete till - ${
+                    formatDateAndTime(task.dueOn)}. ",
                 style = textStyle
             )
         }
@@ -67,6 +69,7 @@ fun NotificationImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 
     )
 }
+
 @Composable
 fun OrderCard(taskRequest: TaskRequest) {
     Row(

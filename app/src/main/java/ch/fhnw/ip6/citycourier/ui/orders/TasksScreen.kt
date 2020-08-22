@@ -68,7 +68,7 @@ fun TasksScreenBody(taskRequestsRepository: TaskRequestsRepository) {
         val tasks = loadFakeTasks()
         Column() {
             ScreenIntro()
-            ScreenDivider()
+
             AcceptedTaskList(orders = tasks)
         }
     }
@@ -86,7 +86,7 @@ fun ScreenIntro() {
     Card(color = LightThemeColors.background) {
         Column(Modifier.weight(1f)){
             Row(horizontalArrangement = Arrangement.Center) {
-                Text(text = "Your accepted tasks.", style = themeTypography.h3, modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp))
+                Text(text = "Your delivery tasks.", style = themeTypography.h3, modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp))
             }
 
             Divider(color = Color.LightGray, modifier = Modifier.height(2.dp))

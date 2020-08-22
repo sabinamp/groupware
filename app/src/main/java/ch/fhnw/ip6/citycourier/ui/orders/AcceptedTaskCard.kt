@@ -26,6 +26,7 @@ import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
+import ch.fhnw.ip6.citycourier.ui.util.formatDateAndTime
 
 @Composable
 private fun AcceptedTaskDetails(
@@ -35,7 +36,8 @@ private fun AcceptedTaskDetails(
         ProvideEmphasis(EmphasisAmbient.current.high) {
             val textStyle = themeTypography.body1
             Text(
-                text = "${task.taskId} - task ${task.taskType} Due on - ${task.dueOn}. ",
+                text = "${task.taskId} - task ${task.taskType} Due on - " +
+                        formatDateAndTime(task.dueOn)+". ",
                 style = textStyle, color = LightThemeColors.primary
             )
         }

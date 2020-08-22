@@ -23,7 +23,6 @@ import androidx.compose.setValue
 import androidx.compose.state
 import ch.fhnw.ip6.citycourier.data.*
 import ch.fhnw.ip6.citycourier.model.CourierInfo
-import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.state.UiState
 
 /**

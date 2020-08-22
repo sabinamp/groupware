@@ -7,38 +7,35 @@ import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
+import androidx.ui.foundation.*
 
-import androidx.ui.foundation.contentColor
 import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.AlarmAdd
-import androidx.ui.material.icons.filled.AlarmOff
-import androidx.ui.material.icons.filled.ArrowBack
-import androidx.ui.material.icons.filled.FavoriteBorder
+import androidx.ui.material.icons.filled.*
 
 import androidx.ui.res.vectorResource
+
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
+import androidx.ui.unit.sp
 import ch.fhnw.ip6.citycourier.R
+
+import ch.fhnw.ip6.citycourier.data.BlockingFakeTaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
-import ch.fhnw.ip6.citycourier.model.DeliveryType
-import ch.fhnw.ip6.citycourier.model.RequestReply
-import ch.fhnw.ip6.citycourier.model.TaskRequest
-import ch.fhnw.ip6.citycourier.model.TaskType
+import ch.fhnw.ip6.citycourier.data.successOr
+import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.state.UiState
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
-import ch.fhnw.ip6.citycourier.ui.btn.EditButton
-import ch.fhnw.ip6.citycourier.ui.btn.NoButton
-import ch.fhnw.ip6.citycourier.ui.btn.OKButton
+
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
-
+import ch.fhnw.ip6.citycourier.ui.util.FunctionalityNotAvailablePopup
+import ch.fhnw.ip6.citycourier.ui.util.ScreenDivider
+import ch.fhnw.ip6.citycourier.ui.util.formatDateAndTime
 
 @Composable
 fun TaskDetailsScreen(taskId: String, taskRequestsRepository: TaskRequestsRepository){
@@ -54,6 +51,7 @@ private fun TaskDetailsScr(task:TaskRequest){
         if (showDialog) {
             FunctionalityNotAvailablePopup { showDialog = false }
         }
+
         Scaffold(
             topAppBar = {
                 TopAppBar(
@@ -82,53 +80,86 @@ private fun TaskDetailsScr(task:TaskRequest){
 
 @Composable
 private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
-    Surface(elevation = 2.dp) {
+    Surface(elevation = 2.dp, color = LightThemeColors.primary) {
             Row(
                 verticalGravity = Alignment.CenterVertically,
                 modifier = Modifier
                     .preferredHeight(75.dp)
                     .fillMaxWidth()
             ) {
-                IconButton(onClick = onUnimplementedAction,modifier = Modifier.preferredSize(40.dp,40.dp)) {
-                    Icon(Icons.Filled.AlarmAdd)
+                IconButton(onClick = onUnimplementedAction) {
+                    Icon(Icons.Filled.ContactPhone, modifier = Modifier.preferredSize(30.dp))
                 }
-                IconButton(onClick = onUnimplementedAction, modifier = Modifier.preferredSize(40.dp,40.dp)) {
-                    Icon(vectorResource(R.drawable.ic_phone_60))
-                }
+
                 val context = ContextAmbient.current
+                IconButton(onClick = onUnimplementedAction) {
+                    Icon(Icons.Filled.ReplyAll,  modifier = Modifier.preferredSize(30.dp))
+                }
 
-                OKButton(onClick = onUnimplementedAction, modifier = Modifier.width(60.dp))
-
-                NoButton(onClick = onUnimplementedAction)
-                Spacer(modifier = Modifier.padding(5.dp))
-                EditButton()
-
+                IconButton(onClick = onUnimplementedAction) {
+                    Icon(
+                        vectorResource(R.drawable.ic_alert_circle),
+                        modifier = Modifier.preferredSize(30.dp)
+                    )
+                }
             }
     }
 }
 
 @Composable
-private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
-    //TODO
+fun TaskHeaderImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
+    val urgent= (DeliveryType.STANDARD == taskRequest.deliveryType)
+    val image = if(urgent) {
+        vectorResource(R.drawable.ic_bell_60)
+    }else{
+        vectorResource(id = R.drawable.ic_bell_urgent_60)
+    }
+    Image(
+        asset = image,
+        modifier = modifier
+            .preferredSize(80.dp, 80.dp)
+            .padding(4.dp)
+
+    )
 }
 
+
 @Composable
-fun FunctionalityNotAvailablePopup(onDismiss: () -> Unit) {
-        AlertDialog(
-            onCloseRequest = onDismiss,
-            text = {
-                Text(
-                    text = "Functionality not available \uD83D\uDE48",
-                    style = MaterialTheme.typography.body2
-                )
-            },
-            confirmButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(text = "CLOSE")
-                }
-            }
+private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
+    VerticalScroller(
+        modifier = modifier.padding(horizontal = 10.dp)
+    ) {
+        Spacer(Modifier.preferredHeight(5.dp))
+        TaskHeaderImage(task)
+        Text(text = "Delivery Task Request ${task.taskId} - ${task.taskType}", style = themeTypography.h3)
+        Spacer(Modifier.preferredHeight(8.dp))
+
+        ProvideEmphasis(EmphasisAmbient.current.medium) {
+            Text(
+                text = "Order : ${task.orderId} Delivery Type: ${task.deliveryType}",
+                style = themeTypography.body1,
+                lineHeight = 25.sp
+            )
+            Text(
+                text = "Task to be completed till : ${
+                    formatDateAndTime(task.dueOn)} Order info - to do",
+                style = themeTypography.body1,
+                lineHeight = 25.sp
+            )
+        }
+
+        Spacer(Modifier.preferredHeight(48.dp))
+        Text(
+            text = " Please accept the task within 15 minutes",
+            style = themeTypography.body1,
+            lineHeight = 25.sp
         )
+        Spacer(Modifier.preferredHeight(24.dp))
+    }
 }
+
+
+
 
 @Composable
 private fun TopSection() {
@@ -143,15 +174,15 @@ private fun TopSection() {
         ScreenDivider()
 }
 
+
 @Composable
-fun ScreenDivider() {
-        Divider(
-            modifier = Modifier.padding(horizontal = 14.dp),
-            color = LightThemeColors.onSurface.copy(alpha = 0.08f)
-        )
+private fun loadFakeTask(taskId: String): TaskRequest {
+    var request: TaskRequest? = null
+    BlockingFakeTaskRequestsRepository(ContextAmbient.current).getTaskRequest(taskId) { result ->
+        request = result.successOr(null)
+    }
+    return request!!
 }
-
-
 
 
 @Preview("TopSection")
