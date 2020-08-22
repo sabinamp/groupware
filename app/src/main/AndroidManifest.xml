@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--permission for phone call-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".CityCourierApplication"
         android:allowBackup="true"

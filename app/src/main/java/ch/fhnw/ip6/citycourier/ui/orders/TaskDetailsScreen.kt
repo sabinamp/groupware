@@ -1,9 +1,17 @@
 package ch.fhnw.ip6.citycourier.ui.orders
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.setValue
 import androidx.compose.state
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
@@ -28,14 +36,11 @@ import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.state.UiState
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
-
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
-import ch.fhnw.ip6.citycourier.ui.util.FunctionalityNotAvailablePopup
-import ch.fhnw.ip6.citycourier.ui.util.ScreenDivider
-import ch.fhnw.ip6.citycourier.ui.util.formatDateAndTime
+import ch.fhnw.ip6.citycourier.ui.util.*
 
 @Composable
 fun TaskDetailsScreen(taskId: String, taskRequestsRepository: TaskRequestsRepository){
@@ -87,11 +92,12 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
                     .preferredHeight(75.dp)
                     .fillMaxWidth()
             ) {
-                IconButton(onClick = onUnimplementedAction) {
+                val context= ContextAmbient.current
+                IconButton(onClick = { makePhoneCallToDispatcher(context = context)}) {
                     Icon(Icons.Filled.ContactPhone, modifier = Modifier.preferredSize(30.dp))
                 }
 
-                val context = ContextAmbient.current
+
                 IconButton(onClick = onUnimplementedAction) {
                     Icon(Icons.Filled.ReplyAll,  modifier = Modifier.preferredSize(30.dp))
                 }
@@ -104,6 +110,10 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
                 }
             }
     }
+}
+
+fun makePhoneCallToDispatcher(context:Context) {
+    makePhoneCall(context)
 }
 
 @Composable
