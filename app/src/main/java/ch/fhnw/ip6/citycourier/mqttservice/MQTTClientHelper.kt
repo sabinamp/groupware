@@ -93,6 +93,7 @@ class MqttClientHelper(context: Context?) {
             mqttAndroidClient.subscribe(subscriptionTopic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken) {
                     Log.w(TAG, "Subscribed to topic '$subscriptionTopic'")
+                    asyncActionToken.response.payload
                 }
 
                 override fun onFailure(

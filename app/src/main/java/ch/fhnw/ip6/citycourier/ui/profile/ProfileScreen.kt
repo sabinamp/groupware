@@ -15,10 +15,7 @@ import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.R
-import ch.fhnw.ip6.citycourier.data.CourierRepository
-import ch.fhnw.ip6.citycourier.data.BlockingFakeCourierRepository
-import ch.fhnw.ip6.citycourier.data.createCourierInfoForPreview
-import ch.fhnw.ip6.citycourier.data.successOr
+import ch.fhnw.ip6.citycourier.data.*
 import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.state.UiState
 import ch.fhnw.ip6.citycourier.ui.AppDrawer
@@ -62,11 +59,11 @@ fun ProfileScreen(scaffoldState: ScaffoldState = remember { ScaffoldState() },
 
 @Composable
 private fun ProfileScreenContent(courierRepository: CourierRepository, modifier: Modifier) {
-    val courierId = "C106"
-    val courierDataState = fetchCourierInfo(courierId = courierId, courierRepository = courierRepository)
+
+    val courierDataState = fetchCourierInfo(courierId = CURRENT_COURIER_ID, courierRepository = courierRepository)
 
     if (courierDataState is UiState.Success<CourierInfo>) {
-        ProfileScreenBody(courierId = courierId, courierInfo = courierDataState.data, modifier = modifier)
+        ProfileScreenBody(courierId = CURRENT_COURIER_ID, courierInfo = courierDataState.data, modifier = modifier)
     }
 }
 

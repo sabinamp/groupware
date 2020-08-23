@@ -8,7 +8,7 @@ interface TaskRequestsRepository{
     /**
      * Get a specific task request.
      */
-    fun getTaskRequest(postId: String, callback: (Result<TaskRequest?>) -> Unit)
+    fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit)
     /**
      * Get list of task requests.
      */

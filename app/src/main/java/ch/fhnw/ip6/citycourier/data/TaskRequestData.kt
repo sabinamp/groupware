@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 private fun createTaskRequest(taskId:String, orderId:String, assigneeId:String, deliveryType: DeliveryType,taskType: TaskType,
                               nbh: Long, accepted: RequestReply): TaskRequest{
-    val notification: TaskRequest = TaskRequest()
+    val notification = TaskRequest()
     notification.taskId = taskId
     notification.orderId = orderId
     notification.assigneeId = assigneeId
@@ -50,6 +50,11 @@ fun taskRequestData(): MutableList<TaskRequest>{
         createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING),
         createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
     )
+}
+
+val taskRequestListFromBroker: MutableList<TaskRequest> = mutableListOf()
+fun taskRequestDataFromBroker(): MutableList<TaskRequest>{
+    return taskRequestListFromBroker
 }
 
 fun assignedTaskRequestData(): List<TaskRequest> {

@@ -13,6 +13,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 
 import androidx.ui.layout.*
+import androidx.ui.material.MaterialTheme
 
 import androidx.ui.res.imageResource
 
@@ -31,7 +32,7 @@ import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 fun ProfilePicture(name:String, available: CourierStatus){
 
     Box(modifier= Modifier.height(260.dp).plus(Modifier.fillMaxWidth()),
-        backgroundColor = LightThemeColors.onBackground,
+        backgroundColor = MaterialTheme.colors.onBackground,
             shape = RoundedCornerShape(topLeft = 90.dp, topRight = 90.dp,
             bottomLeft = 0.dp, bottomRight = 0.dp)
     ){
