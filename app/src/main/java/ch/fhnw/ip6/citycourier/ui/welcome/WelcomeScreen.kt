@@ -115,7 +115,7 @@ private fun LoadingHomeScreen() {
 
 @Composable
 fun HomeScreenIntro() {
-    Card(color = LightThemeColors.background) {
+    Card(color = MaterialTheme.colors.background) {
         Column(Modifier.weight(1f)){
             Row(horizontalArrangement = Arrangement.Center) {
                 Text(text = "New notifications.", style = themeTypography.h3, modifier = Modifier.padding(start = 10.dp, top = 5.dp, end = 10.dp))

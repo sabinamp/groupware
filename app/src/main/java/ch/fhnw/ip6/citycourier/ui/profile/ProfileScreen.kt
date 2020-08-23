@@ -62,7 +62,7 @@ fun ProfileScreen(scaffoldState: ScaffoldState = remember { ScaffoldState() },
 
 @Composable
 private fun ProfileScreenContent(courierRepository: CourierRepository, modifier: Modifier) {
-    val courierId: String = "C106"
+    val courierId = "C106"
     val courierDataState = fetchCourierInfo(courierId = courierId, courierRepository = courierRepository)
 
     if (courierDataState is UiState.Success<CourierInfo>) {
@@ -91,7 +91,7 @@ private fun ProfileScreenBody(courierId: String, courierInfo: CourierInfo,
 fun ProfileInfo(courierId: String, courierInfo:CourierInfo) {
     Card(
         modifier = Modifier.height(310.dp).plus(Modifier.fillMaxWidth()),
-        color = LightThemeColors.onBackground, elevation = 7.dp
+        color = MaterialTheme.colors.onBackground, elevation = 7.dp
     ) {
         Column {
            ProfileRow(title = "ID",

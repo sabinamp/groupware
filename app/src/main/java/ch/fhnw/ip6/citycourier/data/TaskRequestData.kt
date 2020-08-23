@@ -42,8 +42,8 @@ val taskRequestList =listOf( // notification1, notification2,notification3, noti
     createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
 )
 
-fun taskRequestData(): List<TaskRequest>{
-    return listOf(
+fun taskRequestData(): MutableList<TaskRequest>{
+    return mutableListOf(
         createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
         createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
         createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),

@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.setContent
 import ch.fhnw.ip6.citycourier.CityCourierApplication
+import ch.fhnw.ip6.citycourier.mqttservice.MqttClientHelper
 
 import ch.fhnw.ip6.citycourier.ui.util.makePhoneCall
 

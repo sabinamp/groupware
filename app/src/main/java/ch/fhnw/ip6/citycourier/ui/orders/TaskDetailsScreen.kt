@@ -21,6 +21,7 @@ import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.*
+import androidx.ui.res.imageResource
 
 import androidx.ui.res.vectorResource
 
@@ -85,7 +86,7 @@ private fun TaskDetailsScr(task:TaskRequest){
 
 @Composable
 private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
-    Surface(elevation = 2.dp, color = LightThemeColors.primary) {
+    Surface(elevation = 2.dp, color = MaterialTheme.colors.primary) {
             Row(
                 verticalGravity = Alignment.CenterVertically,
                 modifier = Modifier
@@ -94,18 +95,23 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
             ) {
                 val context= ContextAmbient.current
                 IconButton(onClick = { makePhoneCallToDispatcher(context = context)}) {
-                    Icon(Icons.Filled.ContactPhone, modifier = Modifier.preferredSize(30.dp))
+                    Icon(
+                        //Icons.Filled.ContactPhone,
+                        vectorResource(R.drawable.ic_phone_60_black),
+                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
                 }
 
 
                 IconButton(onClick = onUnimplementedAction) {
-                    Icon(Icons.Filled.ReplyAll,  modifier = Modifier.preferredSize(30.dp))
+                    Icon(/*Icons.Filled.ReplyAll,*/
+                        imageResource(R.drawable.ok),
+                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
                 }
 
                 IconButton(onClick = onUnimplementedAction) {
                     Icon(
-                        vectorResource(R.drawable.ic_alert_circle),
-                        modifier = Modifier.preferredSize(30.dp)
+                        imageResource(R.drawable.no),
+                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp))
                     )
                 }
             }

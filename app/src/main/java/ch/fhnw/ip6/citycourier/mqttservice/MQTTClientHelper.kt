@@ -1,16 +1,17 @@
 package ch.fhnw.ip6.citycourier.mqttservice
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
-
+import android.widget.Toast
+import androidx.ui.core.ContextAmbient
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.io.IOException
-
-class MqttClientHelper(activity:Activity) {
+//source https://github.com/ghaithdallaali/solace-kotlin-android-paho-example/blob/master/app/src/main/java/com/example/myapplication/mqtt/MqttClientHelper.kt
+class MqttClientHelper(context: Context?) {
 
     companion object {
-        const val TAG = "MqttClientHelper"
+        const val TAG = "MQTTClientHelper"
     }
 
     var mqttAndroidClient: MqttAndroidClient
@@ -22,10 +23,10 @@ class MqttClientHelper(activity:Activity) {
     }
 
     init {
-        mqttAndroidClient = MqttAndroidClient(activity, serverUri, clientId)
+        mqttAndroidClient = MqttAndroidClient(context, serverUri, clientId)
         mqttAndroidClient.setCallback(object : MqttCallbackExtended {
             override fun connectComplete(b: Boolean, s: String) {
-               System.out.println("Connected");
+                System.out.println("Connected")
                 Log.w(TAG, s)
             }
 
@@ -68,7 +69,9 @@ class MqttClientHelper(activity:Activity) {
                     asyncActionToken: IMqttToken,
                     exception: Throwable
                 ) {
+                    Log.d(TAG, "onFailure")
                     Log.w(TAG, "Failed to connect to: $serverUri ; $exception")
+                    // Something went wrong e.g. connection timeout or firewall problems
                 }
             })
         } catch (ex: MqttException) {
