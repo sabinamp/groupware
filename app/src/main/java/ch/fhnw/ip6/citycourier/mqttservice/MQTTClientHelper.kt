@@ -3,10 +3,10 @@ package ch.fhnw.ip6.citycourier.mqttservice
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.ui.core.ContextAmbient
+
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+
 //source https://github.com/ghaithdallaali/solace-kotlin-android-paho-example/blob/master/app/src/main/java/com/example/myapplication/mqtt/MqttClientHelper.kt
 class MqttClientHelper(context: Context?) {
 
