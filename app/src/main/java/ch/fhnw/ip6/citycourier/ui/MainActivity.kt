@@ -1,27 +1,22 @@
 package ch.fhnw.ip6.citycourier.ui
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.ui.core.ContextAmbient
 import androidx.ui.core.setContent
 import ch.fhnw.ip6.citycourier.CityCourierApplication
-import ch.fhnw.ip6.citycourier.data.CURRENT_COURIER_ID
-import ch.fhnw.ip6.citycourier.mqttservice.MqttClientHelper
-import ch.fhnw.ip6.citycourier.mqttservice.connectToBrokerSubscribeToTopic
-
-import ch.fhnw.ip6.citycourier.ui.util.makePhoneCall
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import ch.fhnw.ip6.citycourier.mqttservice.BrokerClientManager
 
 
 class MainActivity : AppCompatActivity() {
+    private val IDENTIFIER_REQUESTCLIENT = "Android Client Request Subscriber"
+    private val IDENTIFIER_TIMEOUTCLIENT = "Android Client Timeout Subscriber"
+    private val mqttClientTaskRequestSubscriber by lazy {
+        BrokerClientManager(this,IDENTIFIER_REQUESTCLIENT)
+
+    }
+    private val mqttClientTaskTimeoutSubscriber by lazy {
+        BrokerClientManager(this,IDENTIFIER_TIMEOUTCLIENT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,39 +26,17 @@ class MainActivity : AppCompatActivity() {
             CityCourierApp(appContainer = appContainer)
         }
 
+        mqttClientTaskRequestSubscriber.connectToBroker()
+        mqttClientTaskTimeoutSubscriber.connectToBroker()
     }
 
-    private val mqttClientTaskRequestSubscriber by lazy {
-        MqttClientHelper(this)
 
-    }
-    private val mqttClientTaskTimeoutSubscriber by lazy {
-        MqttClientHelper(this)
-
-    }
     override fun onDestroy() {
         mqttClientTaskRequestSubscriber.destroy()
         mqttClientTaskTimeoutSubscriber.destroy()
         super.onDestroy()
     }
-    /**
-     *  network request
-     */
-    private var networkRequestDone = false
-    private fun connectToMqttBroker() {
-        //TODO subscribe to orders/CourierId/+/request
-        //TODO subscribe to orders/CourierId/+/timeout
-        GlobalScope.launch { // launch a new coroutine in background and continue
-            var msg1 = connectToBrokerSubscribeToTopic(
-                mqttClientTaskRequestSubscriber,
-                "orders/" + CURRENT_COURIER_ID + "/+/request"
-            )
-            connectToBrokerSubscribeToTopic(
-                mqttClientTaskTimeoutSubscriber,
-                "orders/" + CURRENT_COURIER_ID + "/+/timeout"
-            )
-        }
-        networkRequestDone=true
-    }
+
+
 }
 
