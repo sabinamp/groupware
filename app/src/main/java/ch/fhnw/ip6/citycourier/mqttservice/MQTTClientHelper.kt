@@ -42,10 +42,12 @@ class MqttClientHelper(context: Context?) {
 
             override fun deliveryComplete(iMqttDeliveryToken: IMqttDeliveryToken) {}
         })
-        connect()
+        if (context != null) {
+            connect(context = context)
+        }
     }
 
-    private fun connect() {
+    private fun connect( context:Context) {
         val mqttConnectOptions = MqttConnectOptions()
         mqttConnectOptions.isAutomaticReconnect = BROKER_CONNECTION_RECONNECT
         mqttConnectOptions.isCleanSession = BROKER_CONNECTION_CLEAN_SESSION
@@ -54,7 +56,7 @@ class MqttClientHelper(context: Context?) {
         mqttConnectOptions.connectionTimeout = BROKER_CONNECTION_TIMEOUT
         mqttConnectOptions.keepAliveInterval = BROKER_CONNECTION_KEEP_ALIVE_INTERVAL
         try {
-            mqttAndroidClient.connect(mqttConnectOptions, null, object : IMqttActionListener {
+            mqttAndroidClient.connect(mqttConnectOptions, context, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken) {
                     val disconnectedBufferOptions =
                         DisconnectedBufferOptions()

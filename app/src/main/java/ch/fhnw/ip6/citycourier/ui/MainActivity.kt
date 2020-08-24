@@ -1,28 +1,21 @@
 package ch.fhnw.ip6.citycourier.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.ui.core.setContent
 import ch.fhnw.ip6.citycourier.CityCourierApplication
 import ch.fhnw.ip6.citycourier.mqttservice.BrokerClient
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 class MainActivity : AppCompatActivity() {
-    private val IDENTIFIER_REQUESTCLIENT = "Android Client Request Subscriber"
-    private val IDENTIFIER_TIMEOUTCLIENT = "Android Client Timeout Subscriber"
-    private val mqttClientTaskRequestSubscriber by lazy {
-        BrokerClient(
-            this,
-            IDENTIFIER_REQUESTCLIENT
-        )
 
-    }
-    private val mqttClientTaskTimeoutSubscriber by lazy {
-        BrokerClient(
-            this,
-            IDENTIFIER_TIMEOUTCLIENT
-        )
-    }
+    private val mqttClient =
+        BrokerClient(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +25,17 @@ class MainActivity : AppCompatActivity() {
             CityCourierApp(appContainer = appContainer)
         }
 
-        mqttClientTaskRequestSubscriber.connectToBroker()
-        mqttClientTaskTimeoutSubscriber.connectToBroker()
+
+        mqttClient.connectBothClients()
     }
 
 
     override fun onDestroy() {
-        mqttClientTaskRequestSubscriber.destroy()
-        mqttClientTaskTimeoutSubscriber.destroy()
+        mqttClient.destroy()
         super.onDestroy()
     }
+
+
 
 
 }

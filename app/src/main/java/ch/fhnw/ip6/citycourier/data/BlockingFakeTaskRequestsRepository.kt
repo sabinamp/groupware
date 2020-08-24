@@ -14,11 +14,12 @@ import kotlin.random.Random
 class BlockingFakeTaskRequestsRepository(private val context: Context
 ): TaskRequestsRepository {
 
-    private val taskRequests: List<TaskRequest> by lazy{
+    private val taskRequests: MutableList<TaskRequest> by lazy{
         taskRequestData()
+
     }
-    override fun getTaskRequest(id: String, callback: (Result<TaskRequest?>) -> Unit) {
-        callback(Result.Success(taskRequests.find { it.taskId == id }))
+    override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
+        callback(Result.Success(taskRequests.find { it.taskId == taskId }))
     }
     override fun getTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
         callback( Result.Success(taskRequests))

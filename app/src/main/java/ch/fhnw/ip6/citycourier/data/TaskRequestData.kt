@@ -57,6 +57,10 @@ fun taskRequestDataFromBroker(): MutableList<TaskRequest>{
     return taskRequestListFromBroker
 }
 
+fun addTaskToListFromBroker(task:TaskRequest){
+    taskRequestListFromBroker.add(task)
+}
+
 fun assignedTaskRequestData(): List<TaskRequest> {
     return taskRequestList.filter { t ->
         t.confirmed.equals(RequestReply.ACCEPTED)

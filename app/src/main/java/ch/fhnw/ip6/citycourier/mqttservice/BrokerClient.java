@@ -1,45 +1,61 @@
 package ch.fhnw.ip6.citycourier.mqttservice;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+
+import ch.fhnw.ip6.citycourier.model.TaskRequest;
+import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
 public class BrokerClient {
     private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "hivemq-android-client";
    //private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "<your-service-password>"
 
-// Other options
-    private static final  int BROKER_CONNECTION_TIMEOUT = 10;
-    private static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 120;
-    private static final  boolean BROKER_CONNECTION_CLEAN_SESSION = true;
-    private static final boolean BROKER_CONNECTION_RECONNECT = true;
+  // Other options
+    public static final  int BROKER_CONNECTION_TIMEOUT = 5;
+    public static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 240;
+    public static final  boolean BROKER_CONNECTION_CLEAN_SESSION = true;
+    public static final boolean BROKER_CONNECTION_RECONNECT = true;
     private static final String TAG = "AndroidBrokerClient";
-   /* private static final String IDENTIFIER_REQUEST_CLIENT="Android Client Request Subscriber";
-    private static final String IDENTIFIER_TIMEOUT_CLIENT="Android Client Timeout Subscriber";*/
-    private static final String HIVEMQ_MQTT_HOST = "tcp://127.0.0.1:1883";
-    private MqttAndroidClient client;
-    private String clientIdentifier;
 
-   public BrokerClient(Context context, String clientIdentifier){
-        this.clientIdentifier=clientIdentifier;
-        client = new MqttAndroidClient(context, HIVEMQ_MQTT_HOST,
-                        clientIdentifier);
+    static final String CURRENT_COURIER_ID = "C106";
+    private static final String  requestTopic = "orders/"+CURRENT_COURIER_ID+"/+/request";
+    private static final String  timeoutTopic = "orders/"+CURRENT_COURIER_ID+"/+/timeout";
+    private static final String  publishRequestReplyTopicOK = "orders/"+CURRENT_COURIER_ID+"/+/accept";
+    private static final String  publishRequestReplyTopicNO = "orders/"+CURRENT_COURIER_ID+"/+/deny";
+    private static final String  publishRequestCompletedTopic = "orders/"+CURRENT_COURIER_ID+"/+/completed";
+
+    public static final String IDENTIFIER_REQUESTCLIENT = "Android Client Request Subscriber";
+    public static final String IDENTIFIER_TIMEOUTCLIENT = "Android Client Timeout Subscriber";
+
+    static final String HIVEMQ_MQTT_HOST = "tcp://192.168.0.108:1883";
+    MqttAndroidClient clientRequestSubscriber ;
+    MqttAndroidClient clientTimeoutSubscriber;
+
+    public BrokerClient(Context context){
+         clientRequestSubscriber = new MqttAndroidClient(context,
+                HIVEMQ_MQTT_HOST,
+                IDENTIFIER_REQUESTCLIENT
+        );
+        //Set callback handler
+        clientRequestSubscriber.setCallback(new MqttCallbackHandler());
+         clientTimeoutSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_TIMEOUTCLIENT);
+        clientTimeoutSubscriber.setCallback(new MqttCallbackHandler());
+
     }
-    public void connectToBroker(){
+
+    private void connectToBroker(MqttAndroidClient client){
          try {
              MqttConnectOptions options = new MqttConnectOptions();
+             //The MqttAndroidClient will connect with MQTT 3.1.1 by default
              options.setAutomaticReconnect(BROKER_CONNECTION_RECONNECT);
              options.setCleanSession(BROKER_CONNECTION_CLEAN_SESSION);
              options.setConnectionTimeout(BROKER_CONNECTION_TIMEOUT);
@@ -48,13 +64,18 @@ public class BrokerClient {
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, clientIdentifier+" onSuccess-Connected");
+                    Log.d(TAG, client.getClientId()+" onSuccess-Connected");
+                    if(client.getClientId().equals(IDENTIFIER_REQUESTCLIENT)){
+                        subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
+                    }else if(client.getClientId().equals(IDENTIFIER_TIMEOUTCLIENT)){
+                        subscribeToTopic(clientTimeoutSubscriber, timeoutTopic,2);
+                    }
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     // Something went wrong e.g. connection timeout or firewall problems
-                    Log.d(TAG, clientIdentifier +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+                    Log.d(TAG, client.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
 
                 }
             });
@@ -63,7 +84,7 @@ public class BrokerClient {
         }
     }
 
-    public  void disconnectFromBroker(){
+    private void disconnectFromBroker(MqttAndroidClient client){
         try {
             IMqttToken disconToken = client.disconnect();
             disconToken.setActionCallback(new IMqttActionListener() {
@@ -87,11 +108,13 @@ public class BrokerClient {
 
 
     public void destroy() throws MqttException {
-        client.unregisterResources();
-        client.disconnect();
+        clientRequestSubscriber.unregisterResources();
+        clientRequestSubscriber.disconnect();
+        clientTimeoutSubscriber.unregisterResources();
+        clientTimeoutSubscriber.disconnect();
     }
 
-    public void publishToTopic(String topic, String payload, boolean retained, int qos){
+    private void publishToTopic(MqttAndroidClient client, String topic, String payload, boolean retained, int qos){
         byte[] encodedPayload = new byte[0];
         try {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
@@ -104,27 +127,72 @@ public class BrokerClient {
         }
     }
 
-    public void subscribeToTopic(String topic, int qos){
+    public void subscribeToTopic( MqttAndroidClient client, String topic, int qos){
         try {
-            IMqttToken subToken = client.subscribe(topic, qos);
-            subToken.setActionCallback(new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    // The message was published
-                    Log.d(TAG, client.getClientId() +" successfully subscribed to topic"+topic);
+            if(!topic.isEmpty()){
+                if (!client.isConnected()) {
+                    connectToBroker(client);
                 }
+                IMqttToken subToken = client.subscribe(topic, qos);
+                subToken.setActionCallback(new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        // The message was published
+                        Log.d(TAG, client.getClientId() +" successfully subscribed to topic "+topic);
 
-                @Override
-                public void onFailure(IMqttToken asyncActionToken,
-                                      Throwable exception) {
-                    // The subscription could not be performed, maybe the user was not
-                    // authorized to subscribe on the specified topic e.g. using wildcards
-                    Log.d(TAG, client.getClientId() +"could not subscribe to topic"+topic);
-                }
-            });
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken,
+                                          Throwable exception) {
+                        // The subscription could not be performed, maybe the user was not
+                        // authorized to subscribe on the specified topic e.g. using wildcards
+                        Log.d(TAG, client.getClientId() +"could not subscribe to topic"+topic);
+                    }
+                });
+            }else{
+                Log.d(TAG, client.getClientId() +"is not connected.Topic is empty");
+
+            }
+
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
+
+    /*public void setMqttCallBack(MqttAndroidClient client) {
+        client.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                String msg = "Connected to host:\n"+ HIVEMQ_MQTT_HOST;
+                Log.w("Debug", msg);
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                String msg = "Connected to host lost:\n"+ HIVEMQ_MQTT_HOST;
+                Log.w("Debug", msg);
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+                Log.w("Debug", "Message received from host "+ HIVEMQ_MQTT_HOST+ mqttMessage);
+                String received= mqttMessage.toString();
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.w("Debug", "Message published to host "+ HIVEMQ_MQTT_HOST);
+            }
+        });
+    }*/
+
+
+public void connectBothClients(){
+    connectToBroker(clientRequestSubscriber);
+
+    connectToBroker(clientTimeoutSubscriber);
+}
 
 }
