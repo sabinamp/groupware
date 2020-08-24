@@ -9,13 +9,22 @@ import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-public class BrokerClientManager {
+public class BrokerClient {
+    private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "hivemq-android-client";
+   //private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "<your-service-password>"
+
+// Other options
+    private static final  int BROKER_CONNECTION_TIMEOUT = 10;
+    private static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 120;
+    private static final  boolean BROKER_CONNECTION_CLEAN_SESSION = true;
+    private static final boolean BROKER_CONNECTION_RECONNECT = true;
     private static final String TAG = "AndroidBrokerClient";
    /* private static final String IDENTIFIER_REQUEST_CLIENT="Android Client Request Subscriber";
     private static final String IDENTIFIER_TIMEOUT_CLIENT="Android Client Timeout Subscriber";*/
@@ -23,14 +32,19 @@ public class BrokerClientManager {
     private MqttAndroidClient client;
     private String clientIdentifier;
 
-   public BrokerClientManager(Context context, String clientIdentifier){
+   public BrokerClient(Context context, String clientIdentifier){
         this.clientIdentifier=clientIdentifier;
         client = new MqttAndroidClient(context, HIVEMQ_MQTT_HOST,
                         clientIdentifier);
     }
     public void connectToBroker(){
          try {
-            IMqttToken token = client.connect();
+             MqttConnectOptions options = new MqttConnectOptions();
+             options.setAutomaticReconnect(BROKER_CONNECTION_RECONNECT);
+             options.setCleanSession(BROKER_CONNECTION_CLEAN_SESSION);
+             options.setConnectionTimeout(BROKER_CONNECTION_TIMEOUT);
+             options.setKeepAliveInterval(BROKER_CONNECTION_KEEP_ALIVE_INTERVAL);
+            IMqttToken token = client.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
