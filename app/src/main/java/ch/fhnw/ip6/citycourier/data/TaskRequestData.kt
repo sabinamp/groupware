@@ -26,40 +26,25 @@ private fun createTaskRequest(taskId:String, orderId:String, assigneeId:String, 
     return notification
 }
 
-val notification1 = createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED)
+val notification1 = createTaskRequest("T1","OR1123","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED)
 
-val notification2 = createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING)
+val notification2 = createTaskRequest("T2","OR1122","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING)
 
-val notification3 = createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING)
-val notification4 = createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING)
-val notification5 = createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+val notification3 = createTaskRequest("T3","OR1124","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING)
 
-val taskRequestList =listOf( // notification1, notification2,notification3, notification4, notification5)
-    createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
-    createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
-    createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
-    createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING),
-    createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+val notification5 = createTaskRequest("T4","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+
+val taskRequestList = mutableListOf( // notification1, notification2,notification3, notification4, notification5)
+    createTaskRequest("T1","OR1123","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
+    createTaskRequest("T2","OR1122","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
+    createTaskRequest("T3","OR1124","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
+   createTaskRequest("T4","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
 )
 
 fun taskRequestData(): MutableList<TaskRequest>{
-    return mutableListOf(
-        createTaskRequest("T1","OR1123","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
-        createTaskRequest("T2","OR1122","C102",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
-        createTaskRequest("T3","OR1124","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
-        createTaskRequest("T4","OR1125","C102",DeliveryType.URGENT,TaskType.PARCEL_COLLECTION, 3, RequestReply.PENDING),
-        createTaskRequest("T5","OR1111","C102",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
-    )
+    return taskRequestList
 }
 
-val taskRequestListFromBroker: MutableList<TaskRequest> = mutableListOf()
-fun taskRequestDataFromBroker(): MutableList<TaskRequest>{
-    return taskRequestListFromBroker
-}
-
-fun addTaskToListFromBroker(task:TaskRequest){
-    taskRequestListFromBroker.add(task)
-}
 
 fun assignedTaskRequestData(): List<TaskRequest> {
     return taskRequestList.filter { t ->

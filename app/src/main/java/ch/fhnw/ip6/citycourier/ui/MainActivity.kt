@@ -1,20 +1,15 @@
 package ch.fhnw.ip6.citycourier.ui
 
 import android.os.Bundle
-import android.util.Log
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.ui.core.setContent
 import ch.fhnw.ip6.citycourier.CityCourierApplication
 import ch.fhnw.ip6.citycourier.mqttservice.BrokerClient
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
-import org.eclipse.paho.client.mqttv3.MqttMessage
+
 
 
 class MainActivity : AppCompatActivity() {
-
-    private val mqttClient =
-        BrokerClient(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             CityCourierApp(appContainer = appContainer)
         }
+        val mqttClient by lazy{
+            BrokerClient(this, appContainer.taskRequestRepository, appContainer.courierRepository)
+        }
 
 
         mqttClient.connectBothClients()
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onDestroy() {
-        mqttClient.destroy()
+     //   mqttClient.destroy()
         super.onDestroy()
     }
 

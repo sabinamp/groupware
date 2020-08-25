@@ -18,9 +18,10 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
                                  private val resources: Resources
 ): TaskRequestsRepository {
 
-    private val taskRequests: List<TaskRequest> by lazy{
+    private val taskRequests: MutableList<TaskRequest> by lazy{
         taskRequestData()
     }
+
 
     override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
         executeInBackground(callback) {
@@ -36,7 +37,7 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
     override fun getTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
         //callback( Result.Success(taskRequests))
         executeInBackground(callback) {
-            simulateNetworkRequest()
+           // simulateNetworkRequest()
             Thread.sleep(1500L)
             if (shouldRandomlyFail()) {
                 throw IllegalStateException()
@@ -47,6 +48,21 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
 
     override fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
         callback( Result.Success(taskRequests.filter { t->t.confirmed.equals(RequestReply.ACCEPTED)}))
+    }
+
+    override fun addTaskRequest(task: TaskRequest): Boolean {
+        taskRequests.add(task)
+        return true
+    }
+
+    override fun removeTaskRequest(taskId: String): Boolean {
+       var removed =false
+       for(task: TaskRequest in taskRequests){
+           if(task.taskId.equals(taskId)){
+                removed=taskRequests.remove(task)
+           }
+       }
+        return removed
     }
 
     /**

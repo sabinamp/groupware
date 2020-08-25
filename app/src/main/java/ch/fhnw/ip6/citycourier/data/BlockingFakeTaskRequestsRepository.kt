@@ -30,4 +30,19 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
         callback( Result.Success(taskRequests.filter { t->t.confirmed.equals(RequestReply.ACCEPTED)}))
     }
 
+
+    override fun addTaskRequest(task: TaskRequest): Boolean {
+        taskRequests.add(task)
+        return true
+    }
+
+    override fun removeTaskRequest(taskId: String): Boolean {
+        var removed =false
+        for(task: TaskRequest in taskRequests){
+            if(task.taskId.equals(taskId)){
+                removed=taskRequests.remove(task)
+            }
+        }
+        return removed
+    }
 }

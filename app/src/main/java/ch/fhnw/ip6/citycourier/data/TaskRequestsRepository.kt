@@ -20,7 +20,17 @@ interface TaskRequestsRepository{
    fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit)
 
     /**
-     * Update task request before sendind a reply to the dispatcher
+     * Add a specific task request.
+     */
+    fun addTaskRequest(task: TaskRequest): Boolean
+
+    /**
+     * Remove a specific task request.
+     */
+    fun removeTaskRequest(taskId: String): Boolean
+
+    /**
+     * Update task request after sending a reply to the dispatcher
      */
    // fun updateTaskRequest(id: Long, newTaskState: RequestReply): Boolean
 

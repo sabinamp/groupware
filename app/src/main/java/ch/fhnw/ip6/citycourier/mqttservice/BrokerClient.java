@@ -12,6 +12,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.nio.charset.StandardCharsets;
 
+import ch.fhnw.ip6.citycourier.data.CourierRepository;
+import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
@@ -40,15 +42,16 @@ public class BrokerClient {
     MqttAndroidClient clientRequestSubscriber ;
     MqttAndroidClient clientTimeoutSubscriber;
 
-    public BrokerClient(Context context){
+    public BrokerClient(Context context, TaskRequestsRepository taskRequestsRepository, CourierRepository courierRepository){
+
          clientRequestSubscriber = new MqttAndroidClient(context,
                 HIVEMQ_MQTT_HOST,
                 IDENTIFIER_REQUESTCLIENT
         );
         //Set callback handler
-        clientRequestSubscriber.setCallback(new MqttCallbackHandler());
+        clientRequestSubscriber.setCallback(new MqttCallbackHandler(taskRequestsRepository));
          clientTimeoutSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_TIMEOUTCLIENT);
-        clientTimeoutSubscriber.setCallback(new MqttCallbackHandler());
+        clientTimeoutSubscriber.setCallback(new MqttCallbackHandler(taskRequestsRepository));
 
     }
 
