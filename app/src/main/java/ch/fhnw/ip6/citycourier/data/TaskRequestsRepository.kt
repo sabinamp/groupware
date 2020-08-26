@@ -30,8 +30,10 @@ interface TaskRequestsRepository{
     fun removeTaskRequest(taskId: String): Boolean
 
     /**
-     * Update task request after sending a reply to the dispatcher
+     * Update a specific task request.
      */
-   // fun updateTaskRequest(id: Long, newTaskState: RequestReply): Boolean
+    fun updateTask(taskId:String, reply:RequestReply): Boolean
+
+
 
 }

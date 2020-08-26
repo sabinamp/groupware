@@ -45,4 +45,10 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
         }
         return removed
     }
+
+    override fun updateTask(taskId: String, reply: RequestReply): Boolean {
+
+         taskRequests.find { it.taskId == taskId }?.confirmed(reply)
+         return true
+    }
 }

@@ -5,16 +5,18 @@ import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
+import ch.fhnw.ip6.citycourier.model.RequestReply;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
-public class MqttCallbackHandler implements MqttCallbackExtended {
+public class RequestMqttCallbackHandler implements MqttCallbackExtended {
     private TaskRequestsRepository requestsRepository;
 
-    public MqttCallbackHandler(TaskRequestsRepository taskRequestsRepository){
+    public RequestMqttCallbackHandler(TaskRequestsRepository taskRequestsRepository){
         this.requestsRepository= taskRequestsRepository;
     }
 
@@ -37,7 +39,7 @@ public class MqttCallbackHandler implements MqttCallbackExtended {
         TaskRequest taskRequest= ModelObjectsConverter.convertJsonToTaskRequest(received);
         if(taskRequest != null && topic.endsWith("request")){
             String taskId=taskRequest.getTaskId();
-            Log.w("Debug", "task request received from host .Task id: "+ taskId);
+            Log.w("Debug", "task request received from host.Task id: "+ taskId);
             this.requestsRepository.addTaskRequest(taskRequest);
         }else if(topic.endsWith("timeout")){
             Log.w("Debug", topic+"task timeout");
@@ -52,5 +54,21 @@ public class MqttCallbackHandler implements MqttCallbackExtended {
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         Log.w("Debug", "Message published to host "+ BrokerClient.HIVEMQ_MQTT_HOST);
+        try {
+            String[] topics= token.getTopics();
+            String topic1=topics[0];
+            String topic2= topics[1];
+            String[] topic1Levels=topic1.split("/");
+            String taskId=topic1Levels[2];
+            if(token.getMessage().getPayload()==null && topic1.endsWith("deny")){
+                this.requestsRepository.updateTask(taskId, RequestReply.DENIED);
+            }else if(token.getMessage().getPayload()==null && topic1.endsWith("accept")){
+                this.requestsRepository.updateTask(taskId, RequestReply.ACCEPTED);
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

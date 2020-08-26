@@ -5,13 +5,19 @@ import ch.fhnw.ip6.citycourier.model.*
 
 class BlockingFakeCourierRepository(private val context: Context) : CourierRepository {
 
-    private val courierInfoC106: CourierInfo by lazy {
-        courierC106Data
-    }
+    private var currentCourierInfo: CourierInfo = createCourierInfoForPreview()
 
 
     override fun getCourier(courierId: String, callback: (Result<CourierInfo>) -> Unit) {
-        callback(Result.Success(courierInfoC106))
+        callback(Result.Success(currentCourierInfo))
+    }
+
+    override fun setCourierInfo(info: CourierInfo): Boolean {
+        return if(info!=null){
+            currentCourierInfo=info
+            true
+        }else false
+
     }
 
 }

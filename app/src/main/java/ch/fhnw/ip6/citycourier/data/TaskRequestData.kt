@@ -32,13 +32,13 @@ val notification2 = createTaskRequest("T2","OR1122","C106",DeliveryType.STANDARD
 
 val notification3 = createTaskRequest("T3","OR1124","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING)
 
-val notification5 = createTaskRequest("T4","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+val notification4 = createTaskRequest("T4","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
 
-val taskRequestList = mutableListOf( // notification1, notification2,notification3, notification4, notification5)
-    createTaskRequest("T1","OR1123","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
-    createTaskRequest("T2","OR1122","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
-    createTaskRequest("T3","OR1124","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
-   createTaskRequest("T4","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
+val taskRequestList = mutableListOf(
+    //createTaskRequest("T1","OR1123","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 20, RequestReply.DENIED),
+    createTaskRequest("T31","OR1122","C106",DeliveryType.STANDARD, TaskType.PARCEL_COLLECTION, 21,RequestReply.PENDING),
+    //createTaskRequest("T32","OR1124","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4,RequestReply.PENDING),
+   createTaskRequest("T32","OR1111","C106",DeliveryType.URGENT,TaskType.DELIVERY_FIRST, 4, RequestReply.ACCEPTED)
 )
 
 fun taskRequestData(): MutableList<TaskRequest>{

@@ -5,13 +5,13 @@ import android.content.res.Resources
 import android.os.Handler
 import ch.fhnw.ip6.citycourier.model.CourierInfo
 import java.util.concurrent.ExecutorService
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 class FakeCourierRepository(private val executorService: ExecutorService,
                             private val resultThreadHandler: Handler,
                             private val resources: Resources): CourierRepository {
-    private val courierInfoC106: CourierInfo by lazy {
-        createCourierInfoForPreview()
-    }
+    private var courierInfoC106: CourierInfo = createCourierInfoForPreview()
 
     override fun getCourier(courierId: String, callback: (Result<CourierInfo>) -> Unit) {
         executeInBackground(callback) {
@@ -22,6 +22,14 @@ class FakeCourierRepository(private val executorService: ExecutorService,
                     ))
             }
         }
+    }
+
+    override fun setCourierInfo(info: CourierInfo): Boolean {
+        return if(info!=null){
+            courierInfoC106=info
+            true
+        }else false
+
     }
 
     /**
@@ -39,3 +47,5 @@ class FakeCourierRepository(private val executorService: ExecutorService,
     }
 
 }
+
+

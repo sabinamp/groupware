@@ -3,13 +3,13 @@ package ch.fhnw.ip6.citycourier.data
 import ch.fhnw.ip6.citycourier.model.*
 
 fun createCourierInfoForPreview(): CourierInfo {
-    val info: CourierInfo = CourierInfo()
+    val info = CourierInfo()
     info.courierName = "Martin Hauser"
     info.conn= Conn.ONLINE
     info.status= CourierStatus.AVAILABLE
     info.assignedOrders= setOf("OR1126")
     val contact: ContactInfo = ContactInfo()
-    val emailAddr: Email = Email()
+    val emailAddr = Email()
     emailAddr.email = "info@citycourier.com"
     contact.email = emailAddr
     val phone: Phone = Phone()

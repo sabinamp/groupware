@@ -13,11 +13,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.nio.charset.StandardCharsets;
 
 import ch.fhnw.ip6.citycourier.data.CourierRepository;
+import ch.fhnw.ip6.citycourier.data.CurrentCourierIdKt;
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
-import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
-public class BrokerClient {
+public class BrokerClient implements RequestReplyEventListener{
     private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "hivemq-android-client";
    //private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "<your-service-password>"
 
@@ -36,22 +36,19 @@ public class BrokerClient {
     private static final String  publishRequestCompletedTopic = "orders/"+CURRENT_COURIER_ID+"/+/completed";
 
     public static final String IDENTIFIER_REQUESTCLIENT = "Android Client Request Subscriber";
-    public static final String IDENTIFIER_TIMEOUTCLIENT = "Android Client Timeout Subscriber";
+    public static final String IDENTIFIER_COURIERCLIENT = "Android Client Courier Info Subscriber";
 
     static final String HIVEMQ_MQTT_HOST = "tcp://192.168.0.108:1883";
     MqttAndroidClient clientRequestSubscriber ;
-    MqttAndroidClient clientTimeoutSubscriber;
+    MqttAndroidClient clientCourierSubscriber;
 
     public BrokerClient(Context context, TaskRequestsRepository taskRequestsRepository, CourierRepository courierRepository){
 
-         clientRequestSubscriber = new MqttAndroidClient(context,
-                HIVEMQ_MQTT_HOST,
-                IDENTIFIER_REQUESTCLIENT
-        );
+         clientRequestSubscriber = new MqttAndroidClient(context, HIVEMQ_MQTT_HOST, IDENTIFIER_REQUESTCLIENT);
         //Set callback handler
-        clientRequestSubscriber.setCallback(new MqttCallbackHandler(taskRequestsRepository));
-         clientTimeoutSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_TIMEOUTCLIENT);
-        clientTimeoutSubscriber.setCallback(new MqttCallbackHandler(taskRequestsRepository));
+        clientRequestSubscriber.setCallback(new RequestMqttCallbackHandler(taskRequestsRepository));
+        clientCourierSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_COURIERCLIENT);
+        clientCourierSubscriber.setCallback(new CourierInfoMqttCallbackHandler(courierRepository, CURRENT_COURIER_ID));
 
     }
 
@@ -70,8 +67,13 @@ public class BrokerClient {
                     Log.d(TAG, client.getClientId()+" onSuccess-Connected");
                     if(client.getClientId().equals(IDENTIFIER_REQUESTCLIENT)){
                         subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
-                    }else if(client.getClientId().equals(IDENTIFIER_TIMEOUTCLIENT)){
-                        subscribeToTopic(clientTimeoutSubscriber, timeoutTopic,2);
+                        subscribeToTopic(clientRequestSubscriber, timeoutTopic,2);
+                    }else if(client.getClientId().equals(IDENTIFIER_COURIERCLIENT)){
+
+                        String courierInfoTopic = "couriers/info/get/"+CURRENT_COURIER_ID;
+                        publishToTopic(clientCourierSubscriber,courierInfoTopic,null, true,2);
+                        String courierInfoResponseTopic = "couriers/info/get/"+CURRENT_COURIER_ID+"/response";
+                        subscribeToTopic(clientCourierSubscriber, courierInfoResponseTopic, 2);
                     }
                 }
 
@@ -113,14 +115,16 @@ public class BrokerClient {
     public void destroy() throws MqttException {
         clientRequestSubscriber.unregisterResources();
         clientRequestSubscriber.disconnect();
-        clientTimeoutSubscriber.unregisterResources();
-        clientTimeoutSubscriber.disconnect();
+        clientCourierSubscriber.unregisterResources();
+        clientCourierSubscriber.disconnect();
     }
 
     private void publishToTopic(MqttAndroidClient client, String topic, String payload, boolean retained, int qos){
         byte[] encodedPayload = new byte[0];
         try {
-            encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
+            if(payload!=null){
+                encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
+            }
             MqttMessage message = new MqttMessage(encodedPayload);
             message.setQos(qos);
             message.setRetained(retained);
@@ -163,39 +167,25 @@ public class BrokerClient {
         }
     }
 
-    /*public void setMqttCallBack(MqttAndroidClient client) {
-        client.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                String msg = "Connected to host:\n"+ HIVEMQ_MQTT_HOST;
-                Log.w("Debug", msg);
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-                String msg = "Connected to host lost:\n"+ HIVEMQ_MQTT_HOST;
-                Log.w("Debug", msg);
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-                Log.w("Debug", "Message received from host "+ HIVEMQ_MQTT_HOST+ mqttMessage);
-                String received= mqttMessage.toString();
-
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.w("Debug", "Message published to host "+ HIVEMQ_MQTT_HOST);
-            }
-        });
-    }*/
 
 
-public void connectBothClients(){
-    connectToBroker(clientRequestSubscriber);
 
-    connectToBroker(clientTimeoutSubscriber);
-}
+    public void connectBothClients(){
+        connectToBroker(clientRequestSubscriber);
+        connectToBroker(clientCourierSubscriber);
+    }
 
+
+    @Override
+    public void handleAcceptTask(TaskRequest taskRequest) {
+        String acceptRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/accept";
+        publishToTopic(clientRequestSubscriber,acceptRequestTopic, null,  true,2);
+
+    }
+
+    @Override
+    public void handleDenyTask(TaskRequest taskRequest) {
+        String denyRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/deny";
+        publishToTopic(clientRequestSubscriber,denyRequestTopic, null,  true,2);
+    }
 }

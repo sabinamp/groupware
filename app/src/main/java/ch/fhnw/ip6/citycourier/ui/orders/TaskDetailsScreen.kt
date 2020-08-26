@@ -1,17 +1,10 @@
 package ch.fhnw.ip6.citycourier.ui.orders
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.setValue
 import androidx.compose.state
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
@@ -39,7 +32,6 @@ import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
 import ch.fhnw.ip6.citycourier.ui.navigateTo
-import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 import ch.fhnw.ip6.citycourier.ui.util.*
 
@@ -47,12 +39,12 @@ import ch.fhnw.ip6.citycourier.ui.util.*
 fun TaskDetailsScreen(taskId: String, taskRequestsRepository: TaskRequestsRepository){
     val tasksState = fetchTask(taskId, taskRequestsRepository)
     if (tasksState is UiState.Success<TaskRequest>) {
-        TaskDetailsScr(tasksState.data)
+        TaskDetailsScr(tasksState.data, taskRequestsRepository)
     }
 }
 
 @Composable
-private fun TaskDetailsScr(task:TaskRequest){
+private fun TaskDetailsScr(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository){
         var showDialog by state { false }
         if (showDialog) {
             FunctionalityNotAvailablePopup { showDialog = false }
@@ -79,13 +71,17 @@ private fun TaskDetailsScr(task:TaskRequest){
                 TaskDetailsContent(task, modifier)
             },
             bottomAppBar = {
-                BottomBar(task) { showDialog = true }
+                BottomBar(task, taskRequestsRepository) { showDialog = true }
             }
         )
 }
 
 @Composable
-private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
+private fun BottomBar(
+    task: TaskRequest,
+    taskRequestsRepository: TaskRequestsRepository,
+    function: () -> Unit
+) {
     Surface(elevation = 2.dp, color = MaterialTheme.colors.primary) {
             Row(
                 verticalGravity = Alignment.CenterVertically,
@@ -102,13 +98,13 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
                 }
 
 
-                IconButton(onClick = onUnimplementedAction) {
+                IconButton(onClick = { sendTaskRequestReply(task=task,taskRequestsRepository = taskRequestsRepository, accept = true)}) {
                     Icon(/*Icons.Filled.ReplyAll,*/
                         imageResource(R.drawable.ok),
                         modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
                 }
 
-                IconButton(onClick = onUnimplementedAction) {
+                IconButton(onClick = { sendTaskRequestReply(task=task, taskRequestsRepository = taskRequestsRepository, accept = false)}) {
                     Icon(
                         imageResource(R.drawable.no),
                         modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp))
@@ -117,6 +113,13 @@ private fun BottomBar(task: TaskRequest, onUnimplementedAction: () -> Unit) {
             }
     }
 }
+
+
+fun sendTaskRequestReply(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository, accept:Boolean) {
+    //trigger ReplyEvent -todo
+
+}
+
 
 fun makePhoneCallToDispatcher(context:Context) {
     makePhoneCall(context)

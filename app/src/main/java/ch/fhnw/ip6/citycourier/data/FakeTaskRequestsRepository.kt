@@ -65,6 +65,11 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
         return removed
     }
 
+    override fun updateTask(taskId: String, reply: RequestReply): Boolean {
+        taskRequests.find { it.taskId == taskId }?.confirmed(reply)
+        return true
+    }
+
     /**
      * Executes a block of code in the past and returns an error in the [callback]
      * if [block] throws an exception.
