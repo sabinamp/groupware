@@ -36,8 +36,9 @@ public class RequestMqttCallbackHandler implements MqttCallbackExtended {
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         Log.w("Debug", "Message received from host "+ BrokerClient.HIVEMQ_MQTT_HOST+ mqttMessage);
         String received= mqttMessage.toString();
-        TaskRequest taskRequest= ModelObjectsConverter.convertJsonToTaskRequest(received);
-        if(taskRequest != null && topic.endsWith("request")){
+
+        if(received != null && topic.endsWith("request")){
+            TaskRequest taskRequest= ModelObjectsConverter.convertJsonToTaskRequest(received);
             String taskId=taskRequest.getTaskId();
             Log.w("Debug", "task request received from host.Task id: "+ taskId);
             this.requestsRepository.addTaskRequest(taskRequest);
