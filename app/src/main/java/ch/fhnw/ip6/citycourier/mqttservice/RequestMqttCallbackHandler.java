@@ -55,20 +55,10 @@ public class RequestMqttCallbackHandler implements MqttCallbackExtended {
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         Log.w("Debug", "Message published to host "+ BrokerClient.HIVEMQ_MQTT_HOST);
-        try {
-            String[] topics= token.getTopics();
-            String topic1=topics[0];
-            String topic2= topics[1];
-            String[] topic1Levels=topic1.split("/");
-            String taskId=topic1Levels[2];
-            if(token.getMessage().getPayload()==null && topic1.endsWith("deny")){
-                this.requestsRepository.updateTask(taskId, RequestReply.DENIED);
-            }else if(token.getMessage().getPayload()==null && topic1.endsWith("accept")){
-                this.requestsRepository.updateTask(taskId, RequestReply.ACCEPTED);
-            }
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        String[] topics= token.getTopics();
+        String topic1=topics[0];
+        String topic2= topics[1];
+
     }
 
 

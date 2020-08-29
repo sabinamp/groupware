@@ -11,7 +11,9 @@ import ch.fhnw.ip6.citycourier.mqttservice.BrokerClient
 
 class MainActivity : AppCompatActivity() {
 
-
+    private  val mqttClient by lazy{
+            BrokerClient()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val appContainer = (application as CityCourierApplication).container
@@ -19,17 +21,16 @@ class MainActivity : AppCompatActivity() {
         setContent {
             CityCourierApp(appContainer = appContainer)
         }
-        val mqttClient by lazy{
-            BrokerClient(this, appContainer.taskRequestRepository, appContainer.courierRepository)
-        }
 
+        mqttClient.createClients(this, appContainer.taskRequestRepository, appContainer.courierRepository)
+        appContainer.taskRequestRepository.addRequestReplyEventListener(0, mqttClient)
 
-        mqttClient.connectBothClients()
+        mqttClient.connectMqttClients()
     }
 
 
     override fun onDestroy() {
-     //   mqttClient.destroy()
+        mqttClient.disconnectMQttClients()
         super.onDestroy()
     }
 

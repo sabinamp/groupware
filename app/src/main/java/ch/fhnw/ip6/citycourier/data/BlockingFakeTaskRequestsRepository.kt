@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Handler
 import ch.fhnw.ip6.citycourier.model.*
+import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.concurrent.ExecutorService
 import kotlin.random.Random
@@ -18,6 +21,8 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
         taskRequestData()
 
     }
+    private var listeners: MutableList<RequestReplyEventListener> = mutableListOf()
+
     override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
         callback(Result.Success(taskRequests.find { it.taskId == taskId }))
     }
@@ -47,8 +52,30 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
     }
 
     override fun updateTask(taskId: String, reply: RequestReply): Boolean {
-
-         taskRequests.find { it.taskId == taskId }?.confirmed(reply)
+        GlobalScope.launch {  taskRequests.find { it.taskId == taskId }?.confirmed(reply) }
          return true
+    }
+
+    override fun addRequestReplyEventListener(index:Int, listener: RequestReplyEventListener){
+        listeners.add(index, listener)
+    }
+
+    override fun getListeners(): MutableList<RequestReplyEventListener>{
+        return listeners
+    }
+
+    override fun handleAcceptRequestEvent(taskRequest: TaskRequest, accepted: RequestReply) {
+        GlobalScope.launch {
+            for( each: RequestReplyEventListener in getListeners()){
+                if(accepted.equals(RequestReply.ACCEPTED)){
+                    each.handleAcceptTask(taskRequest)
+                    updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
+                }else if (accepted.equals(RequestReply.DENIED)){
+                    each.handleDenyTask(taskRequest)
+                    updateTask(taskRequest.taskId, RequestReply.DENIED)
+                }
+            }
+        }
+
     }
 }

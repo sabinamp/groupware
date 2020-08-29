@@ -28,6 +28,7 @@ import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
 import ch.fhnw.ip6.citycourier.data.successOr
 import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.state.UiState
+import ch.fhnw.ip6.citycourier.state.refreshableUiStateFrom
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
@@ -38,6 +39,7 @@ import ch.fhnw.ip6.citycourier.ui.util.*
 @Composable
 fun TaskDetailsScreen(taskId: String, taskRequestsRepository: TaskRequestsRepository){
     val tasksState = fetchTask(taskId, taskRequestsRepository)
+
     if (tasksState is UiState.Success<TaskRequest>) {
         TaskDetailsScr(tasksState.data, taskRequestsRepository)
     }
@@ -82,7 +84,7 @@ private fun BottomBar(
     taskRequestsRepository: TaskRequestsRepository,
     function: () -> Unit
 ) {
-    Surface(elevation = 2.dp, color = MaterialTheme.colors.primary) {
+    Surface(elevation = 3.dp, color = MaterialTheme.colors.primary) {
             Row(
                 verticalGravity = Alignment.CenterVertically,
                 modifier = Modifier
@@ -98,13 +100,21 @@ private fun BottomBar(
                 }
 
 
-                IconButton(onClick = { sendTaskRequestReply(task=task,taskRequestsRepository = taskRequestsRepository, accept = true)}) {
-                    Icon(/*Icons.Filled.ReplyAll,*/
+                IconButton(onClick = {
+                    sendTaskRequestReply(
+                        task = task,
+                        taskRequestsRepository = taskRequestsRepository,
+                        accept = true
+                    )
+                }) {
+                    Icon(
                         imageResource(R.drawable.ok),
                         modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
                 }
 
-                IconButton(onClick = { sendTaskRequestReply(task=task, taskRequestsRepository = taskRequestsRepository, accept = false)}) {
+                IconButton(onClick = { sendTaskRequestReply(task=task,
+                                   taskRequestsRepository = taskRequestsRepository,
+                                    accept = false)}) {
                     Icon(
                         imageResource(R.drawable.no),
                         modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp))
@@ -114,11 +124,18 @@ private fun BottomBar(
     }
 }
 
-
 fun sendTaskRequestReply(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository, accept:Boolean) {
-    //trigger ReplyEvent -todo
+   if(accept){
+       taskRequestsRepository.handleAcceptRequestEvent(taskRequest = task, accepted = RequestReply.ACCEPTED)
+   }else{
+       taskRequestsRepository.handleAcceptRequestEvent(taskRequest = task, accepted = RequestReply.DENIED)
+   }
+   // refreshTask(taskId = task.taskId,taskRequestsRepository=taskRequestsRepository)
+
 
 }
+
+
 
 
 fun makePhoneCallToDispatcher(context:Context) {
@@ -157,13 +174,13 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
             Text(
                 text = "Order : ${task.orderId} Delivery Type: ${task.deliveryType}",
                 style = themeTypography.body1,
-                lineHeight = 25.sp
+                lineHeight = 28.sp
             )
             Text(
                 text = "Task to be completed till : ${
                     formatDateAndTime(task.dueOn)} Order info - to do",
                 style = themeTypography.body1,
-                lineHeight = 25.sp
+                lineHeight = 28.sp
             )
         }
 
@@ -171,9 +188,9 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
         Text(
             text = " Please accept the task within 15 minutes",
             style = themeTypography.body1,
-            lineHeight = 25.sp
+            lineHeight = 28.sp
         )
-        Spacer(Modifier.preferredHeight(24.dp))
+        Spacer(Modifier.preferredHeight(28.dp))
     }
 }
 

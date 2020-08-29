@@ -2,26 +2,28 @@ package ch.fhnw.ip6.citycourier.data
 
 import android.content.res.Resources
 import android.os.Handler
-import ch.fhnw.ip6.citycourier.model.*
+import ch.fhnw.ip6.citycourier.model.RequestReply
+import ch.fhnw.ip6.citycourier.model.TaskRequest
+import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.concurrent.ExecutorService
 import kotlin.random.Random
 
 /*
 * Implementation that returns a hardcoded list of Task Requests
  */
-class FakeTaskRequestsRepository(private val executorService: ExecutorService,
-                                 private val resultThreadHandler: Handler,
-                                 private val resources: Resources
+class FakeTaskRequestsRepository(
+    private val executorService: ExecutorService,
+    private val resultThreadHandler: Handler,
+    private val resources: Resources
 ): TaskRequestsRepository {
 
     private val taskRequests: MutableList<TaskRequest> by lazy{
         taskRequestData()
     }
-
+    private var listeners: MutableList<RequestReplyEventListener> = mutableListOf()
 
     override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
         executeInBackground(callback) {
@@ -29,7 +31,7 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
                 callback(
                     Result.Success(
                         taskRequests.find { it.taskId == taskId }
-                ))
+                    ))
             }
         }
     }
@@ -38,7 +40,6 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
         //callback( Result.Success(taskRequests))
         executeInBackground(callback) {
            // simulateNetworkRequest()
-            Thread.sleep(1500L)
             if (shouldRandomlyFail()) {
                 throw IllegalStateException()
             }
@@ -47,7 +48,7 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
     }
 
     override fun getAcceptedTaskRequests(callback: (Result<List<TaskRequest>>) -> Unit) {
-        callback( Result.Success(taskRequests.filter { t->t.confirmed.equals(RequestReply.ACCEPTED)}))
+        callback(Result.Success(taskRequests.filter { t -> t.confirmed.equals(RequestReply.ACCEPTED) }))
     }
 
     override fun addTaskRequest(task: TaskRequest): Boolean {
@@ -84,9 +85,30 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
         }
     }
 
+    override fun addRequestReplyEventListener(index: Int, listener: RequestReplyEventListener){
+        listeners.add(index, listener)
+    }
+
+    override fun getListeners(): MutableList<RequestReplyEventListener>{
+        return listeners
+    }
+
+    override fun handleAcceptRequestEvent(taskRequest: TaskRequest, accepted: RequestReply) {
+        for( each: RequestReplyEventListener in getListeners()){
+            if(accepted.equals(RequestReply.ACCEPTED)){
+                each.handleAcceptTask(taskRequest)
+                this.updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
+            }else if (accepted.equals(RequestReply.DENIED)){
+                each.handleDenyTask(taskRequest)
+                this.updateTask(taskRequest.taskId, RequestReply.DENIED)
+            }
+        }
+    }
+
     /**
      * Simulates network request
      */
+/*
     private var networkRequestDone = false
     private fun simulateNetworkRequest() {
         if (!networkRequestDone) {
@@ -96,6 +118,7 @@ class FakeTaskRequestsRepository(private val executorService: ExecutorService,
             networkRequestDone = true
         }
     }
+*/
 
     /**
      * 1/3 requests should fail loading

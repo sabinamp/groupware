@@ -2,6 +2,7 @@ package ch.fhnw.ip6.citycourier.data
 
 import ch.fhnw.ip6.citycourier.model.RequestReply
 import ch.fhnw.ip6.citycourier.model.TaskRequest
+import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
 
 interface TaskRequestsRepository{
 
@@ -34,6 +35,9 @@ interface TaskRequestsRepository{
      */
     fun updateTask(taskId:String, reply:RequestReply): Boolean
 
+    fun addRequestReplyEventListener(index:Int, listener: RequestReplyEventListener)
 
+    fun getListeners(): MutableList<RequestReplyEventListener>
 
+   fun handleAcceptRequestEvent(taskRequest:TaskRequest, accepted: RequestReply)
 }
