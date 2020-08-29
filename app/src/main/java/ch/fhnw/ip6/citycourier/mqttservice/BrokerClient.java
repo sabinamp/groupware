@@ -18,8 +18,8 @@ import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 
 public class BrokerClient implements RequestReplyEventListener{
-    private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "hivemq-android-client";
-   //private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "<your-service-password>"
+    private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "mqtt-android";
+   private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "groupwareandroid";
 
   // Other options
     public static final  int BROKER_CONNECTION_TIMEOUT = 5;
@@ -35,8 +35,8 @@ public class BrokerClient implements RequestReplyEventListener{
     private static final String  publishRequestReplyTopicNO = "orders/"+CURRENT_COURIER_ID+"/+/deny";
     private static final String  publishRequestCompletedTopic = "orders/"+CURRENT_COURIER_ID+"/+/completed";
 
-    public static final String IDENTIFIER_REQUESTCLIENT = "Android Client Request Subscriber";
-    public static final String IDENTIFIER_COURIERCLIENT = "Android Client Courier Info Subscriber";
+    public static final String IDENTIFIER_REQUESTCLIENT = "Android_Client_Request_Subscriber";
+    public static final String IDENTIFIER_COURIERCLIENT = "Android_Client_Courier_InfoSubscriber";
 
     static final String HIVEMQ_MQTT_HOST = "tcp://192.168.0.108:1883";
     MqttAndroidClient clientRequestSubscriber ;
@@ -55,6 +55,8 @@ public class BrokerClient implements RequestReplyEventListener{
     private void connectToBroker(MqttAndroidClient client){
          try {
              MqttConnectOptions options = new MqttConnectOptions();
+             options.setUserName(HIVEMQ_ANDROID_CLIENT_USER_NAME);
+             options.setPassword(HIVEMQ_ANDROID_CLIENT_PASSWORD.toCharArray());
              //The MqttAndroidClient will connect with MQTT 3.1.1 by default
              options.setAutomaticReconnect(BROKER_CONNECTION_RECONNECT);
              options.setCleanSession(BROKER_CONNECTION_CLEAN_SESSION);
