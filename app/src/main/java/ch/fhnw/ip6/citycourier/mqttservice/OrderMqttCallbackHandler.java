@@ -1,23 +1,22 @@
 package ch.fhnw.ip6.citycourier.mqttservice;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import ch.fhnw.ip6.citycourier.data.OrdersRepository;
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
-import ch.fhnw.ip6.citycourier.model.RequestReply;
+import ch.fhnw.ip6.citycourier.model.OrderDescriptiveInfo;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
-public class RequestMqttCallbackHandler implements MqttCallbackExtended {
-    private TaskRequestsRepository requestsRepository;
+public class OrderMqttCallbackHandler implements MqttCallbackExtended {
+    private OrdersRepository orderRepository;
 
-    public RequestMqttCallbackHandler(TaskRequestsRepository taskRequestsRepository){
-        this.requestsRepository= taskRequestsRepository;
+    public OrderMqttCallbackHandler(OrdersRepository orderRepository){
+        this.orderRepository= orderRepository;
     }
 
     @Override
@@ -37,26 +36,21 @@ public class RequestMqttCallbackHandler implements MqttCallbackExtended {
         Log.w("Debug", "Message received from host "+ BrokerClient.HIVEMQ_MQTT_HOST+ mqttMessage);
         String received= mqttMessage.toString();
 
-        if(received != null && topic.endsWith("request")){
-            TaskRequest taskRequest= ModelObjectsConverter.convertJsonToTaskRequest(received);
-            if(taskRequest != null){
-                String taskId=taskRequest.getTaskId();
-                Log.w("Debug", "task request received from host.Task id: "+ taskId);
-                this.requestsRepository.addTaskRequest(taskRequest);
+        if(received != null && topic.startsWith("orders")){
+            OrderDescriptiveInfo orderData= ModelObjectsConverter.convertJsonToOrderDescriptiveInfo(received);
+            if(orderData != null){
+                String orderId= orderData.getOrderId();
+                Log.w("Debug", "order data received from host.Order id: "+ orderId);
+                this.orderRepository.addOrder(orderId,orderData);
             }
-        }else if(topic.endsWith("timeout")){
-            Log.w("Debug", topic+"task timeout");
-            String[] topicLevels=topic.split("/");
-            String taskId=topicLevels[2];
-            this.requestsRepository.removeTaskRequest(taskId);
         }
-
 
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         Log.w("Debug", "Message published to host "+ BrokerClient.HIVEMQ_MQTT_HOST);
+
 
     }
 

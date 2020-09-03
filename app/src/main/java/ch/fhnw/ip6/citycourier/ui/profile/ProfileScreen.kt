@@ -6,6 +6,7 @@ import androidx.ui.core.*
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
+import androidx.ui.graphics.Color
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.layout.*
 import androidx.ui.material.*
@@ -87,7 +88,7 @@ private fun ProfileScreenBody(courierId: String, courierInfo: CourierInfo,
 @Composable
 fun ProfileInfo(courierId: String, courierInfo:CourierInfo) {
     Card(
-        modifier = Modifier.height(310.dp).plus(Modifier.fillMaxWidth()),
+        modifier = Modifier.height(430.dp).plus(Modifier.fillMaxWidth()),
         color = MaterialTheme.colors.onBackground, elevation = 7.dp
     ) {
         Column {
@@ -122,12 +123,12 @@ fun ProfileInfo(courierId: String, courierInfo:CourierInfo) {
                 value = courierInfo.conn.toString(),
                 imageUrl = R.drawable.ic_phone_24_black
             )
-            Row(){
-                Box(padding = 10.dp) {
-                        EditButton(onClick = {})
+            ProfileRow(
+                title = "Completed Tasks",
+                value = "OR1000",
+                imageUrl = R.drawable.ic_tracking_24_black
+            )
 
-                }
-            }
 
         }
 

@@ -22,16 +22,16 @@ class MainActivity : AppCompatActivity() {
             CityCourierApp(appContainer = appContainer)
         }
 
-        mqttClient.createClients(this, appContainer.taskRequestRepository, appContainer.courierRepository)
+        mqttClient.createClients(this, appContainer.taskRequestRepository, appContainer.courierRepository, appContainer.ordersRepository)
         appContainer.taskRequestRepository.addRequestReplyEventListener(0, mqttClient)
-
+        appContainer.ordersRepository.addGetOrderListener(0, mqttClient)
         mqttClient.connectMqttClients()
     }
 
 
     override fun onDestroy() {
-        mqttClient.disconnectMQttClients()
         super.onDestroy()
+        mqttClient.disconnectMQttClients()
     }
 
 

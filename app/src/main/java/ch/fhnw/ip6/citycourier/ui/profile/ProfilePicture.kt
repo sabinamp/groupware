@@ -23,41 +23,62 @@ import androidx.ui.unit.dp
 import ch.fhnw.ip6.citycourier.R
 import ch.fhnw.ip6.citycourier.model.Conn
 import ch.fhnw.ip6.citycourier.model.CourierStatus
+import ch.fhnw.ip6.citycourier.ui.btn.EditButton
 import ch.fhnw.ip6.citycourier.ui.themes.LightThemeColors
 
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 
 
 @Composable
-fun ProfilePicture(name:String, available: CourierStatus){
+fun ProfilePicture(name:String, available: CourierStatus) {
 
-    Box(modifier= Modifier.height(260.dp).plus(Modifier.fillMaxWidth()),
+    Box(
+        modifier = Modifier.height(235.dp).plus(Modifier.fillMaxWidth()),
         backgroundColor = MaterialTheme.colors.onBackground,
-            shape = RoundedCornerShape(topLeft = 90.dp, topRight = 90.dp,
-            bottomLeft = 0.dp, bottomRight = 0.dp)
-    ){
+        shape = RoundedCornerShape(
+            topLeft = 90.dp, topRight = 90.dp,
+            bottomLeft = 0.dp, bottomRight = 0.dp
+        )
+    ) {
 
-        Column(modifier = Modifier.padding(25.dp), horizontalGravity = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(25.dp),
+            horizontalGravity = Alignment.CenterHorizontally
+        ) {
             Box(modifier = Modifier.padding(5.dp).plus(Modifier.width(80.dp))) {
                 Image(vectorResource(R.drawable.ic_profile_80))
             }
-            Box(padding = 10.dp) {
-                Column(modifier = Modifier.height(55.dp)){
-                Text(name, style = themeTypography.h2, maxLines = 1, modifier = Modifier.padding(4.dp))
+            Box(modifier = Modifier.padding(5.dp)) {
+                Column(modifier = Modifier.height(90.dp)) {
+                    Text(
+                        name,
+                        style = themeTypography.h2,
+                        maxLines = 1,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                    Column(modifier = Modifier.padding(horizontal = 3.dp,vertical = 5.dp)) {
+                        Text(
+                            available.toString(),
+                            style = themeTypography.h6,
+                            maxLines = 1,
+                            modifier = Modifier.padding(1.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                Text(available.toString(), style = themeTypography.h6, maxLines = 1,modifier = Modifier.padding(4.dp))
-                    Spacer(modifier = Modifier.width(5.dp))
+                        Box(modifier = Modifier.padding(horizontal = 5.dp,vertical = 5.dp).plus(Modifier.width(80.dp)).plus(Modifier.height(30.dp)), backgroundColor = Color.Transparent) {
+                            EditButton(onClick = {})
+
+                       }
+                    }
                 }
-            }
 
+
+            }
 
         }
 
-
     }
-
-    }
-
+}
 
 
 @Preview

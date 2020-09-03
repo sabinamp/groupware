@@ -17,8 +17,8 @@ import ch.fhnw.ip6.citycourier.ui.btn.OKButton
 @Composable
 fun ConfirmPopUp(msg: String) {
     AlertDialog(onCloseRequest = {},
-        text = { Text("New task request") },
-        title = { Text("Clicked on ${msg}") },
+        text = { Text("New Task Request") },
+        title = { Text(msg) },
         buttonLayout = AlertDialogButtonLayout.SideBySide,
         confirmButton = {
             OKButton(onClick = {
@@ -31,8 +31,13 @@ fun ConfirmPopUp(msg: String) {
         })
 }
 
-@Preview("DisplayALert")
+@Composable
+fun DisplayAlert(msg: String){
+    ConfirmPopUp(msg)
+}
+
+@Preview("DisplayAlert")
 @Composable
 fun DisplayAlertPreview(){
-    ConfirmPopUp(msg = "Hello")
+    ConfirmPopUp(msg = "You received a New Task Request")
 }

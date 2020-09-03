@@ -13,7 +13,7 @@ import android.os.Looper
  */
 interface AppContainer {
     val taskRequestRepository: TaskRequestsRepository
-   /* val ordersRepository: OrdersRepository*/
+    val ordersRepository: OrdersRepository
     val courierRepository: CourierRepository
 }
 
@@ -38,7 +38,7 @@ class AppContainerImpl(private val applicationContext: Context) : AppContainer {
             resources = applicationContext.resources)
     }
 
-  // override val ordersRepository: OrdersRepository = BlockingFakeOrdersRepository(applicationContext)
+
 
     override val courierRepository: CourierRepository by lazy {
       FakeCourierRepository(executorService = executorService,
@@ -46,6 +46,11 @@ class AppContainerImpl(private val applicationContext: Context) : AppContainer {
           resources = applicationContext.resources)
     }
 
+    override val ordersRepository: OrdersRepository by lazy {
+        ImplOrderRepository(executorService = executorService,
+            resultThreadHandler = mainThreadHandler,
+            resources = applicationContext.resources)
+    }
 
 }
 

@@ -13,15 +13,16 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.nio.charset.StandardCharsets;
 
 import ch.fhnw.ip6.citycourier.data.CourierRepository;
+import ch.fhnw.ip6.citycourier.data.OrdersRepository;
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 
-public class BrokerClient implements RequestReplyEventListener{
+public class BrokerClient implements RequestReplyEventListener, OrderGetEventListener{
     private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "mqtt-android";
    private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "groupwareandroid";
 
   // Other options
-    public static final  int BROKER_CONNECTION_TIMEOUT = 5;
+    public static final  int BROKER_CONNECTION_TIMEOUT = 7;
     public static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 240;
     public static final  boolean BROKER_CONNECTION_CLEAN_SESSION = true;
     public static final boolean BROKER_CONNECTION_RECONNECT = true;
@@ -34,22 +35,26 @@ public class BrokerClient implements RequestReplyEventListener{
     private static final String  publishRequestReplyTopicNO = "orders/"+CURRENT_COURIER_ID+"/+/deny";
     private static final String  publishRequestCompletedTopic = "orders/"+CURRENT_COURIER_ID+"/+/completed";
 
-    public static final String IDENTIFIER_REQUEST_CLIENT = "Android_Client_Request_Subscriber";
-    public static final String IDENTIFIER_COURIER_CLIENT = "Android_Client_Courier_InfoSubscriber";
-
+    public static final String IDENTIFIER_REQUEST_CLIENT = "Android_Request_Subscriber";
+    public static final String IDENTIFIER_COURIER_CLIENT = "Android_Courier_InfoSubscriber";
+    public static final String IDENTIFIER_ORDER_SUBSCRIBER = "Android_OrderSubscriber";
     static final String HIVEMQ_MQTT_HOST = "tcp://192.168.0.108:1883";
     MqttAndroidClient clientRequestSubscriber ;
     MqttAndroidClient clientCourierSubscriber;
+    MqttAndroidClient clientOrderSubscriber;
 
     public BrokerClient() {
     }
 
-    public void createClients(Context context,TaskRequestsRepository taskRequestsRepository, CourierRepository courierRepository){
+    public void createClients(Context context, TaskRequestsRepository taskRequestsRepository,
+                              CourierRepository courierRepository, OrdersRepository orderRepository){
             clientRequestSubscriber = new MqttAndroidClient(context, HIVEMQ_MQTT_HOST, IDENTIFIER_REQUEST_CLIENT);
             //Set callback handler
             clientRequestSubscriber.setCallback(new RequestMqttCallbackHandler(taskRequestsRepository));
             clientCourierSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_COURIER_CLIENT);
             clientCourierSubscriber.setCallback(new CourierInfoMqttCallbackHandler(courierRepository, CURRENT_COURIER_ID));
+            clientOrderSubscriber = new MqttAndroidClient( context,HIVEMQ_MQTT_HOST, IDENTIFIER_ORDER_SUBSCRIBER);
+            clientOrderSubscriber.setCallback(new OrderMqttCallbackHandler(orderRepository));
     }
 
     private MqttConnectOptions setUpConnectionOptions(){
@@ -63,30 +68,49 @@ public class BrokerClient implements RequestReplyEventListener{
         options.setKeepAliveInterval(BROKER_CONNECTION_KEEP_ALIVE_INTERVAL);
         return options;
     }
-    private void connectToBroker(MqttAndroidClient client){
+
+    private void connectToBrokerClientRequestSubscriber(){
          try {
             MqttConnectOptions options = setUpConnectionOptions();
-            IMqttToken token = client.connect(options);
+            IMqttToken token = clientRequestSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, client.getClientId()+" onSuccess-Connected");
-                    if(client.getClientId().equals(IDENTIFIER_REQUEST_CLIENT)){
-                        subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
-                        subscribeToTopic(clientRequestSubscriber, timeoutTopic,2);
-                    }else if(client.getClientId().equals(IDENTIFIER_COURIER_CLIENT)){
+                    Log.d(TAG, clientRequestSubscriber.getClientId()+" onSuccess-Connected");
 
-                        String courierInfoTopic = "couriers/info/get/"+CURRENT_COURIER_ID;
-                        publishToTopic(clientCourierSubscriber,courierInfoTopic,null, true,2);
-                        String courierInfoResponseTopic = "couriers/info/get/"+CURRENT_COURIER_ID+"/response";
-                        subscribeToTopic(clientCourierSubscriber, courierInfoResponseTopic, 2);
-                    }
+                    subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
+                    subscribeToTopic(clientRequestSubscriber, timeoutTopic,2);
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     // Something went wrong e.g. connection timeout or firewall problems
-                    Log.d(TAG, client.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+                    Log.d(TAG, clientRequestSubscriber.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+                }
+            });
+        } catch ( MqttException e) {
+            e.printStackTrace();
+        }
+    }
+    private void connectToBrokerClientCourierSubscriber(){
+        try {
+            MqttConnectOptions options = setUpConnectionOptions();
+            IMqttToken token = clientCourierSubscriber.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d(TAG, clientCourierSubscriber.getClientId()+" onSuccess-Connected");
+
+                    String courierInfoTopic = "couriers/info/get/"+CURRENT_COURIER_ID;
+                    publishToTopic(clientCourierSubscriber,courierInfoTopic,null, true,2);
+                    String courierInfoResponseTopic = "couriers/info/get/"+CURRENT_COURIER_ID+"/response";
+                    subscribeToTopic(clientCourierSubscriber, courierInfoResponseTopic, 2);
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Log.d(TAG, clientCourierSubscriber.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
 
                 }
             });
@@ -97,7 +121,9 @@ public class BrokerClient implements RequestReplyEventListener{
 
     private void disconnectFromBroker(MqttAndroidClient client){
         try {
+            client.unregisterResources();
             IMqttToken disconToken = client.disconnect();
+
             disconToken.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
@@ -118,11 +144,13 @@ public class BrokerClient implements RequestReplyEventListener{
     }
 
 
-    public void disconnectMQttClients() throws MqttException {
-        clientRequestSubscriber.unregisterResources();
-        clientRequestSubscriber.disconnect();
-        clientCourierSubscriber.unregisterResources();
-        clientCourierSubscriber.disconnect();
+    public void disconnectMQttClients() {
+        disconnectFromBroker(clientRequestSubscriber);
+        disconnectFromBroker(clientCourierSubscriber);
+        if(clientOrderSubscriber.isConnected()){
+            disconnectFromBroker(clientOrderSubscriber);
+        }
+
     }
 
 
@@ -146,7 +174,14 @@ public class BrokerClient implements RequestReplyEventListener{
         try {
             if(!topic.isEmpty()){
                 if (!client.isConnected()) {
-                    connectToBroker(client);
+                    if (client.getClientId().equals(clientRequestSubscriber.getClientId())){
+                        connectToBrokerClientRequestSubscriber();
+                    }else if(client.getClientId().equals(clientCourierSubscriber.getClientId())){
+                        connectToBrokerClientCourierSubscriber();
+                    }else if(client.getClientId().equals(clientOrderSubscriber.getClientId())){
+                      Log.d("Debug","clientOrderSubscriber should be connected already but it is not");
+                    }
+
                 }
                 IMqttToken subToken = client.subscribe(topic, qos);
                 subToken.setActionCallback(new IMqttActionListener() {
@@ -174,17 +209,45 @@ public class BrokerClient implements RequestReplyEventListener{
         }
     }
 
+    private void connectToBrokerClientOrderSubscriber(String orderId) {
+        try {
+            MqttConnectOptions options = setUpConnectionOptions();
+            IMqttToken token = clientOrderSubscriber.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d(TAG, clientOrderSubscriber.getClientId()+" onSuccess-Connected");
+                    String topic="orders/all_info/get/"+orderId;
+                    publishToTopic(clientOrderSubscriber,topic, null,  false,2);
+
+                    String responseTopic = "orders/all_info/get/+/response";
+                    subscribeToTopic(clientOrderSubscriber, responseTopic, 2);
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Log.d(TAG, clientOrderSubscriber.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+
+                }
+            });
+        } catch ( MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void connectMqttClients(){
-        connectToBroker(clientRequestSubscriber);
-        connectToBroker(clientCourierSubscriber);
+        connectToBrokerClientRequestSubscriber();
+        connectToBrokerClientCourierSubscriber();
+        //order subscriber connects only when order info is needed
     }
 
 
     @Override
     public void handleAcceptTask(TaskRequest taskRequest) {
         String acceptRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/accept";
-        if(!clientRequestSubscriber.isConnected()){
+        if(clientRequestSubscriber.isConnected()){
             publishToTopic(clientRequestSubscriber,acceptRequestTopic, null,  true,2);
         }else{
             reconnectAndPublishReply(taskRequest);
@@ -226,5 +289,10 @@ public class BrokerClient implements RequestReplyEventListener{
             publishToTopic(clientRequestSubscriber,denyRequestTopic, null,  true,2);
         }
 
+    }
+
+    @Override
+    public void handleGetOrder(String orderId) {
+      connectToBrokerClientOrderSubscriber(orderId);
     }
 }

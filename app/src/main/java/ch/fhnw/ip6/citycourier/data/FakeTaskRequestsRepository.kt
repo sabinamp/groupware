@@ -23,6 +23,7 @@ class FakeTaskRequestsRepository(
     private val taskRequests: MutableList<TaskRequest> by lazy{
         taskRequestData()
     }
+
     private var listeners: MutableList<RequestReplyEventListener> = mutableListOf()
 
     override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
@@ -105,20 +106,7 @@ class FakeTaskRequestsRepository(
         }
     }
 
-    /**
-     * Simulates network request
-     */
-/*
-    private var networkRequestDone = false
-    private fun simulateNetworkRequest() {
-        if (!networkRequestDone) {
-            GlobalScope.launch {
-               delay(2000L)
-            }
-            networkRequestDone = true
-        }
-    }
-*/
+
 
     /**
      * 1/3 requests should fail loading

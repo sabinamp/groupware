@@ -22,31 +22,40 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import androidx.ui.unit.sp
 import ch.fhnw.ip6.citycourier.R
+import ch.fhnw.ip6.citycourier.data.*
 
-import ch.fhnw.ip6.citycourier.data.BlockingFakeTaskRequestsRepository
-import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository
-import ch.fhnw.ip6.citycourier.data.successOr
 import ch.fhnw.ip6.citycourier.model.*
 import ch.fhnw.ip6.citycourier.state.UiState
-import ch.fhnw.ip6.citycourier.state.refreshableUiStateFrom
 import ch.fhnw.ip6.citycourier.ui.Screen
 import ch.fhnw.ip6.citycourier.ui.ThemedPreview
+import ch.fhnw.ip6.citycourier.ui.effects.fetchOrder
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
 import ch.fhnw.ip6.citycourier.ui.navigateTo
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 import ch.fhnw.ip6.citycourier.ui.util.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 
 @Composable
-fun TaskDetailsScreen(taskId: String, taskRequestsRepository: TaskRequestsRepository){
+fun TaskDetailsScreen(
+    taskId: String,
+    taskRequestsRepository: TaskRequestsRepository,
+    orderRepository: OrdersRepository
+){
     val tasksState = fetchTask(taskId, taskRequestsRepository)
 
     if (tasksState is UiState.Success<TaskRequest>) {
-        TaskDetailsScr(tasksState.data, taskRequestsRepository)
+        val currentTaskRequest= tasksState.data
+        TaskDetailsScr(currentTaskRequest, taskRequestsRepository, orderRepository)
+        GlobalScope.launch(){
+            orderRepository.handleGetOrderUIEvent(currentTaskRequest.orderId)
+        }
     }
 }
 
 @Composable
-private fun TaskDetailsScr(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository){
+private fun TaskDetailsScr(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository,  orderRepository: OrdersRepository){
         var showDialog by state { false }
         if (showDialog) {
             FunctionalityNotAvailablePopup { showDialog = false }
@@ -70,7 +79,7 @@ private fun TaskDetailsScr(task:TaskRequest,taskRequestsRepository: TaskRequests
                 )
             },
             bodyContent = { modifier ->
-                TaskDetailsContent(task, modifier)
+                TaskDetailsContent(task, modifier, orderRepository)
             },
             bottomAppBar = {
                 BottomBar(task, taskRequestsRepository) { showDialog = true }
@@ -161,7 +170,8 @@ fun TaskHeaderImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 
 
 @Composable
-private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
+private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier,  orderRepository: OrdersRepository) {
+
     VerticalScroller(
         modifier = modifier.padding(horizontal = 10.dp)
     ) {
@@ -174,21 +184,43 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier) {
             Text(
                 text = "Order : ${task.orderId} Delivery Type: ${task.deliveryType}",
                 style = themeTypography.body1,
-                lineHeight = 28.sp
+                lineHeight = 29.sp
             )
             Text(
-                text = "Task to be completed till : ${
-                    formatDateAndTime(task.dueOn)} Order info - to do",
+                text = "Task to be completed till : ${formatDateAndTime(task.dueOn)} ",
                 style = themeTypography.body1,
-                lineHeight = 28.sp
+                lineHeight = 29.sp
             )
+            val order:OrderDescriptiveInfo
+            val orderState= fetchOrder(task.orderId, orderRepository)
+            if(orderState is UiState.Success<OrderDescriptiveInfo>){
+                order= orderState.data
+
+            Text(
+                text = "Task Order Information : ${task.orderId}"
+                        +" Customer Name: ${order.customerName}",
+                style = themeTypography.body1,
+                lineHeight = 30.sp
+            )
+                Text(
+                    text = "Destination Address "+order.finalDestinationContactInfos[0].address.addressLine,
+                    style = themeTypography.body1,
+                    lineHeight = 30.sp
+                )
+                Text(
+                    text = "City "+order.finalDestinationContactInfos[0].address.cityName
+                            +" Postal code "+order.finalDestinationContactInfos[0].address.postalCode,
+                    style = themeTypography.body1,
+                    lineHeight = 30.sp
+                )
+            }
         }
 
         Spacer(Modifier.preferredHeight(48.dp))
         Text(
-            text = " Please accept the task within 15 minutes",
+            text = " Please accept the task within 15 minutes.",
             style = themeTypography.body1,
-            lineHeight = 28.sp
+            lineHeight = 30.sp
         )
         Spacer(Modifier.preferredHeight(28.dp))
     }
@@ -220,6 +252,14 @@ private fun loadFakeTask(taskId: String): TaskRequest {
     return request!!
 }
 
+@Composable
+private fun loadFakeOrder(orderId: String): OrderDescriptiveInfo {
+    var order: OrderDescriptiveInfo? = null
+    BlockingOrdersRepository(ContextAmbient.current).getOrder(orderId = orderId){ result ->
+        order = result.successOr(null)
+    }
+    return order!!
+}
 
 @Preview("TopSection")
 @Composable
