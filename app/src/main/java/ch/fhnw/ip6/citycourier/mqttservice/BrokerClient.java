@@ -217,10 +217,10 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d(TAG, clientOrderSubscriber.getClientId()+" onSuccess-Connected");
-                    String topic="orders/all_info/get/"+orderId;
+                    String topic="orders/android/all_info/get/"+orderId;
                     publishToTopic(clientOrderSubscriber,topic, null,  false,2);
 
-                    String responseTopic = "orders/all_info/get/+/response";
+                    String responseTopic = "orders/android/all_info/get/+/response";
                     subscribeToTopic(clientOrderSubscriber, responseTopic, 2);
                 }
 

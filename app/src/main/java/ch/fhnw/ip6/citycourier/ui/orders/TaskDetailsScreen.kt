@@ -184,18 +184,17 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier,  orderRepo
             Text(
                 text = "Order : ${task.orderId} Delivery Type: ${task.deliveryType}",
                 style = themeTypography.body1,
-                lineHeight = 29.sp
+                lineHeight = 30.sp
             )
             Text(
                 text = "Task to be completed till : ${formatDateAndTime(task.dueOn)} ",
                 style = themeTypography.body1,
-                lineHeight = 29.sp
+                lineHeight = 30.sp
             )
             val order:OrderDescriptiveInfo
             val orderState= fetchOrder(task.orderId, orderRepository)
             if(orderState is UiState.Success<OrderDescriptiveInfo>){
                 order= orderState.data
-
             Text(
                 text = "Task Order Information : ${task.orderId}"
                         +" Customer Name: ${order.customerName}",
