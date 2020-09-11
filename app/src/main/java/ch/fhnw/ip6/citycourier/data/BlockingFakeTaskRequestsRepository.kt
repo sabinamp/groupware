@@ -56,8 +56,8 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
     }
 
     override fun updateTask(taskId: String, reply: RequestReply): Boolean {
-        GlobalScope.launch {  taskRequests.find { it.taskId == taskId }?.confirmed(reply) }
-         return true
+        runBlocking {launch {  taskRequests.find { it.taskId == taskId }?.confirmed(reply) }}
+        return true
     }
 
     override fun addRequestReplyEventListener(index:Int, listener: RequestReplyEventListener){
@@ -70,21 +70,25 @@ class BlockingFakeTaskRequestsRepository(private val context: Context
     private fun getListenersCompleted(): MutableList<TaskCompletedEventListener>{
         return listenersCompleted
     }
+
     override fun handleAcceptRequestEvent(taskRequest: TaskRequest, accepted: RequestReply) {
-        runBlocking {
-            launch {
                 for( each: RequestReplyEventListener in getListeners()){
                     if(accepted.equals(RequestReply.ACCEPTED)){
-                        each.handleAcceptTask(taskRequest)
-                        updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
+                        runBlocking {
+                            launch {
+                                each.handleAcceptTask(taskRequest)
+                                updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
+                            }
+                        }
                     }else if (accepted.equals(RequestReply.DENIED)){
-                        each.handleDenyTask(taskRequest)
-                        updateTask(taskRequest.taskId, RequestReply.DENIED)
+                        runBlocking {
+                            launch {
+                                each.handleDenyTask(taskRequest)
+                                updateTask(taskRequest.taskId, RequestReply.DENIED)
+                            }
+                        }
                     }
                 }
-            }
-
-        }
 
     }
 
