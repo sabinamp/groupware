@@ -16,14 +16,15 @@ import ch.fhnw.ip6.citycourier.data.CourierRepository;
 import ch.fhnw.ip6.citycourier.data.OrdersRepository;
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
+import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
 
-public class BrokerClient implements RequestReplyEventListener, OrderGetEventListener{
+public class BrokerClient implements RequestReplyEventListener, OrderGetEventListener, TaskCompletedEventListener{
     private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "mqtt-android";
    private static final String HIVEMQ_ANDROID_CLIENT_PASSWORD = "groupwareandroid";
 
   // Other options
     public static final  int BROKER_CONNECTION_TIMEOUT = 7;
-    public static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 240;
+    public static final  int BROKER_CONNECTION_KEEP_ALIVE_INTERVAL = 1200;
     public static final  boolean BROKER_CONNECTION_CLEAN_SESSION = true;
     public static final boolean BROKER_CONNECTION_RECONNECT = true;
     private static final String TAG = "AndroidBrokerClient";
@@ -267,7 +268,6 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
                         //subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
                         subscribeToTopic(clientRequestSubscriber, timeoutTopic,2);
                         publishToTopic(clientRequestSubscriber,acceptRequestTopic, null,  true,2);
-
                 }
 
                 @Override
@@ -293,6 +293,41 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
 
     @Override
     public void handleGetOrder(String orderId) {
-      connectToBrokerClientOrderSubscriber(orderId);
+        connectToBrokerClientOrderSubscriber(orderId);
+    }
+
+    @Override
+    public void handleTaskCompleted(TaskRequest taskRequest) {
+        String taskCompletedTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/completed";
+        if(clientCourierSubscriber.isConnected()){
+            publishToTopic(clientCourierSubscriber,taskCompletedTopic, ModelObjectsConverter.convertToJSON(taskRequest),  true,2);
+        }else{
+            reconnectAndPublishTaskCompleted(taskCompletedTopic, taskRequest);
+        }
+    }
+
+    private void reconnectAndPublishTaskCompleted(String topic, TaskRequest taskRequest) {
+        try {
+            MqttConnectOptions options = setUpConnectionOptions();
+            IMqttToken token = clientCourierSubscriber.connect(options);
+            token.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d(TAG, clientCourierSubscriber.getClientId()+" onSuccess-Connected");
+
+                    publishToTopic(clientCourierSubscriber,topic,ModelObjectsConverter.convertToJSON(taskRequest), true,2);
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    // Something went wrong e.g. connection timeout or firewall problems
+                    Log.d(TAG, clientCourierSubscriber.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+
+                }
+            });
+        } catch ( MqttException e) {
+            e.printStackTrace();
+        }
     }
 }

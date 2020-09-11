@@ -4,6 +4,8 @@ import android.content.Context
 import ch.fhnw.ip6.citycourier.model.OrderDescriptiveInfo
 import ch.fhnw.ip6.citycourier.mqttservice.OrderGetEventListener
 import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class BlockingOrdersRepository(private val context: Context) : OrdersRepository {
@@ -40,9 +42,14 @@ class BlockingOrdersRepository(private val context: Context) : OrdersRepository 
     }
 
     override fun handleGetOrderUIEvent(orderId: String) {
-        for( each: OrderGetEventListener in getListeners()){
-            each.handleGetOrder(orderId)
+        runBlocking {
+            launch{
+                for( each: OrderGetEventListener in getListeners()){
+                    each.handleGetOrder(orderId)
+                }
+            }
         }
+
     }
 
 }

@@ -1,5 +1,6 @@
 package ch.fhnw.ip6.citycourier.data
 
+import ch.fhnw.ip6.citycourier.model.OrderStatus
 import ch.fhnw.ip6.citycourier.model.RequestReply
 import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
@@ -40,4 +41,8 @@ interface TaskRequestsRepository{
     fun getListeners(): MutableList<RequestReplyEventListener>
 
    fun handleAcceptRequestEvent(taskRequest:TaskRequest, accepted: RequestReply)
+    /**
+     * Notify the dispatcher about a task completion.
+     */
+   fun handleCompleteTaskEvent(taskRequest: TaskRequest,outcome: OrderStatus)
 }

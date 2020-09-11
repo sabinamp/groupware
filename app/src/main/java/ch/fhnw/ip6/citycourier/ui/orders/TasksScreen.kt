@@ -3,7 +3,6 @@ package ch.fhnw.ip6.citycourier.ui.orders
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.compose.state
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.*
@@ -13,8 +12,6 @@ import androidx.ui.layout.*
 import androidx.ui.layout.RowScope.weight
 import androidx.ui.material.*
 
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.res.vectorResource
 import androidx.ui.tooling.preview.Preview
 

@@ -31,6 +31,7 @@ import ch.fhnw.ip6.citycourier.ui.ThemedPreview
 import ch.fhnw.ip6.citycourier.ui.effects.fetchOrder
 import ch.fhnw.ip6.citycourier.ui.effects.fetchTask
 import ch.fhnw.ip6.citycourier.ui.navigateTo
+import ch.fhnw.ip6.citycourier.ui.themes.background2
 import ch.fhnw.ip6.citycourier.ui.themes.themeTypography
 import ch.fhnw.ip6.citycourier.ui.util.*
 import kotlinx.coroutines.GlobalScope
@@ -105,7 +106,7 @@ private fun BottomBar(
                     Icon(
                         //Icons.Filled.ContactPhone,
                         vectorResource(R.drawable.ic_phone_60_black),
-                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
+                        modifier = Modifier.preferredSize(90.dp).plus(Modifier.padding(10.dp)))
                 }
 
 
@@ -113,32 +114,33 @@ private fun BottomBar(
                     sendTaskRequestReply(
                         task = task,
                         taskRequestsRepository = taskRequestsRepository,
-                        accept = true
+                        accept = RequestReply.ACCEPTED
                     )
                 }) {
                     Icon(
                         imageResource(R.drawable.ok),
-                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp)))
+                        modifier = Modifier.preferredSize(90.dp).plus(Modifier.padding(10.dp)))
                 }
 
                 IconButton(onClick = { sendTaskRequestReply(task=task,
                                    taskRequestsRepository = taskRequestsRepository,
-                                    accept = false)}) {
+                                    accept = RequestReply.DENIED)}) {
                     Icon(
                         imageResource(R.drawable.no),
-                        modifier = Modifier.preferredSize(60.dp).plus(Modifier.padding(10.dp))
+                        modifier = Modifier.preferredSize(90.dp).plus(Modifier.padding(10.dp))
                     )
                 }
+
             }
     }
 }
 
-fun sendTaskRequestReply(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository, accept:Boolean) {
-   if(accept){
-       taskRequestsRepository.handleAcceptRequestEvent(taskRequest = task, accepted = RequestReply.ACCEPTED)
-   }else{
-       taskRequestsRepository.handleAcceptRequestEvent(taskRequest = task, accepted = RequestReply.DENIED)
-   }
+
+
+fun sendTaskRequestReply(task:TaskRequest,taskRequestsRepository: TaskRequestsRepository, accept:RequestReply) {
+
+     taskRequestsRepository.handleAcceptRequestEvent(taskRequest = task, accepted = accept)
+
    // refreshTask(taskId = task.taskId,taskRequestsRepository=taskRequestsRepository)
 
 

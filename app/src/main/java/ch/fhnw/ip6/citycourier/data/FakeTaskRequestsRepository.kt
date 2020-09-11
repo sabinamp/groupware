@@ -2,12 +2,17 @@ package ch.fhnw.ip6.citycourier.data
 
 import android.content.res.Resources
 import android.os.Handler
+import androidx.compose.launchInComposition
+import ch.fhnw.ip6.citycourier.model.OrderStatus
 import ch.fhnw.ip6.citycourier.model.RequestReply
 import ch.fhnw.ip6.citycourier.model.TaskRequest
 import ch.fhnw.ip6.citycourier.mqttservice.RequestReplyEventListener
+import ch.fhnw.ip6.citycourier.mqttservice.TaskCompletedEventListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
 import java.util.concurrent.ExecutorService
 import kotlin.random.Random
 
@@ -25,6 +30,7 @@ class FakeTaskRequestsRepository(
     }
 
     private var listeners: MutableList<RequestReplyEventListener> = mutableListOf()
+    private var listenersCompleted: MutableList<TaskCompletedEventListener> = mutableListOf()
 
     override fun getTaskRequest(taskId: String, callback: (Result<TaskRequest?>) -> Unit) {
         executeInBackground(callback) {
@@ -72,6 +78,7 @@ class FakeTaskRequestsRepository(
         return true
     }
 
+
     /**
      * Executes a block of code in the past and returns an error in the [callback]
      * if [block] throws an exception.
@@ -94,18 +101,40 @@ class FakeTaskRequestsRepository(
         return listeners
     }
 
-    override fun handleAcceptRequestEvent(taskRequest: TaskRequest, accepted: RequestReply) {
-        for( each: RequestReplyEventListener in getListeners()){
-            if(accepted.equals(RequestReply.ACCEPTED)){
-                each.handleAcceptTask(taskRequest)
-                this.updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
-            }else if (accepted.equals(RequestReply.DENIED)){
-                each.handleDenyTask(taskRequest)
-                this.updateTask(taskRequest.taskId, RequestReply.DENIED)
-            }
-        }
+    private fun getListenersCompleted(): MutableList<TaskCompletedEventListener>{
+        return listenersCompleted
     }
 
+    override fun handleAcceptRequestEvent(taskRequest: TaskRequest, accepted: RequestReply) {
+        runBlocking {
+            launch{
+                for( each: RequestReplyEventListener in getListeners()){
+                    if(accepted.equals(RequestReply.ACCEPTED)){
+                        each.handleAcceptTask(taskRequest)
+                        updateTask(taskRequest.taskId, RequestReply.ACCEPTED)
+                    }else if (accepted.equals(RequestReply.DENIED)){
+                        each.handleDenyTask(taskRequest)
+                        updateTask(taskRequest.taskId, RequestReply.DENIED)
+                    }
+                }
+            }
+        }
+
+    }
+
+    override fun handleCompleteTaskEvent(taskRequest: TaskRequest,outcome: OrderStatus) {
+        taskRequest.completedWhen= LocalDateTime.now()
+        taskRequest.isDone=true
+        taskRequest.outcome= outcome
+        runBlocking {
+            launch{
+                for( each: TaskCompletedEventListener in getListenersCompleted()){
+                    each.handleTaskCompleted(taskRequest)
+                }
+            }
+        }
+        removeTaskRequest(taskRequest.taskId)
+    }
 
 
     /**
