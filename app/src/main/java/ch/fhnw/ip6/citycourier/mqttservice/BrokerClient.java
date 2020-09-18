@@ -17,6 +17,7 @@ import ch.fhnw.ip6.citycourier.data.OrdersRepository;
 import ch.fhnw.ip6.citycourier.data.TaskRequestsRepository;
 import ch.fhnw.ip6.citycourier.model.TaskRequest;
 import ch.fhnw.ip6.citycourier.mqttservice.util.ModelObjectsConverter;
+import kotlinx.coroutines.GlobalScope;
 
 public class BrokerClient implements RequestReplyEventListener, OrderGetEventListener, TaskCompletedEventListener{
     private static final String HIVEMQ_ANDROID_CLIENT_USER_NAME = "mqtt-android";
@@ -58,31 +59,21 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
             clientOrderSubscriber.setCallback(new OrderMqttCallbackHandler(orderRepository));
     }
 
-    private MqttConnectOptions setUpConnectionOptions(){
+    private MqttConnectOptions setUpConnectionOptions(int keepAliveInt, boolean cleanSession){
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(HIVEMQ_ANDROID_CLIENT_USER_NAME);
         options.setPassword(HIVEMQ_ANDROID_CLIENT_PASSWORD.toCharArray());
         //The MqttAndroidClient will connect with MQTT 3.1.1 by default
         options.setAutomaticReconnect(BROKER_CONNECTION_RECONNECT);
-        options.setCleanSession(BROKER_CONNECTION_CLEAN_SESSION);
+        options.setCleanSession(cleanSession);
         options.setConnectionTimeout(BROKER_CONNECTION_TIMEOUT);
-        options.setKeepAliveInterval(BROKER_CONNECTION_KEEP_ALIVE_INTERVAL);
+        options.setKeepAliveInterval(keepAliveInt);
         return options;
     }
-    private MqttConnectOptions setUpConnectionOrderSubscriberOptions(){
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setUserName(HIVEMQ_ANDROID_CLIENT_USER_NAME);
-        options.setPassword(HIVEMQ_ANDROID_CLIENT_PASSWORD.toCharArray());
-        //The MqttAndroidClient will connect with MQTT 3.1.1 by default
-        options.setAutomaticReconnect(BROKER_CONNECTION_RECONNECT);
-        options.setCleanSession(true);
-        options.setConnectionTimeout(BROKER_CONNECTION_TIMEOUT);
-        options.setKeepAliveInterval(60);
-        return options;
-    }
+
     private void connectToBrokerClientRequestSubscriber(){
          try {
-            MqttConnectOptions options = setUpConnectionOptions();
+            MqttConnectOptions options = setUpConnectionOptions(BROKER_CONNECTION_KEEP_ALIVE_INTERVAL, BROKER_CONNECTION_CLEAN_SESSION);
             IMqttToken token = clientRequestSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -105,7 +96,7 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
     }
     private void connectToBrokerClientCourierSubscriber(){
         try {
-            MqttConnectOptions options = setUpConnectionOptions();
+            MqttConnectOptions options = setUpConnectionOptions(100, BROKER_CONNECTION_CLEAN_SESSION);
             IMqttToken token = clientCourierSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -139,14 +130,14 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     // we are now successfully disconnected
-                    Log.d(TAG, client.getClientId() +" successfully disconnected");
+                    Log.d(TAG, asyncActionToken.getClient().getClientId() +" successfully disconnected");
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken,
                                       Throwable exception) {
                     // something went wrong, but probably we are disconnected anyway
-                    Log.d(TAG, client.getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
+                    Log.d(TAG, asyncActionToken.getClient().getClientId() +" onFailure -Something went wrong"+exception.getLocalizedMessage());
                 }
             });
         } catch (MqttException e) {
@@ -154,16 +145,31 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
         }
     }
 
+    public boolean isAlreadyConnected(MqttAndroidClient myMqttAndroidClient) {
+        if(myMqttAndroidClient != null){
+            try{
+               return myMqttAndroidClient.isConnected();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
 
     public void disconnectMQttClients() {
-        if(clientRequestSubscriber.isConnected()){
-            disconnectFromBroker(clientRequestSubscriber);
+
+        if(this.clientRequestSubscriber.getClientId() != null && isAlreadyConnected(this.clientRequestSubscriber)){
+            disconnectFromBroker(this.clientRequestSubscriber);
         }
-        if(clientCourierSubscriber.isConnected()){
-            disconnectFromBroker(clientCourierSubscriber);
+        if(this.clientCourierSubscriber.getClientId() != null && isAlreadyConnected(this.clientRequestSubscriber)){
+            disconnectFromBroker(this.clientCourierSubscriber);
         }
-        if(clientOrderSubscriber.isConnected()){
-            disconnectFromBroker(clientOrderSubscriber);
+        if(this.clientOrderSubscriber.getClientId() != null && isAlreadyConnected(this.clientOrderSubscriber)){
+            disconnectFromBroker(this.clientOrderSubscriber);
         }
     }
 
@@ -225,7 +231,7 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
 
     private void connectToBrokerClientOrderSubscriber(String orderId) {
         try {
-            MqttConnectOptions options = setUpConnectionOrderSubscriberOptions();
+            MqttConnectOptions options = setUpConnectionOptions(60, true);
             IMqttToken token = clientOrderSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -272,7 +278,7 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
         try {
             Log.w(TAG, clientRequestSubscriber.getClientId()+" reconnectAndPublishReply() related to taksRequestId:"+taskRequest.getTaskId());
             String acceptRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/accept";
-            MqttConnectOptions options = setUpConnectionOptions();
+            MqttConnectOptions options = setUpConnectionOptions(BROKER_CONNECTION_KEEP_ALIVE_INTERVAL,BROKER_CONNECTION_CLEAN_SESSION);
             IMqttToken token = clientRequestSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -321,7 +327,7 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
 
     private void reconnectAndPublishTaskCompleted(String topic, TaskRequest taskRequest) {
         try {
-            MqttConnectOptions options = setUpConnectionOptions();
+            MqttConnectOptions options = setUpConnectionOptions(60, BROKER_CONNECTION_CLEAN_SESSION);
             IMqttToken token = clientCourierSubscriber.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override

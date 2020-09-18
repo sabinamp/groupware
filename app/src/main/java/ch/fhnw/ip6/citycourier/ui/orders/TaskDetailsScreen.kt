@@ -49,9 +49,7 @@ fun TaskDetailsScreen(
     if (tasksState is UiState.Success<TaskRequest>) {
         val currentTaskRequest= tasksState.data
         TaskDetailsScr(currentTaskRequest, taskRequestsRepository, orderRepository)
-        GlobalScope.launch(){
-            orderRepository.handleGetOrderUIEvent(currentTaskRequest.orderId)
-        }
+
     }
 }
 
@@ -173,7 +171,9 @@ fun TaskHeaderImage(taskRequest: TaskRequest, modifier: Modifier = Modifier) {
 
 @Composable
 private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier,  orderRepository: OrdersRepository) {
-
+    GlobalScope.launch(){
+        orderRepository.handleGetOrderUIEvent(task.orderId)
+    }
     VerticalScroller(
         modifier = modifier.padding(horizontal = 10.dp)
     ) {
@@ -198,7 +198,7 @@ private fun TaskDetailsContent(task: TaskRequest, modifier: Modifier,  orderRepo
             if(orderState is UiState.Success<OrderDescriptiveInfo>){
                 order= orderState.data
             Text(
-                text = "Task Order Information : ${task.orderId}"
+                text = "Task Order Information : ${task.orderId} "
                         +" Customer Name: ${order.customerName}",
                 style = themeTypography.body1,
                 lineHeight = 30.sp
