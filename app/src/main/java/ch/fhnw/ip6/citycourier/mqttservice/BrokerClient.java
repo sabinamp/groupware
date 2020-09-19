@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -78,6 +79,12 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
+                    DisconnectedBufferOptions disconnectedBufferOpts = new DisconnectedBufferOptions();
+                    disconnectedBufferOpts.setBufferEnabled(true);
+                    disconnectedBufferOpts.setBufferSize(100);
+                    disconnectedBufferOpts.setPersistBuffer(false);
+                    disconnectedBufferOpts.setDeleteOldestMessages(false);
+                    clientRequestSubscriber.setBufferOpts(disconnectedBufferOpts);
                     Log.d(TAG, clientRequestSubscriber.getClientId()+" onSuccess-Connected");
 
                     subscribeToTopic(clientRequestSubscriber, requestTopic, 2);
@@ -102,6 +109,12 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d(TAG, clientCourierSubscriber.getClientId()+" onSuccess-Connected");
+                    DisconnectedBufferOptions disconnectedBufferOpts = new DisconnectedBufferOptions();
+                    disconnectedBufferOpts.setBufferEnabled(true);
+                    disconnectedBufferOpts.setBufferSize(100);
+                    disconnectedBufferOpts.setPersistBuffer(false);
+                    disconnectedBufferOpts.setDeleteOldestMessages(false);
+                    clientCourierSubscriber.setBufferOpts(disconnectedBufferOpts);
 
                     String courierInfoTopic = "couriers/info/get/"+CURRENT_COURIER_ID;
                     publishToTopic(clientCourierSubscriber,courierInfoTopic,null, true,2);
@@ -145,30 +158,17 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
         }
     }
 
-    public boolean isAlreadyConnected(MqttAndroidClient myMqttAndroidClient) {
-        if(myMqttAndroidClient != null){
-            try{
-               return myMqttAndroidClient.isConnected();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+
 
     public void disconnectMQttClients() {
 
-        if(this.clientRequestSubscriber.getClientId() != null && isAlreadyConnected(this.clientRequestSubscriber)){
+        if(this.clientRequestSubscriber.getClientId() != null && (this.clientRequestSubscriber.isConnected())){
             disconnectFromBroker(this.clientRequestSubscriber);
         }
-        if(this.clientCourierSubscriber.getClientId() != null && isAlreadyConnected(this.clientRequestSubscriber)){
+        if(this.clientCourierSubscriber.getClientId() != null && (this.clientRequestSubscriber.isConnected())){
             disconnectFromBroker(this.clientCourierSubscriber);
         }
-        if(this.clientOrderSubscriber.getClientId() != null && isAlreadyConnected(this.clientOrderSubscriber)){
+        if(this.clientOrderSubscriber.getClientId() != null && (this.clientOrderSubscriber.isConnected())){
             disconnectFromBroker(this.clientOrderSubscriber);
         }
     }
@@ -237,6 +237,12 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d(TAG, clientOrderSubscriber.getClientId()+" onSuccess-Connected");
+                    DisconnectedBufferOptions disconnectedBufferOpts = new DisconnectedBufferOptions();
+                    disconnectedBufferOpts.setBufferEnabled(true);
+                    disconnectedBufferOpts.setBufferSize(100);
+                    disconnectedBufferOpts.setPersistBuffer(false);
+                    disconnectedBufferOpts.setDeleteOldestMessages(false);
+                    clientOrderSubscriber.setBufferOpts(disconnectedBufferOpts);
                     String topic="orders/"+clientOrderSubscriber.getClientId()+"/all_info/get/"+orderId;
                     publishToTopic(clientOrderSubscriber,topic, null,  false,2);
 
