@@ -36,15 +36,13 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onDestroy() {
-
-        mqttClient.disconnectMQttClients()
         super.onDestroy()
+        mqttClient.disconnectMQttClients()
     }
 
     override fun onPause() {
-
+       super.onPause()
        mqttClient.disconnectMQttClients()
-        super.onPause()
 
     }
 

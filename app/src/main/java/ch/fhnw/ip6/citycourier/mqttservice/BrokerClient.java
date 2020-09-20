@@ -275,12 +275,12 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
         String acceptRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/accept";
         if(clientRequestSubscriber.isConnected()){
             publishToTopic(clientRequestSubscriber,acceptRequestTopic, null,  true,2);
-        }else{
+        }/*else{
             reconnectAndPublishReply(taskRequest);
-        }
+        }*/
     }
 
-    private void reconnectAndPublishReply(TaskRequest taskRequest) {
+/*    private void reconnectAndPublishReply(TaskRequest taskRequest) {
         try {
             Log.w(TAG, clientRequestSubscriber.getClientId()+" reconnectAndPublishReply() related to taksRequestId:"+taskRequest.getTaskId());
             String acceptRequestTopic="orders/"+ CURRENT_COURIER_ID+"/"+taskRequest.getTaskId()+"/accept";
@@ -305,7 +305,7 @@ public class BrokerClient implements RequestReplyEventListener, OrderGetEventLis
         } catch ( MqttException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public void handleDenyTask(TaskRequest taskRequest) {
